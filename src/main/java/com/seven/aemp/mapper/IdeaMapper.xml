@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.seven.aemp.dao.IdeaDao">
+    <select id="queryIdea" resultType="com.seven.aemp.bean.IdeaBean">
+        SELECT I.IDEA_ID
+        ,I.IDEA_NAME
+        ,I.IDEA_DATE
+        ,I.PLAN_ID
+        ,P.PLAN_NAME
+        ,I.EG_ID
+        ,G.EG_NAME
+        ,I.ADVERTISE_TYPE_ID
+        ,I.UPDATE_URL
+        ,I.IDEA_DESCRIBE
+        ,I.IDEA_DATE
+        ,FORMAT(I.CLICK_NUM/I.CLICK_RATE*100,0)  AS EXHIBITS
+        ,FORMAT(I.CLICK_RATE/100,2) AS CLICK_RATE
+        ,I.UNIT_PRICE
+        ,FORMAT(I.CLICK_NUM/I.UNIT_PRICE,2) AS CUSTOME
+        ,I.STATE
+        ,I.CLICK_NUM
+        ,I.PROD_URL
+        FROM EXTENT_IDEA I
+        LEFT JOIN EXTENT_GROUP G ON I.EG_ID=G.EG_ID
+        LEFT JOIN PLANT P ON  P.PLAN_ID=I.PLAN_ID
+        <where>
+            <if test="egId != null and egId != ''">
+                AND  EG_ID = #{egId}
+            </if>
+            <if test="planId != null and planId != ''">
+                AND PLAN_ID = #{planId}
+            </if>
+            <if test="prodUrl != null and prodUrl != ''">
+                AND PROD_URL = #{prodUrl}
+            </if>
+            <if test="ideaId != null and ideaId != ''">
+                AND IDEA_ID  = #{ideaId}
+            </if>
+            <if test="dateType != null and dateType != '' and dateType == '1'">
+                AND EG_NAME  = #{egName}
+            </if>
+            <if test="dateType != null and dateType != '' and dateType == '2'">
+                AND EG_NAME  = #{egName}
+            </if>
+            <if test="dateType != null and dateType != '' and dateType == '3'">
+                AND EG_NAME  = #{egName}
+            </if>
+            <if test="dateType != null and dateType != '' and dateType == '4'">
+                AND EG_NAME  = #{egName}
+            </if>
+            <if test="dateType != null and dateType != '' and dateType == '5'">
+                AND EG_NAME  = #{egName}
+            </if>
+        </where>
+    </select>
+
+    <!--插入创意-->
+    <insert id="addIdea" useGeneratedKeys="true" keyProperty="ideaId" parameterType="com.seven.aemp.bean.IdeaBean">
+        INSERT INTO EXTENT_iDEA
+            (PLAN_ID,EG_ID,IDEA_NAME,UPDATE_URL,IDEA_DESCRIBE,PROD_URL,EXHIBITS,CLICK_NUM,CLICK_RATE,UNIT_PRICE,STATE,CREATE_DATE)
+        VALUES
+           (#{pId},#{gId},#{iName},#{updateUrl},#{ideaDescribe},#{prodUrl},0,0,0,#{unitPrice},#{state},#{createDate})
+    </insert>
+
+    <update id="updateClickIdea" useGeneratedKeys="true" keyProperty="ideaId" parameterType="com.seven.aemp.bean.IdeaBean">
+        UPDATE EXTENT_iDEA SET
+          <if test="prodUrl != '' and prodUrl != null">
+              CLICK_NUM = #{clickNum}
+          </if>
+        WHERE
+        <if test="prodUrl != '' and prodUrl != null">
+            PROD_URL = #{prodUrl}
+        </if>
+    </update>
+</mapper>

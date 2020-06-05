@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.seven.aemp.dao.SystemAccountDao">
+    <!--    查询用户-->
+    <select id="querySystemAccount" resultType="com.seven.aemp.bean.SystemAccountBean">
+        SELECT SYS_ID,SYS_ACCOUNT,SYS_PWD,FIRM_NAME,FIRM_ADDRESS,INDUSTRY,CERTIFICATE,LINK_MAN
+        ,LINK_PHONE,LINK_EMAIL,EMP_TYPE,CREATE_DATE,IS_USE
+        FROM system_account
+        <where>
+            <if test="accountId != null and accountId != ''">
+                AND  ACCOUNT_ID = #{accountId}
+            </if>
+            <if test="accountName != null and accountName != ''">
+                AND ACCOUNT_NAME = #{accountName}
+            </if>
+            <if test="accountPwd != null and accountPwd != ''">
+                AND ACCOUNT_PWD  = #{accountPwd}
+            </if>
+            <if test="accountState != null and accountState != ''">
+                AND ACCOUNT_STATE = #{accountState}
+            </if>
+        </where>
+    </select>
+
+    <!--    修改用户信息-->
+    <update id="updateSystemAccount">
+        UPDATE system_account
+        SET
+        <trim suffixOverrides=",">
+            <if test="sysPwd != null and sysPwd != ''">
+                SYS_PWD = #{sysPwd},
+            </if>
+            <if test="accountName != null and accountName != ''">
+                SYS_ACCOUNT = #{sysAccount},
+            </if>
+            <if test="isUse != null and isUse != ''">
+                IS_USE = #{isUse},
+            </if>
+        </trim>
+        WHERE
+        <if test="sysId != null and sysId != ''">
+            SYS_ID = #{sysId}
+        </if>
+    </update>
+</mapper>

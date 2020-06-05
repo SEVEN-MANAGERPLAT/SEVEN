@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.seven.aemp.dao.PlantDao">
+    <!--模糊查询的两种不同的写法-->
+    <select id="queryPlant" resultType="com.seven.aemp.bean.PlantBean">
+        SELECT PLAN_ID
+        ,PLAN_PREDICT
+        ,STATE
+        ,PLAN_NAME
+        ,ACC_ID
+        ,CREATE_DATE
+        FROM PLANT
+
+        <where>
+            <if test="planId != null and planId != ''">
+                AND PLAN_ID = #{planId}
+            </if>
+            <if test="accId != null and accId != '' and accId != 1">
+                AND ACC_ID  = #{accId}
+            </if>
+            <if test="begDate != null and begDate != '' and endDate != null and endDate != ''">
+                AND CREATE_DATE >= #{begDate}
+                AND CREATE_DATE &lt;= #{endDate}
+            </if>
+            <if test="planName != null and planName != ''">
+                --                 AND PLAN_NAME  LIKE  '% ${planName}%'
+                AND PLAN_NAME  LIKE  "%"#{planName}"%"
+            </if>
+        </where>
+    </select>
+</mapper>

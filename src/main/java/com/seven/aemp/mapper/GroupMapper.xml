@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.seven.aemp.dao.GroupDao">
+    <select id="queryGroup" resultType="com.seven.aemp.bean.GroupBean">
+        SELECT G.EG_ID,G.PLAN_ID,P.ACC_ID, G.EG_NAME, G.PLAN_DATE,G.PREDICT,G.COMPARE_PATTERN,G.BILL,G.THROW_URL,G.SOURCE_ID,G.SEX,G.AGE
+          ,G.INTREST,G.PLAT,G.APP_ACTION,G.THROW_AREA,G.THROW_BEG_DATE,G.THROW_END_DATE,G.THROW_SEG_DATE,G.STATE,P.PLAN_NAME,SUM(EI.CLICK_NUM) AS CLICK_NUM
+        FROM EXTENT_GROUP G
+        LEFT JOIN PLANT P ON G.PLAN_ID = P.PLAN_ID
+        LEFT JOIN EXTENT_IDEA EI ON EI.EG_ID = G.EG_ID
+        <where>
+            <if test="egId != null and egId != ''">
+                AND EG_ID = #{egId}
+            </if>
+            <if test="planId != null and planId != ''">
+                AND PLAN_ID = #{planId}
+            </if>
+            <if test="egName != null and egName != ''">
+                AND EG_NAME  = #{egName}
+            </if>
+            <if test="accId != null and accId != '' and accId != 1">
+                AND P.ACC_ID  = #{accId}
+            </if>
+            <!--<if test="dateType != null and dateType != '' and dateType == '1'">-->
+                <!--AND G_NAME  = #{gName}-->
+            <!--</if>-->
+            <!--<if test="dateType != null and dateType != '' and dateType == '2'">-->
+                <!--AND G_NAME  = #{gName}-->
+            <!--</if>-->
+            <!--<if test="dateType != null and dateType != '' and dateType == '3'">-->
+                <!--AND G_NAME  = #{gName}-->
+            <!--</if>-->
+            <!--<if test="dateType != null and dateType != '' and dateType == '4'">-->
+                <!--AND G_NAME  = #{gName}-->
+            <!--</if>-->
+            <!--<if test="dateType != null and dateType != '' and dateType == '5'">-->
+                <!--AND G_NAME  = #{gName}-->
+            <!--</if>-->
+        </where>
+        GROUP BY G.EG_ID
+    </select>
+
+</mapper>
