@@ -2,6 +2,7 @@ package com.seven.aemp.exception;
 
 import com.alibaba.fastjson.JSONObject;
 import com.seven.aemp.common.Constant;
+import com.seven.aemp.util.CommonResultUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -32,11 +33,7 @@ public class SysControllerAdvice {
     @ResponseBody
     @ExceptionHandler(value = Exception.class)
     public JSONObject exceptionHandler(Exception e) {
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put(Constant.Result.RETCODE, Constant.Result.ERROR);
-        jsonObject.put(Constant.Result.RETMSG, Constant.Result.ERROR_MSG);
-        log.error(Constant.Result.RETMSG, e);
-        return jsonObject;
+        return CommonResultUtil.retFailJSONObj(null);
     }
 
     /* *
@@ -51,9 +48,6 @@ public class SysControllerAdvice {
     @ResponseBody
     @ExceptionHandler(value = MessageException.class)
     public JSONObject messageExceptionHandler(MessageException e) {
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put(Constant.Result.RETCODE, Constant.Result.ERROR);
-        jsonObject.put(Constant.Result.RETMSG, e.getMessage());
-        return jsonObject;
+        return CommonResultUtil.retFailJSONObj(null,e.getMessage());
     }
 }

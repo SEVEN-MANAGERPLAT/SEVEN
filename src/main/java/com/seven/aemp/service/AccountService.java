@@ -3,6 +3,7 @@ package com.seven.aemp.service;
 import com.alibaba.fastjson.JSONObject;
 import com.seven.aemp.bean.AccountBean;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.List;
 
@@ -26,4 +27,8 @@ public interface AccountService extends IService<AccountBean> {
 
     //添加账户
     public AccountBean addAccount(AccountBean accountBean) throws Exception;
+
+    UserDetails loadUserByUsername(String userName);
+
+    public JSONObject loginTwo(AccountBean accountBean)throws Exception;
 }

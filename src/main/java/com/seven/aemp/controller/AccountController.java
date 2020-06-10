@@ -6,9 +6,11 @@ import com.seven.aemp.bean.AccountBean;
 import com.seven.aemp.common.Constant;
 import com.seven.aemp.exception.MessageException;
 import com.seven.aemp.service.AccountService;
+import com.seven.aemp.util.CommonResultUtil;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,6 +34,7 @@ public class AccountController {
 
     //用户登录
     @PostMapping("/login")
+    @PreAuthorize("hasAuthority('pms:brand:read')")
     public JSONObject login(@RequestBody String params) throws Exception {
         if (StringUtils.isBlank(params)) throw new MessageException("参数接收失败!");
         JSONObject jsonObject = new JSONObject();
@@ -42,6 +45,12 @@ public class AccountController {
         return jsonObject;
     }
 
+    @PostMapping("/loginTwo")
+    public JSONObject loginTwo(@RequestBody String params) throws Exception {
+        if (StringUtils.isBlank(params)) throw new MessageException("参数接收失败!");
+        AccountBean accountBean = JSONObject.parseObject(params, AccountBean.class);
+        return CommonResultUtil.retSuccJSONObj(accountService.loginTwo(accountBean));
+    }
 
     @PostMapping("/queryAccount")
     public JSONObject queryAccount(@RequestBody String params) throws Exception {
