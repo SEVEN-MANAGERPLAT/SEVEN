@@ -62,7 +62,6 @@ public class IdeaController {
      * @throws:
      * @version: 1.0
      **/
-    //测试问题的基本信息添加
     @PostMapping("/addIdea")
     public JSONObject addGroup(@RequestBody String params, MultipartFile[] file) throws Exception {
         if (StringUtils.isBlank(params)) throw new MessageException("参数接收失败!");

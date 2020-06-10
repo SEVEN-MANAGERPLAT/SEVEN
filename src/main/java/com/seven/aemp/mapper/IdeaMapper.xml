@@ -20,9 +20,9 @@
         ,I.STATE
         ,I.CLICK_NUM
         ,I.PROD_URL
-        FROM EXTENT_IDEA I
-        LEFT JOIN EXTENT_GROUP G ON I.EG_ID=G.EG_ID
-        LEFT JOIN PLANT P ON  P.PLAN_ID=I.PLAN_ID
+        FROM sevenmanager.extent_idea I
+        LEFT JOIN sevenmanager.extent_group G ON I.EG_ID=G.EG_ID
+        LEFT JOIN  sevenmanager.plant P ON  P.PLAN_ID=I.PLAN_ID
         <where>
             <if test="egId != null and egId != ''">
                 AND  EG_ID = #{egId}
@@ -56,14 +56,14 @@
 
     <!--插入创意-->
     <insert id="addIdea" useGeneratedKeys="true" keyProperty="ideaId" parameterType="com.seven.aemp.bean.IdeaBean">
-        INSERT INTO EXTENT_iDEA
+        INSERT INTO sevenmanager.extent_idea
             (PLAN_ID,EG_ID,IDEA_NAME,UPDATE_URL,IDEA_DESCRIBE,PROD_URL,EXHIBITS,CLICK_NUM,CLICK_RATE,UNIT_PRICE,STATE,CREATE_DATE)
         VALUES
            (#{pId},#{gId},#{iName},#{updateUrl},#{ideaDescribe},#{prodUrl},0,0,0,#{unitPrice},#{state},#{createDate})
     </insert>
 
     <update id="updateClickIdea" useGeneratedKeys="true" keyProperty="ideaId" parameterType="com.seven.aemp.bean.IdeaBean">
-        UPDATE EXTENT_iDEA SET
+        UPDATE sevenmanager.extent_idea SET
           <if test="prodUrl != '' and prodUrl != null">
               CLICK_NUM = #{clickNum}
           </if>

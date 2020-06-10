@@ -4,9 +4,9 @@
     <select id="queryGroup" resultType="com.seven.aemp.bean.GroupBean">
         SELECT G.EG_ID,G.PLAN_ID,P.ACC_ID, G.EG_NAME, G.PLAN_DATE,G.PREDICT,G.COMPARE_PATTERN,G.BILL,G.THROW_URL,G.SOURCE_ID,G.SEX,G.AGE
           ,G.INTREST,G.PLAT,G.APP_ACTION,G.THROW_AREA,G.THROW_BEG_DATE,G.THROW_END_DATE,G.THROW_SEG_DATE,G.STATE,P.PLAN_NAME,SUM(EI.CLICK_NUM) AS CLICK_NUM
-        FROM EXTENT_GROUP G
-        LEFT JOIN PLANT P ON G.PLAN_ID = P.PLAN_ID
-        LEFT JOIN EXTENT_IDEA EI ON EI.EG_ID = G.EG_ID
+        FROM sevenmanager.extent_group G
+        LEFT JOIN sevenmanager.plant P ON G.PLAN_ID = P.PLAN_ID
+        LEFT JOIN sevenmanager.extent_idea EI ON EI.EG_ID = G.EG_ID
         <where>
             <if test="egId != null and egId != ''">
                 AND EG_ID = #{egId}

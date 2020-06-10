@@ -5,7 +5,7 @@
     <select id="queryAccount" resultType="com.seven.aemp.bean.AccountBean">
         SELECT ACCOUNT_ID,ACCOUNT_NAME,ACCOUNT_PWD,FIRM_NAME,ADDRESS , INDUSTRY , CERTIFICATE, LINK_MAN , PHONE,
         EMAIL, BUSINESS_ID, OPERATE_ID, ACCOUNT_STATE
-        FROM ACCOUNT
+        FROM sevenmanager.account
         <where>
             <if test="accountId != null and accountId != '' and accountId != 1">
                 AND  ACCOUNT_ID = #{accountId}
@@ -24,7 +24,7 @@
 
     <!--    修改用户信息-->
     <update id="updateAccount">
-        UPDATE ACCOUNT
+        UPDATE sevenmanager.account
         SET
         <trim suffixOverrides=",">
             <if test="accountPwd != null and accountPwd != ''">
