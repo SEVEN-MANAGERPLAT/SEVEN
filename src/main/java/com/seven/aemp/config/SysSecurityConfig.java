@@ -49,6 +49,7 @@ public class SysSecurityConfig extends SecurityConfig {
             @Override
             public Map<String, ConfigAttribute> loadDataSource() {
                 Map<String, ConfigAttribute> map = new ConcurrentHashMap<>();
+                //查询所有权限，待修改
                 List<UmsResourceBean> resourceList = new ArrayList<UmsResourceBean>();
                 for (UmsResourceBean resource : resourceList) {
                     map.put(resource.getUrl(), new org.springframework.security.access.SecurityConfig(resource.getId() + ":" + resource.getName()));

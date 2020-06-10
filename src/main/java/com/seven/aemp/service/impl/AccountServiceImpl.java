@@ -111,7 +111,7 @@ public class AccountServiceImpl extends ServiceImpl<AccountDao, AccountBean> imp
         if (accountBeans.isEmpty()) throw new UsernameNotFoundException("用户不存在!");
         //获取用户信息
         AccountBean accountBean = accountBeans.get(0);
-        //需要增加权限
+        //需要查询用户权限，待修改
         List<UmsResourceBean> resourceList = new ArrayList<UmsResourceBean>();
         return new AdminUserDetails(accountBean, resourceList);
     }
