@@ -9,7 +9,7 @@
         ,PLAN_NAME
         ,ACC_ID
         ,CREATE_DATE
-        FROM PLANT
+        FROM sevenmanager.plant
 
         <where>
             <if test="planId != null and planId != ''">

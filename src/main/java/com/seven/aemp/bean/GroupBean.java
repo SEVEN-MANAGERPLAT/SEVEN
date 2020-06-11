@@ -24,7 +24,7 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("extentgroup")
+@TableName("extent_group")
 public class GroupBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
