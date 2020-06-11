@@ -34,4 +34,13 @@ public class CommonResultUtil {
         jsonObject.put(Constant.Result.RETDATA, data == null ? "无数据" : data);
         return jsonObject;
     }
+
+    //自定义状态码及信息
+    public static JSONObject retJSONObj(Object data, String code, String msg) {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put(Constant.Result.RETCODE, StringUtils.isBlank(code) ? Constant.Result.ERROR : code);
+        jsonObject.put(Constant.Result.RETMSG, StringUtils.isBlank(msg) ? Constant.Result.ERROR_MSG : msg);
+        jsonObject.put(Constant.Result.RETDATA, data == null ? "无数据" : data);
+        return jsonObject;
+    }
 }

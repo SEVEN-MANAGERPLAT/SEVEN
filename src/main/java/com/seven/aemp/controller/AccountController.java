@@ -7,19 +7,21 @@ import com.seven.aemp.common.Constant;
 import com.seven.aemp.exception.MessageException;
 import com.seven.aemp.service.AccountService;
 import com.seven.aemp.util.CommonResultUtil;
+import com.seven.aemp.util.JwtTokenUtil;
+import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
-import org.springframework.web.bind.annotation.RestController;
+import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
 
 /**
  * <p>
- *  前端控制器
+ * 前端控制器
  * </p>
  *
  * @author mwl
@@ -29,12 +31,22 @@ import org.springframework.web.bind.annotation.RestController;
 @Scope("prototype")
 @RequestMapping("/accountAction")
 public class AccountController {
+
+    @Value("${jwt.tokenHeader}")
+    private String tokenHeader;
+
+    @Value("${jwt.tokenHead}")
+    private String tokenHead;
+
+    @Autowired
+    private JwtTokenUtil jwtTokenUtil;
+
     @Autowired
     private AccountService accountService;
 
     //用户登录
     @PostMapping("/login")
-    @PreAuthorize("hasAuthority('pms:brand:read')")
+    @PreAuthorize("hasAuthority('1:后台用户管理')")
     public JSONObject login(@RequestBody String params) throws Exception {
         if (StringUtils.isBlank(params)) throw new MessageException("参数接收失败!");
         JSONObject jsonObject = new JSONObject();
@@ -50,6 +62,18 @@ public class AccountController {
         if (StringUtils.isBlank(params)) throw new MessageException("参数接收失败!");
         AccountBean accountBean = JSONObject.parseObject(params, AccountBean.class);
         return CommonResultUtil.retSuccJSONObj(accountService.loginTwo(accountBean));
+    }
+
+    @ApiOperation(value = "刷新token")
+    @GetMapping(value = "/refreshToken")
+    public JSONObject refreshToken(HttpServletRequest request) throws Exception {
+        String token = request.getHeader(tokenHeader);
+        String refreshToken = jwtTokenUtil.refreshHeadToken(token);
+        if (refreshToken == null) throw new MessageException("token已过期!");
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("token", refreshToken);
+        jsonObject.put("tokenHead", tokenHead);
+        return CommonResultUtil.retSuccJSONObj(jsonObject);
     }
 
     @PostMapping("/queryAccount")

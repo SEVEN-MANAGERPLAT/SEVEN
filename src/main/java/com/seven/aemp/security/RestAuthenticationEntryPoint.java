@@ -26,7 +26,7 @@ public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
         response.setCharacterEncoding(Constant.Charset.UTF8);
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Access-Control-Allow-Origin", "*");
-        JSONObject jsonObject = CommonResultUtil.retFailJSONObj(null, "未登录或token失效!!!");
+        JSONObject jsonObject = CommonResultUtil.retFailJSONObj(null, "未登录或token失效!");
         response.getWriter().println(jsonObject.toJSONString());
         response.getWriter().flush();
     }

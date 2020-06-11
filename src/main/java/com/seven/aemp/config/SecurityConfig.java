@@ -55,7 +55,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // 自定义权限拒绝处理类
                 .and()
                 .exceptionHandling()
-                .accessDeniedHandler(restfulAccessDeniedHandler())
+                //SpringBoot全局异常处理导致accessDeniedHandler不能使用
+                //.accessDeniedHandler(restfulAccessDeniedHandler())
                 .authenticationEntryPoint(restAuthenticationEntryPoint())
                 // 自定义权限拦截器JWT过滤器
                 .and()
@@ -78,6 +79,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
+    //安全路径白名单
     @Bean
     public IgnoreUrlsConfig ignoreUrlsConfig() {
         return new IgnoreUrlsConfig();
@@ -95,28 +97,33 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return super.authenticationManagerBean();
     }
 
+    //当未登录或token失效时，返回JSON格式的结果；
     @Bean
     public RestAuthenticationEntryPoint restAuthenticationEntryPoint() {
         return new RestAuthenticationEntryPoint();
     }
 
+    //当访问接口没有权限时，自定义的返回结果
     @Bean
     public RestfulAccessDeniedHandler restfulAccessDeniedHandler() {
         return new RestfulAccessDeniedHandler();
     }
 
+    //动态权限决策管理器，用于判断用户是否有访问权限
     @Bean
     @ConditionalOnBean(name = "dynamicSecurityService")
     public DynamicAccessDecisionManager dynamicAccessDecisionManager() {
         return new DynamicAccessDecisionManager();
     }
 
+    //动态权限过滤器，用于实现基于路径的动态权限过滤
     @Bean
     @ConditionalOnBean(name = "dynamicSecurityService")
     public DynamicSecurityFilter dynamicSecurityFilter() {
         return new DynamicSecurityFilter();
     }
 
+    //动态权限数据源，用于获取动态权限规则
     @Bean
     @ConditionalOnBean(name = "dynamicSecurityService")
     public DynamicSecurityMetadataSource dynamicSecurityMetadataSource() {
