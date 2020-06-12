@@ -27,15 +27,15 @@ public class AempConfig {
     }
 
     //注册过滤器
-    @Bean
-    public FilterRegistrationBean registFilter() {
-        FilterRegistrationBean registration = new FilterRegistrationBean();
-        registration.setFilter(new CorsFilter());
-        registration.addUrlPatterns("/*");
-        registration.setName("CorsFilter");
-        registration.setOrder(1);
-        return registration;
-    }
+//    @Bean
+//    public FilterRegistrationBean registFilter() {
+//        FilterRegistrationBean registration = new FilterRegistrationBean();
+//        registration.setFilter(new CorsFilter());
+//        registration.addUrlPatterns("/*");
+//        registration.setName("CorsFilter");
+//        registration.setOrder(1);
+//        return registration;
+//    }
 
 
 }

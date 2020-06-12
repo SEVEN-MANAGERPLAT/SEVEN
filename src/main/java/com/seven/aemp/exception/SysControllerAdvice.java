@@ -65,6 +65,6 @@ public class SysControllerAdvice {
     @ResponseBody
     @ExceptionHandler(value = AccessDeniedException.class)
     public JSONObject accessDeniedExceptionHandler(AccessDeniedException e) {
-        return CommonResultUtil.retFailJSONObj(null,"暂无访问权限!");
+        return CommonResultUtil.retJSONObj(null,Constant.Result.FORBIDDEN_RETCODE,Constant.Result.FORBIDDEN_RETMSG);
     }
 }
