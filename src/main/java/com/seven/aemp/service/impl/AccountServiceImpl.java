@@ -105,6 +105,8 @@ public class AccountServiceImpl extends ServiceImpl<AccountDao, AccountBean> imp
     public AccountBean addAccount(AccountBean accountBean) throws Exception {
         if (StringUtils.isBlank(accountBean.getAccountName())) throw new MessageException("账号不能为空!");
         if (StringUtils.isBlank(accountBean.getAccountPwd())) throw new MessageException("密码不能为空!");
+        List<AccountBean> accountBeans = queryAccount(new AccountBean().setAccountName(accountBean.getAccountName()));
+        if (!accountBeans.isEmpty()) throw new MessageException("账号重复!");
         if (accountDao.insert(accountBean) <= 0) throw new MessageException("操作失败!");
         return accountBean;
     }
