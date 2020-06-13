@@ -5,6 +5,7 @@ import com.seven.aemp.common.Constant;
 import com.seven.aemp.util.CommonResultUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -19,7 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 //@ControllerAdvice(basePackages ="com.example.demo.controller")
 public class SysControllerAdvice {
 
-    private Logger log = LoggerFactory.getLogger(SysControllerAdvice.class);
+    private static Logger log = LoggerFactory.getLogger(SysControllerAdvice.class);
 
     /* *
      * @desc:全局异常处理，反正异常返回统一格式的JSONObject
@@ -33,6 +34,7 @@ public class SysControllerAdvice {
     @ResponseBody
     @ExceptionHandler(value = Exception.class)
     public JSONObject exceptionHandler(Exception e) {
+        log.error(Constant.Result.ERROR_MSG, e);
         return CommonResultUtil.retFailJSONObj(null);
     }
 
@@ -48,6 +50,21 @@ public class SysControllerAdvice {
     @ResponseBody
     @ExceptionHandler(value = MessageException.class)
     public JSONObject messageExceptionHandler(MessageException e) {
-        return CommonResultUtil.retFailJSONObj(null,e.getMessage());
+        return CommonResultUtil.retFailJSONObj(null, e.getMessage());
+    }
+
+    /* *
+     * @desc:访问权限异常处理
+     * @author: dx
+     * @date: 2020-06-11 15:14:40
+     * @param e :
+     * @return: com.alibaba.fastjson.JSONObject
+     * @throws:
+     * @version: 1.0
+     **/
+    @ResponseBody
+    @ExceptionHandler(value = AccessDeniedException.class)
+    public JSONObject accessDeniedExceptionHandler(AccessDeniedException e) {
+        return CommonResultUtil.retJSONObj(null,Constant.Result.FORBIDDEN_RETCODE,Constant.Result.FORBIDDEN_RETMSG);
     }
 }

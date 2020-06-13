@@ -1,5 +1,7 @@
 package com.seven.aemp.util;
 
+import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.StrUtil;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -14,7 +16,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @desc:JwtToken生成的工具类
+ * @desc: JwtToken生成的工具类
+ * JWT token的格式：header.payload.signature
+ * header的格式（算法、token的类型）：
+ * {"alg": "HS512","typ": "JWT"}
+ * payload的格式（用户名、创建时间、生成时间）：
+ * {"sub":"wang","created":1489079981393,"exp":1489684781}
+ * signature的生成算法：
+ * HMACSHA512(base64UrlEncode(header) + "." +base64UrlEncode(payload),secret)
  * @date: 2020-04-09 15:13
  * @author: dx
  * @version: 1.0
@@ -30,6 +39,9 @@ public class JwtTokenUtil {
 
     @Value("${jwt.expiration}")
     private Long expiration;
+
+    @Value("${jwt.tokenHead}")
+    private String tokenHead;
 
     /**
      * 根据负责生成JWT的token
@@ -53,7 +65,7 @@ public class JwtTokenUtil {
                     .parseClaimsJws(token)
                     .getBody();
         } catch (Exception e) {
-            LOGGER.info("JWT格式验证失败:{}",token);
+            LOGGER.info("JWT格式验证失败:{}", token);
         }
         return claims;
     }
@@ -72,7 +84,7 @@ public class JwtTokenUtil {
         String username;
         try {
             Claims claims = getClaimsFromToken(token);
-            username =  claims.getSubject();
+            username = claims.getSubject();
         } catch (Exception e) {
             username = null;
         }
@@ -117,19 +129,51 @@ public class JwtTokenUtil {
     }
 
     /**
-     * 判断token是否可以被刷新
+     * 当原来的token没过期时是可以刷新的
+     *
+     * @param oldToken 带tokenHead的token
      */
-    public boolean canRefresh(String token) {
-        return !isTokenExpired(token);
+    public String refreshHeadToken(String oldToken) {
+        if (StrUtil.isEmpty(oldToken)) {
+            return null;
+        }
+        String token = oldToken.substring(tokenHead.length());
+        if (StrUtil.isEmpty(token)) {
+            return null;
+        }
+        //token校验不通过
+        Claims claims = getClaimsFromToken(token);
+        if (claims == null) {
+            return null;
+        }
+        //如果token已经过期，不支持刷新
+        if (isTokenExpired(token)) {
+            return null;
+        }
+        //如果token在30分钟之内刚刷新过，返回原token
+        if (tokenRefreshJustBefore(token, 30 * 60)) {
+            return token;
+        } else {
+            claims.put(CLAIM_KEY_CREATED, new Date());
+            return generateToken(claims);
+        }
     }
 
     /**
-     * 刷新token
+     * 判断token在指定时间内是否刚刚刷新过
+     *
+     * @param token 原token
+     * @param time  指定时间（秒）
      */
-    public String refreshToken(String token) {
+    private boolean tokenRefreshJustBefore(String token, int time) {
         Claims claims = getClaimsFromToken(token);
-        claims.put(CLAIM_KEY_CREATED, new Date());
-        return generateToken(claims);
+        Date created = claims.get(CLAIM_KEY_CREATED, Date.class);
+        Date refreshDate = new Date();
+        //刷新时间在创建时间的指定时间内
+        if (refreshDate.after(created) && refreshDate.before(DateUtil.offsetSecond(created, time))) {
+            return true;
+        }
+        return false;
     }
 }
 

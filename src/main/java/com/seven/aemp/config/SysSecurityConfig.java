@@ -1,20 +1,16 @@
 package com.seven.aemp.config;
 
-import com.seven.aemp.bean.AccountBean;
-import com.seven.aemp.bean.UmsPermissionBean;
 import com.seven.aemp.bean.UmsResourceBean;
-import com.seven.aemp.security.AdminUserDetails;
 import com.seven.aemp.service.AccountService;
 import com.seven.aemp.service.DynamicSecurityService;
+import com.seven.aemp.service.UmsResourceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,10 +31,15 @@ public class SysSecurityConfig extends SecurityConfig {
     @Autowired
     private AccountService accountService;
 
+    @Autowired
+    private UmsResourceService umsResourceService;
+
+    //SpringSecurity定义的核心接口，用于根据用户名获取用户信息，需要自行实现；
     @Bean
     public UserDetailsService userDetailsService() {
         //获取登录用户信息
         return username -> {
+            //SpringSecurity定义用于封装用户信息的类（主要是用户信息和权限），需要自行实现；
             return accountService.loadUserByUsername(username);
         };
     }
@@ -49,8 +50,8 @@ public class SysSecurityConfig extends SecurityConfig {
             @Override
             public Map<String, ConfigAttribute> loadDataSource() {
                 Map<String, ConfigAttribute> map = new ConcurrentHashMap<>();
-                //查询所有权限，待修改
-                List<UmsResourceBean> resourceList = new ArrayList<UmsResourceBean>();
+                //查询所有资源，待修改
+                List<UmsResourceBean> resourceList = umsResourceService.queryUmsResource(new UmsResourceBean());
                 for (UmsResourceBean resource : resourceList) {
                     map.put(resource.getUrl(), new org.springframework.security.access.SecurityConfig(resource.getId() + ":" + resource.getName()));
                 }

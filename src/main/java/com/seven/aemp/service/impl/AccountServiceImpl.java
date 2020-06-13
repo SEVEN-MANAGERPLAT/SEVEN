@@ -10,6 +10,7 @@ import com.seven.aemp.exception.MessageException;
 import com.seven.aemp.security.AdminUserDetails;
 import com.seven.aemp.service.AccountService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.seven.aemp.service.UmsResourceService;
 import com.seven.aemp.util.CookieTools;
 import com.seven.aemp.util.JwtTokenUtil;
 import org.apache.commons.lang.StringUtils;
@@ -60,6 +61,9 @@ public class AccountServiceImpl extends ServiceImpl<AccountDao, AccountBean> imp
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private UmsResourceService resourceService;
 
     @Override
     public List<AccountBean> queryAccount(AccountBean accountBean) {
@@ -112,7 +116,7 @@ public class AccountServiceImpl extends ServiceImpl<AccountDao, AccountBean> imp
         //获取用户信息
         AccountBean accountBean = accountBeans.get(0);
         //需要查询用户权限，待修改
-        List<UmsResourceBean> resourceList = new ArrayList<UmsResourceBean>();
+        List<UmsResourceBean> resourceList = resourceService.queryUmsResourceByAdminId(accountBean);
         return new AdminUserDetails(accountBean, resourceList);
     }
 
@@ -123,7 +127,7 @@ public class AccountServiceImpl extends ServiceImpl<AccountDao, AccountBean> imp
         UserDetails userDetails = loadUserByUsername(accountBean.getAccountName());
         //String accountPwd = passwordEncoder.encode(accountBean.getAccountPwd());
         String password = passwordEncoder.encode(userDetails.getPassword());
-        System.out.println("password:" + password);
+        log.debug("password:{}" + password);
         if (!passwordEncoder.matches(accountBean.getAccountPwd(), password)) {
             throw new MessageException("密码不正确!");
         }

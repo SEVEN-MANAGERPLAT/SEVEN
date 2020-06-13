@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.seven.aemp.dao.UmsResourceDao">
+
+    <!--    查询-->
+    <select id="queryUmsResource" resultType="com.seven.aemp.bean.UmsResourceBean">
+        SELECT ID, CREATE_TIME, NAME, URL, DESCRIPTION, CATEGORY_ID
+        FROM UMS_RESOURCE
+    </select>
+
+    <select id="queryUmsResourceByAdminId" resultType="com.seven.aemp.bean.UmsResourceBean">
+        SELECT UR.ID          ID,
+               UR.CREATE_TIME CREATETIME,
+               UR.NAME        NAME,
+               UR.URL         URL,
+               UR.DESCRIPTION DESCRIPTION,
+               UR.CATEGORY_ID CATEGORYID
+        FROM UMS_ADMIN_ROLE_RELATION AR
+        LEFT JOIN UMS_ROLE R ON AR.ROLE_ID = R.ID
+        LEFT JOIN UMS_ROLE_RESOURCE_RELATION RRR ON R.ID = RRR.ROLE_ID
+        LEFT JOIN UMS_RESOURCE UR ON UR.ID = RRR.RESOURCE_ID
+        WHERE AR.ADMIN_ID = #{accountId}
+          AND UR.ID IS NOT NULL
+        GROUP BY UR.ID
+    </select>
+</mapper>

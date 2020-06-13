@@ -6,20 +6,26 @@ import com.seven.aemp.bean.AccountBean;
 import com.seven.aemp.common.Constant;
 import com.seven.aemp.exception.MessageException;
 import com.seven.aemp.service.AccountService;
+import com.seven.aemp.service.UmsRoleService;
 import com.seven.aemp.util.CommonResultUtil;
+import com.seven.aemp.util.JwtTokenUtil;
+import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
-import org.springframework.web.bind.annotation.RestController;
+import javax.servlet.http.HttpServletRequest;
+import java.security.Principal;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
- *  前端控制器
+ * 前端控制器
  * </p>
  *
  * @author mwl
@@ -29,12 +35,25 @@ import org.springframework.web.bind.annotation.RestController;
 @Scope("prototype")
 @RequestMapping("/accountAction")
 public class AccountController {
+
+    @Value("${jwt.tokenHeader}")
+    private String tokenHeader;
+
+    @Value("${jwt.tokenHead}")
+    private String tokenHead;
+
+    @Autowired
+    private UmsRoleService roleService;
+
+    @Autowired
+    private JwtTokenUtil jwtTokenUtil;
+
     @Autowired
     private AccountService accountService;
 
     //用户登录
-    @PostMapping("/login")
-    @PreAuthorize("hasAuthority('pms:brand:read')")
+    //@PostMapping("/login")
+    @PreAuthorize("hasAuthority('1:后台用户管理')")
     public JSONObject login(@RequestBody String params) throws Exception {
         if (StringUtils.isBlank(params)) throw new MessageException("参数接收失败!");
         JSONObject jsonObject = new JSONObject();
@@ -45,11 +64,23 @@ public class AccountController {
         return jsonObject;
     }
 
-    @PostMapping("/loginTwo")
+    @PostMapping("/login")
     public JSONObject loginTwo(@RequestBody String params) throws Exception {
         if (StringUtils.isBlank(params)) throw new MessageException("参数接收失败!");
         AccountBean accountBean = JSONObject.parseObject(params, AccountBean.class);
         return CommonResultUtil.retSuccJSONObj(accountService.loginTwo(accountBean));
+    }
+
+    @ApiOperation(value = "刷新token")
+    @GetMapping(value = "/refreshToken")
+    public JSONObject refreshToken(HttpServletRequest request) throws Exception {
+        String token = request.getHeader(tokenHeader);
+        String refreshToken = jwtTokenUtil.refreshHeadToken(token);
+        if (refreshToken == null) throw new MessageException("token已过期!");
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("token", refreshToken);
+        jsonObject.put("tokenHead", tokenHead);
+        return CommonResultUtil.retSuccJSONObj(jsonObject);
     }
 
     @PostMapping("/queryAccount")
@@ -61,6 +92,30 @@ public class AccountController {
         AccountBean accountBean = JSONObject.parseObject(params, AccountBean.class);
         jsonObject.put(Constant.Result.RETDATA, accountService.queryAccount(accountBean));
         return jsonObject;
+    }
+
+    @GetMapping(value = "/info")
+    @ApiOperation(value = "获取当前登录用户信息")
+    public JSONObject getAdminInfo(Principal principal) throws Exception {
+        if (principal == null) {
+            return CommonResultUtil.retJSONObj(null, Constant.Result.UNAUTHORIZED_RETCODE, Constant.Result.UNAUTHORIZED_RETMSG);
+        }
+        String username = principal.getName();
+        List<AccountBean> accountBeans = accountService.queryAccount(new AccountBean().setAccountName(username));
+        if (accountBeans.isEmpty()) throw new MessageException("未查询该用户信息!");
+        AccountBean accountBean = accountBeans.get(0);
+        Map<String, Object> data = new HashMap<>();
+        data.put("username", accountBean.getAccountName());
+        data.put("roles", new String[]{"TEST"});
+        data.put("menus", roleService.getMenuList(accountBean.getAccountId().longValue()));
+        data.put("icon", "http://macro-oss.oss-cn-shenzhen.aliyuncs.com/mall/images/20180607/timg.jpg");
+        return CommonResultUtil.retSuccJSONObj(data);
+    }
+
+    @ApiOperation(value = "登出功能")
+    @PostMapping(value = "/logout")
+    public JSONObject logout() {
+        return CommonResultUtil.retSuccJSONObj(null);
     }
 
     //修改用户信息
