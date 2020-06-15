@@ -2,11 +2,13 @@ package com.seven.aemp.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.seven.aemp.bean.IdeaBean;
+import com.seven.aemp.bean.IdeaclickBean;
 import com.seven.aemp.dao.GroupDao;
 import com.seven.aemp.dao.IdeaDao;
 import com.seven.aemp.exception.MessageException;
 import com.seven.aemp.service.IdeaService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.seven.aemp.service.IdeaclickService;
 import com.seven.aemp.util.TimeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -36,6 +38,9 @@ public class IdeaServiceImpl extends ServiceImpl<IdeaDao, IdeaBean> implements I
     @Autowired
     private IdeaDao ideaDao;
 
+    @Autowired
+    private IdeaclickService ideaclickService;
+
     @Override
     public List<IdeaBean> queryIdea(IdeaBean ideaBean) throws Exception {
         return ideaDao.queryIdea(ideaBean);
@@ -51,15 +56,16 @@ public class IdeaServiceImpl extends ServiceImpl<IdeaDao, IdeaBean> implements I
         queryWrapper.eq("IDEA_NAME", ideaBean.getIdeaName());
         List<IdeaBean> ideaBeans = ideaDao.selectList(queryWrapper);
         if(ideaBeans.size() > 0)throw new MessageException("创意名不能重复!");
-        //创建自己的短链
-        ideaBean.setClickNum("0");
-        String newDate = TimeUtil.getDateYYYYMMDD(new Date());
+
+        String newDate = TimeUtil.getDateYYYYMMDD(TimeUtil.getDBTime());
         ideaBean.setCreateDate(newDate);
         //设置点击率
         Random random = new Random();
         int s = random.nextInt(20)%(5) + 15;
         ideaBean.setClickRate(String.valueOf(s));
         if (ideaDao.addIdea(ideaBean) <= 0) throw new MessageException("操作失败!");
+
+        //生成创意ID
         ideaBean.setProdUrl(ideaBean.getPlanId().concat("idea".concat(ideaBean.getPlanId()).concat(ideaBean.getIdeaId())));
         this.updateIdea(ideaBean);
     }
@@ -84,9 +90,15 @@ public class IdeaServiceImpl extends ServiceImpl<IdeaDao, IdeaBean> implements I
         List<IdeaBean> ideaBeans = ideaDao.selectList(queryWrapper);
         if(ideaBeans.size() <= 0)throw new MessageException("创意不存在!");
 
-        ideaBeans.get(0).setClickNum(String.valueOf(Integer.valueOf(ideaBeans.get(0).getClickNum())+1));
-
-        if (ideaDao.updateClickIdea(ideaBeans.get(0)) <= 0) throw new MessageException("操作失败!");
+        String newDate = TimeUtil.getDateYYYYMMDD(TimeUtil.getDBTime());
+        ideaBean.setCreateDate(newDate);
+        //查询当日的创意点击
+        List<IdeaclickBean> ideaclickBeans = ideaclickService.queryIdeaclick(new IdeaclickBean().setIdeaId(ideaBeans.get(0).getIdeaId()).setIdeaDate(newDate));
+        if (ideaBeans.isEmpty()){
+            ideaclickService.addIdeaclick(new IdeaclickBean().setIdeaId(ideaBeans.get(0).getIdeaId()).setIdeaDate(newDate).setClickNum("1"));
+        }else {
+            ideaclickService.updateIdeaclick(new IdeaclickBean().setIdeaId(ideaclickBeans.get(0).getIdeaId()).setIdeaDate(ideaclickBeans.get(0).getIdeaDate()).setClickNum(String.valueOf(Integer.valueOf(ideaclickBeans.get(0).getClickNum())+1)));
+        }
         return ideaBeans.get(0);
     }
 

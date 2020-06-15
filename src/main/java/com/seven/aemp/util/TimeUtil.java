@@ -3,6 +3,7 @@ package com.seven.aemp.util;
 
 import com.seven.aemp.common.InstantContextAfterProcessor;
 //import com.seven.aemp.service.CommonService;
+import com.seven.aemp.service.CommonService;
 import org.apache.commons.lang.StringUtils;
 
 import java.text.ParseException;
@@ -878,9 +879,9 @@ public class TimeUtil {
     }
 
     //获取数据库时间
-//    public static synchronized Date getDBTime(){
-//        CommonService commonService = InstantContextAfterProcessor.getService("commonServiceImpl", CommonService.class);
-//        return commonService.getDBTime();
-//    }
+    public static synchronized Date getDBTime(){
+        CommonService commonService = InstantContextAfterProcessor.getService("commonServiceImpl", CommonService.class);
+        return commonService.getDBTime();
+    }
 
 }

@@ -29,15 +29,11 @@ public class IdeaclickBean implements Serializable {
     @TableId(value = "IC_ID", type = IdType.AUTO)
     private Integer icId;
 
-    private Integer ideaId;
+    private String ideaId;
 
-    private LocalDateTime ideaDate;
+    private String ideaDate;
 
-    private Integer exhibits;
+    private String isExhibit;
 
-    private Integer clicks;
-
-    private BigDecimal clickRate;
-
-
+    private String clickNum;
 }
