@@ -14,5 +14,4 @@ public interface CommonService {
     //查询数据时间
     public Date queryDBTime();
 
-    Date getDBTime();
 }
