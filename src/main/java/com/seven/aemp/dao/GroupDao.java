@@ -17,5 +17,9 @@ import java.util.List;
 @Mapper
 public interface GroupDao extends BaseMapper<GroupBean> {
 
+    //查询组内创意，一段时间内汇总点击量
     List<GroupBean> queryGroup(GroupBean groupBean);
+
+    //查询组内创意，一段时间内单日点击量数据
+    List<GroupBean> queryGroupIdeaClickByUnitDay(GroupBean groupBean);
 }
