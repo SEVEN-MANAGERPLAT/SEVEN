@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.seven.aemp.dao.IdeaDao">
+    <!--时间段内汇总点击量-->
     <select id="queryIdea" resultType="com.seven.aemp.bean.IdeaBean">
         SELECT I.IDEA_ID
         ,I.IDEA_NAME
-        ,I.IDEA_DATE
+        ,IC.IDEA_DATE
         ,I.PLAN_ID
         ,P.PLAN_NAME
         ,I.EG_ID
@@ -13,45 +14,81 @@
         ,I.UPDATE_URL
         ,I.IDEA_DESCRIBE
         ,I.IDEA_DATE
-        ,FORMAT(I.CLICK_NUM/I.CLICK_RATE*100,0)  AS EXHIBITS
+        ,FORMAT(SUM(IC.CLICK_NUM)/I.CLICK_RATE*100,0)  AS EXHIBITS
         ,FORMAT(I.CLICK_RATE/100,2) AS CLICK_RATE
-        ,I.UNIT_PRICE
+        ,G.BILL AS UNIT_PRICE
         ,FORMAT(I.CLICK_NUM/I.UNIT_PRICE,2) AS CUSTOME
         ,I.STATE
-        ,I.CLICK_NUM
+        ,SUM(IC.CLICK_NUM) AS CLICK_NUM
         ,I.PROD_URL
+        ,SUM(IC.CLICK_NUM)* G.BILL AS CUSTOME
         FROM sevenmanager.extent_idea I
+        LEFT JOIN sevenmanager.ideaclick IC ON IC.IDEA_ID = I.IDEA_ID
         LEFT JOIN sevenmanager.extent_group G ON I.EG_ID=G.EG_ID
         LEFT JOIN  sevenmanager.plant P ON  P.PLAN_ID=I.PLAN_ID
         <where>
             <if test="egId != null and egId != ''">
-                AND  EG_ID = #{egId}
+                AND  I.EG_ID = #{egId}
             </if>
             <if test="planId != null and planId != ''">
-                AND PLAN_ID = #{planId}
+                AND I.PLAN_ID = #{planId}
             </if>
             <if test="prodUrl != null and prodUrl != ''">
-                AND PROD_URL = #{prodUrl}
+                AND I.PROD_URL = #{prodUrl}
             </if>
             <if test="ideaId != null and ideaId != ''">
-                AND IDEA_ID  = #{ideaId}
+                AND I.IDEA_ID  = #{ideaId}
             </if>
-            <if test="dateType != null and dateType != '' and dateType == '1'">
-                AND EG_NAME  = #{egName}
-            </if>
-            <if test="dateType != null and dateType != '' and dateType == '2'">
-                AND EG_NAME  = #{egName}
-            </if>
-            <if test="dateType != null and dateType != '' and dateType == '3'">
-                AND EG_NAME  = #{egName}
-            </if>
-            <if test="dateType != null and dateType != '' and dateType == '4'">
-                AND EG_NAME  = #{egName}
-            </if>
-            <if test="dateType != null and dateType != '' and dateType == '5'">
-                AND EG_NAME  = #{egName}
+            <if test="begDate != null and begDate != '' and endDate != null and endDate != ''">
+                AND IC.IDEA_DATE  >= #{begDate} AND IC.IDEA_DATE  &lt; #{endDate}
             </if>
         </where>
+        GROUP BY I.IDEA_ID
+    </select>
+
+    <!--查询某短时间内单日的点击量-->
+    <select id="queryIdeaClickByUnitDay" resultType="com.seven.aemp.bean.IdeaBean">
+        SELECT I.IDEA_ID
+        ,I.IDEA_NAME
+        ,IC.IDEA_DATE
+        ,I.PLAN_ID
+        ,P.PLAN_NAME
+        ,I.EG_ID
+        ,G.EG_NAME
+        ,I.ADVERTISE_TYPE_ID
+        ,I.UPDATE_URL
+        ,I.IDEA_DESCRIBE
+        ,I.IDEA_DATE
+        ,FORMAT(IC.CLICK_NUM/I.CLICK_RATE*100,0)  AS EXHIBITS
+        ,FORMAT(I.CLICK_RATE/100,2) AS CLICK_RATE
+        ,G.BILL AS UNIT_PRICE
+        ,FORMAT(I.CLICK_NUM/I.UNIT_PRICE,2) AS CUSTOME
+        ,I.STATE
+        ,IC.CLICK_NUM AS CLICK_NUM
+        ,I.PROD_URL
+        ,IC.CLICK_NUM* G.BILL AS CUSTOME
+        FROM sevenmanager.ideaclick IC
+        LEFT JOIN sevenmanager.extent_idea I ON IC.IDEA_ID = I.IDEA_ID
+        LEFT JOIN sevenmanager.extent_group G ON I.EG_ID=G.EG_ID
+        LEFT JOIN  sevenmanager.plant P ON  P.PLAN_ID=I.PLAN_ID
+        <where>
+            <if test="egId != null and egId != ''">
+                AND  I.EG_ID = #{egId}
+            </if>
+            <if test="planId != null and planId != ''">
+                AND I.PLAN_ID = #{planId}
+            </if>
+            <if test="prodUrl != null and prodUrl != ''">
+                AND I.PROD_URL = #{prodUrl}
+            </if>
+            <if test="ideaId != null and ideaId != ''">
+                AND I.IDEA_ID  = #{ideaId}
+            </if>
+            <if test="begDate != null and begDate != '' and endDate != null and endDate != ''">
+                AND IC.IDEA_DATE  >= #{begDate} AND IC.IDEA_DATE  &lt; #{endDate}
+            </if>
+        </where>
+        GROUP BY I.IDEA_ID, IC.IDEA_DATE
     </select>
 
     <!--插入创意-->

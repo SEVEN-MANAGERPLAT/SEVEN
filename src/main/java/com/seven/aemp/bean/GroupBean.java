@@ -126,4 +126,12 @@ public class GroupBean implements Serializable {
     //账号ID
     @TableField(exist = false)
     private String clickNum;
+
+    //组总消费
+    @TableField(exist = false)
+    private String consume;
+
+    //点击日期
+    @TableField(exist = false)
+    private String ideaDate;
 }
