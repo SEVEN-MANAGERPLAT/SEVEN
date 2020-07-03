@@ -1,8 +1,6 @@
-package com.jiubo.samystore.service.impl;
+package com.seven.aemp.service.impl;
 
-//import com.jiubo.samystore.bean.WxTokenBean;
 import com.seven.aemp.dao.CommonDao;
-//import com.jiubo.samystore.exception.MessageException;
 import com.seven.aemp.service.CommonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,32 +25,4 @@ public class CommonServiceImpl implements CommonService {
         Date date = commonDao.queryDBTime();
         return date;
     }
-
-    @Override
-    public Date getDBTime() {
-        return null;
-    }
-
-//    @Override
-//    public WxTokenBean queryWxToken() {
-//        return commonDao.queryWxToken();
-//    }
-//
-//    @Override
-//    @Transactional(rollbackFor = Exception.class)
-//    public void updateWxToken(WxTokenBean wxTokenBean) throws Exception {
-//        if (commonDao.updateWxToken(wxTokenBean) <= 0) throw new MessageException("操作失败!");
-//    }
-//
-//    @Override
-//    @Transactional(rollbackFor = Exception.class)
-//    public void addWxToken(WxTokenBean wxTokenBean) throws Exception {
-//        if (commonDao.addWxToken(wxTokenBean) <= 0) throw new MessageException("操作失败!");
-//    }
-//
-//    @Override
-//    @Transactional(rollbackFor = Exception.class)
-//    public void deleteWxToken(WxTokenBean wxTokenBean) throws Exception {
-//        if (commonDao.deleteWxToken(wxTokenBean) <= 0) throw new MessageException("操作失败!");
-//    }
 }
