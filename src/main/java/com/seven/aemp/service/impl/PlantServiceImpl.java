@@ -6,6 +6,7 @@ import com.seven.aemp.dao.PlantDao;
 import com.seven.aemp.exception.MessageException;
 import com.seven.aemp.service.PlantService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,12 +33,13 @@ public class PlantServiceImpl extends ServiceImpl<PlantDao, PlantBean> implement
 
     @Override
     public void addPlant(PlantBean plantBean) throws MessageException {
-        System.out.println("计划1："+plantBean.toString());
+        if(StringUtils.isBlank(plantBean.getPlanName())) throw new MessageException("计划名称不能为空");
+        if (StringUtils.isBlank(plantBean.getPlanPredict())) throw new MessageException("预算不能为空");
+        if (StringUtils.isBlank(plantBean.getAccId())) throw new MessageException("登录账号已过期，请重新登录");
         QueryWrapper<PlantBean> queryWrapper = new QueryWrapper<PlantBean>();
         queryWrapper.select("*");
         queryWrapper.eq("PLAN_NAME", plantBean.getPlanName());
         List<PlantBean> plantBeans = plantDao.selectList(queryWrapper);
-        System.out.println("计划："+plantBeans.toString());
         if(plantBeans.size() > 0)throw new MessageException("计划名不能重复!");
         if (plantDao.insert(plantBean) <= 0) throw new MessageException("操作失败!");
     }
