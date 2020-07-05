@@ -108,6 +108,9 @@ public class GroupBean implements Serializable {
      4：近30天
      5：时间段内的数据
      */
+
+    private String createDate;
+
     @TableField(exist = false)
     private String dateType;
 
@@ -134,4 +137,10 @@ public class GroupBean implements Serializable {
     //点击日期
     @TableField(exist = false)
     private String ideaDate;
+
+    @TableField(exist = false)
+    private String page;
+
+    @TableField(exist = false)
+    private String pageSize;
 }

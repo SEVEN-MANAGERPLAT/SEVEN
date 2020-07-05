@@ -42,13 +42,17 @@ public class PlantController {
      * @version: 1.0
      **/
     @PostMapping("/queryPlant")
-    public JSONObject queryPlant(@RequestBody String params) throws MessageException {
+    public JSONObject queryPlant(@RequestBody String params) throws Exception {
         if (StringUtils.isBlank(params)) throw new MessageException("参数接收失败!");
         JSONObject jsonObject = new JSONObject();
         jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
         jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
         PlantBean plantBean = JSONObject.parseObject(params, PlantBean.class);
-        jsonObject.put(Constant.Result.RETDATA, plantService.queryPlant(plantBean));
+        if (plantBean.getPage() == null && plantBean.getPageSize() == null) {
+            jsonObject.put(Constant.Result.RETDATA, plantService.queryPlant(plantBean));
+        } else {
+            jsonObject.put(Constant.Result.RETDATA, plantService.queryPlant(plantBean.getPage(), plantBean.getPageSize(), plantBean));
+        }
         return jsonObject;
     }
 

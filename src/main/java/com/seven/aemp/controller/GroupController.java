@@ -40,13 +40,17 @@ public class GroupController {
      * @version: 1.0
      **/
     @PostMapping("/queryGroup")
-    public JSONObject queryGroup(@RequestBody String params) throws MessageException {
+    public JSONObject queryGroup(@RequestBody String params) throws Exception {
         if (StringUtils.isBlank(params)) throw new MessageException("参数接收失败!");
         JSONObject jsonObject = new JSONObject();
         jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
         jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
-        GroupBean groupMBean = JSONObject.parseObject(params, GroupBean.class);
-        jsonObject.put(Constant.Result.RETDATA, groupService.queryGroup(groupMBean));
+        GroupBean groupBean = JSONObject.parseObject(params, GroupBean.class);
+        if (groupBean.getPage() == null && groupBean.getPageSize() == null) {
+            jsonObject.put(Constant.Result.RETDATA, groupService.queryGroup(groupBean));
+        } else {
+            jsonObject.put(Constant.Result.RETDATA, groupService.queryGroup(groupBean.getPage(), groupBean.getPageSize(), groupBean));
+        }
         return jsonObject;
     }
 

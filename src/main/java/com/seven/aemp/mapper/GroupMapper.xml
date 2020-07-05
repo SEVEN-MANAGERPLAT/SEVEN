@@ -10,20 +10,20 @@
         LEFT JOIN sevenmanager.extent_idea EI ON EI.EG_ID = G.EG_ID
         LEFT JOIN sevenmanager.ideaclick IC ON EI.IDEA_ID = IC.IDEA_ID
         <where>
-            <if test="egId != null and egId != ''">
-                AND EG_ID = #{egId}
+            <if test="group.egId != null and group.egId != ''">
+                AND G.EG_ID = #{group.egId}
             </if>
-            <if test="planId != null and planId != ''">
-                AND PLAN_ID = #{planId}
+            <if test="group.planId != null and group.planId != ''">
+                AND G.PLAN_ID = #{group.planId}
             </if>
-            <if test="egName != null and egName != ''">
-                AND EG_NAME  = #{egName}
+            <if test="group.egName != null and group.egName != ''">
+                AND G.EG_NAME  = #{group.egName}
             </if>
-            <if test="accId != null and accId != '' and accId != 1">
-                AND P.ACC_ID  = #{accId}
+            <if test="group.accId != null and group.accId != '' and group.accId != 1">
+                AND P.ACC_ID  = #{group.accId}
             </if>
-            <if test="begDate != null and begDate != '' and endDate != null and endDate != ''">
-                AND IC.IDEA_DATE  >= #{begDate} AND IC.IDEA_DATE  &lt; #{endDate}
+            <if test="group.begDate != null and group.begDate != '' and group.endDate != null and group.endDate != ''">
+                AND IC.IDEA_DATE  >= #{group.begDate} AND IC.IDEA_DATE  &lt; #{group.endDate}
             </if>
         </where>
         GROUP BY G.EG_ID
@@ -58,4 +58,12 @@
         GROUP BY G.EG_ID, IC.IDEA_DATE
     </select>
 
+    <!--插入组数据-->
+    <insert id="insertGroup" parameterType="com.seven.aemp.bean.GroupBean">
+        INSERT INTO EXTENT_GROUP
+        (PLAN_ID,EG_NAME,PLAN_DATE,PREDICT,COMPARE_PATTERN,BILL,THROW_URL,SOURCE_ID,SEX,AGE,INTREST,PLAT,APP_ACTION,THROW_AREA,THROW_BEG_DATE,THROW_END_DATE,THROW_SEG_DATE,STATE,CREATE_DATE)
+        VALUES
+        (#{planId},#{egName},#{planDate},#{predict},#{comparePattern},#{bill},#{throwUrl},#{sourceId}
+        ,#{sex},#{age},#{intrest},#{plat},#{appAction},#{throwArea},#{throwBegDate},#{throwEndDate},#{throwSegDate},#{state},#{createDate})
+    </insert>
 </mapper>

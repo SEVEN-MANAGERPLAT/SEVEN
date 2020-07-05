@@ -1,6 +1,7 @@
 package com.seven.aemp.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.seven.aemp.bean.PlantBean;
 import com.seven.aemp.dao.PlantDao;
 import com.seven.aemp.exception.MessageException;
@@ -27,8 +28,20 @@ public class PlantServiceImpl extends ServiceImpl<PlantDao, PlantBean> implement
     private PlantDao plantDao;
 
     @Override
-    public List<PlantBean> queryPlant(PlantBean plantBean) throws MessageException {
+    public List<PlantBean> queryPlant(PlantBean plantBean) throws Exception {
         return plantDao.queryPlant(plantBean);
+    }
+
+    @Override
+    public Page<PlantBean> queryPlant(String page, String pageSize, PlantBean plantBean) throws Exception {
+        if (StringUtils.isBlank(page)) {
+            page = "1";
+        }
+        if (StringUtils.isBlank(pageSize)) {
+            pageSize = "10";
+        }
+        Page<PlantBean> result = new Page<>(Long.valueOf(page), Long.valueOf(pageSize));
+        return result.setRecords(plantDao.queryPlant(result, plantBean));
     }
 
     @Override

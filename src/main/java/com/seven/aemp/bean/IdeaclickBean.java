@@ -1,6 +1,8 @@
 package com.seven.aemp.bean;
 
 import java.math.BigDecimal;
+
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -36,4 +38,10 @@ public class IdeaclickBean implements Serializable {
     private String isExhibit;
 
     private String clickNum;
+
+    @TableField(exist = false)
+    private String page;
+
+    @TableField(exist = false)
+    private String pageSize;
 }

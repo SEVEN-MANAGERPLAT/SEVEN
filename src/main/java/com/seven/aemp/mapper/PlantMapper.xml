@@ -12,19 +12,19 @@
         FROM sevenmanager.plant
 
         <where>
-            <if test="planId != null and planId != ''">
-                AND PLAN_ID = #{planId}
+            <if test="plan.planId != null and plan.planId != ''">
+                AND PLAN_ID = #{plan.planId}
             </if>
-            <if test="accId != null and accId != '' and accId != 1">
-                AND ACC_ID  = #{accId}
+            <if test="plan.accId != null and plan.accId != '' and plan.accId != 1">
+                AND ACC_ID  = #{plan.accId}
             </if>
-            <if test="begDate != null and begDate != '' and endDate != null and endDate != ''">
-                AND CREATE_DATE >= #{begDate}
-                AND CREATE_DATE &lt;= #{endDate}
+            <if test="plan.begDate != null and plan.begDate != '' and plan.endDate != null and plan.endDate != ''">
+                AND CREATE_DATE >= #{plan.begDate}
+                AND CREATE_DATE &lt;= #{plan.endDate}
             </if>
-            <if test="planName != null and planName != ''">
+            <if test="plan.planName != null and plan.planName != ''">
                 --                 AND PLAN_NAME  LIKE  '% ${planName}%'
-                AND PLAN_NAME  LIKE  "%"#{planName}"%"
+                AND PLAN_NAME  LIKE  "%"#{plan.planName}"%"
             </if>
         </where>
     </select>

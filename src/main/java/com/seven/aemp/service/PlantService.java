@@ -1,5 +1,6 @@
 package com.seven.aemp.service;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.seven.aemp.bean.PlantBean;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.seven.aemp.exception.MessageException;
@@ -17,7 +18,9 @@ import java.util.List;
 public interface PlantService extends IService<PlantBean> {
 
     //查询计划
-    public List<PlantBean> queryPlant(PlantBean plantBean)throws MessageException;
+    public List<PlantBean> queryPlant(PlantBean plantBean)throws Exception;
+
+    public Page<PlantBean> queryPlant(String page, String pageSize, PlantBean plantBean) throws Exception;
 
     //添加计划
     public void addPlant(PlantBean plantBean)throws MessageException;

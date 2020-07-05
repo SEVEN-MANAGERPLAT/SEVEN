@@ -1,7 +1,11 @@
 package com.seven.aemp.dao;
 
+
+
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.seven.aemp.bean.IdeaBean;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Param;
 import org.mapstruct.Mapper;
 
 import java.util.List;
@@ -18,7 +22,10 @@ import java.util.List;
 public interface IdeaDao extends BaseMapper<IdeaBean> {
 
     //查询创意，一段时间内汇总点击量
-    List<IdeaBean> queryIdea(IdeaBean ideaBean);
+    List<IdeaBean> queryIdea(@Param("idea") IdeaBean ideaBean);
+
+    //分页创意查询
+    List<IdeaBean> queryIdea(Page<IdeaBean> result, @Param("idea") IdeaBean ideaBean);
 
     //查询创意，一段时间内单日点击量数据
     List<IdeaBean> queryIdeaClickByUnitDay(IdeaBean ideaBean);

@@ -1,5 +1,6 @@
 package com.seven.aemp.service;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.seven.aemp.bean.IdeaBean;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.seven.aemp.exception.MessageException;
@@ -19,6 +20,8 @@ public interface IdeaService extends IService<IdeaBean> {
 
     //查询创意列表
     public List<IdeaBean> queryIdea(IdeaBean ideaBean)throws Exception;
+
+    public Page<IdeaBean> queryIdea(String page, String pageSize, IdeaBean ideaBean) throws Exception;
 
     //添加创意
     public void addIdea(IdeaBean ideaBean, MultipartFile[] file)throws Exception;

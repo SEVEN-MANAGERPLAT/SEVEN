@@ -5,7 +5,6 @@
     <select id="queryIdea" resultType="com.seven.aemp.bean.IdeaBean">
         SELECT I.IDEA_ID
         ,I.IDEA_NAME
-        ,IC.IDEA_DATE
         ,I.PLAN_ID
         ,P.PLAN_NAME
         ,I.EG_ID
@@ -15,9 +14,8 @@
         ,I.IDEA_DESCRIBE
         ,I.IDEA_DATE
         ,FORMAT(SUM(IC.CLICK_NUM)/I.CLICK_RATE*100,0)  AS EXHIBITS
-        ,FORMAT(I.CLICK_RATE/100,2) AS CLICK_RATE
+        ,I.CLICK_RATE
         ,G.BILL AS UNIT_PRICE
-        ,FORMAT(I.CLICK_NUM/I.UNIT_PRICE,2) AS CUSTOME
         ,I.STATE
         ,SUM(IC.CLICK_NUM) AS CLICK_NUM
         ,I.PROD_URL
@@ -27,20 +25,20 @@
         LEFT JOIN sevenmanager.extent_group G ON I.EG_ID=G.EG_ID
         LEFT JOIN  sevenmanager.plant P ON  P.PLAN_ID=I.PLAN_ID
         <where>
-            <if test="egId != null and egId != ''">
-                AND  I.EG_ID = #{egId}
+            <if test="idea.egId != null and idea.egId != ''">
+                AND  I.EG_ID = #{idea.egId}
             </if>
-            <if test="planId != null and planId != ''">
-                AND I.PLAN_ID = #{planId}
+            <if test="idea.planId != null and idea.planId != ''">
+                AND I.PLAN_ID = #{idea.planId}
             </if>
-            <if test="prodUrl != null and prodUrl != ''">
-                AND I.PROD_URL = #{prodUrl}
+            <if test="idea.ideaName != null and idea.ideaName != ''">
+                AND I.IDEA_NAME = #{idea.ideaName}
             </if>
-            <if test="ideaId != null and ideaId != ''">
-                AND I.IDEA_ID  = #{ideaId}
+            <if test="idea.ideaId != null and idea.ideaId != ''">
+                AND I.IDEA_ID  = #{idea.ideaId}
             </if>
-            <if test="begDate != null and begDate != '' and endDate != null and endDate != ''">
-                AND IC.IDEA_DATE  >= #{begDate} AND IC.IDEA_DATE  &lt; #{endDate}
+            <if test="idea.begDate != null and idea.begDate != '' and idea.endDate != null and idea.endDate != ''">
+                AND IC.IDEA_DATE  >= #{idea.begDate} AND IC.IDEA_DATE  &lt; #{idea.endDate}
             </if>
         </where>
         GROUP BY I.IDEA_ID
@@ -96,7 +94,7 @@
         INSERT INTO sevenmanager.extent_idea
             (PLAN_ID,EG_ID,IDEA_NAME,UPDATE_URL,IDEA_DESCRIBE,PROD_URL,EXHIBITS,CLICK_NUM,CLICK_RATE,UNIT_PRICE,STATE,CREATE_DATE)
         VALUES
-           (#{pId},#{gId},#{iName},#{updateUrl},#{ideaDescribe},#{prodUrl},0,0,0,#{unitPrice},#{state},#{createDate})
+           (#{planId},#{egId},#{ideaName},#{updateUrl},#{ideaDescribe},#{prodUrl},0,0,0,#{unitPrice},#{state},#{createDate})
     </insert>
 
     <update id="updateClickIdea" useGeneratedKeys="true" keyProperty="ideaId" parameterType="com.seven.aemp.bean.IdeaBean">

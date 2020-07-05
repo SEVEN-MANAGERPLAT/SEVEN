@@ -66,4 +66,10 @@ public class PlantBean implements Serializable {
     //账号ID
     private String accId;
 
+
+    @TableField(exist = false)
+    private String page;
+
+    @TableField(exist = false)
+    private String pageSize;
 }

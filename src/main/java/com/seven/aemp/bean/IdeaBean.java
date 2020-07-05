@@ -86,4 +86,10 @@ public class IdeaBean implements Serializable {
     //账号ID
     @TableField(exist = false)
     private String accId;
+
+    @TableField(exist = false)
+    private String page;
+
+    @TableField(exist = false)
+    private String pageSize;
 }

@@ -1,15 +1,16 @@
 package com.seven.aemp.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.seven.aemp.bean.IdeaBean;
 import com.seven.aemp.bean.IdeaclickBean;
-import com.seven.aemp.dao.GroupDao;
 import com.seven.aemp.dao.IdeaDao;
 import com.seven.aemp.exception.MessageException;
 import com.seven.aemp.service.IdeaService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.seven.aemp.service.IdeaclickService;
 import com.seven.aemp.util.TimeUtil;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -44,6 +45,18 @@ public class IdeaServiceImpl extends ServiceImpl<IdeaDao, IdeaBean> implements I
     @Override
     public List<IdeaBean> queryIdea(IdeaBean ideaBean) throws Exception {
         return ideaDao.queryIdea(ideaBean);
+    }
+
+    @Override
+    public Page<IdeaBean> queryIdea(String page, String pageSize, IdeaBean ideaBean) throws Exception {
+        if (StringUtils.isBlank(page)) {
+            page = "1";
+        }
+        if (StringUtils.isBlank(pageSize)) {
+            pageSize = "10";
+        }
+        Page<IdeaBean> result = new Page<>(Long.valueOf(page), Long.valueOf(pageSize));
+        return result.setRecords(ideaDao.queryIdea(result, ideaBean));
     }
 
     @Override
