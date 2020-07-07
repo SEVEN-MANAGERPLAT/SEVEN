@@ -5,7 +5,7 @@
     <!--    查询-->
     <select id="queryUmsResource" resultType="com.seven.aemp.bean.UmsResourceBean">
         SELECT ID, CREATE_TIME, NAME, URL, DESCRIPTION, CATEGORY_ID
-        FROM UMS_RESOURCE
+        FROM ums_resource
     </select>
 
     <select id="queryUmsResourceByAdminId" resultType="com.seven.aemp.bean.UmsResourceBean">
@@ -15,10 +15,10 @@
                UR.URL         URL,
                UR.DESCRIPTION DESCRIPTION,
                UR.CATEGORY_ID CATEGORYID
-        FROM UMS_ADMIN_ROLE_RELATION AR
-        LEFT JOIN UMS_ROLE R ON AR.ROLE_ID = R.ID
-        LEFT JOIN UMS_ROLE_RESOURCE_RELATION RRR ON R.ID = RRR.ROLE_ID
-        LEFT JOIN UMS_RESOURCE UR ON UR.ID = RRR.RESOURCE_ID
+        FROM ums_admin_role_relation AR
+        LEFT JOIN ums_role R ON AR.ROLE_ID = R.ID
+        LEFT JOIN ums_role_resource_relation RRR ON R.ID = RRR.ROLE_ID
+        LEFT JOIN ums_resource UR ON UR.ID = RRR.RESOURCE_ID
         WHERE AR.ADMIN_ID = #{accountId}
           AND UR.ID IS NOT NULL
         GROUP BY UR.ID
