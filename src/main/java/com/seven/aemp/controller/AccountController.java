@@ -90,7 +90,7 @@ public class AccountController {
         jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
         jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
         AccountBean accountBean = JSONObject.parseObject(params, AccountBean.class);
-        jsonObject.put(Constant.Result.RETDATA, accountService.queryAccount(accountBean));
+        jsonObject.put(Constant.Result.RETDATA, accountService.queryAccount(accountBean.getPage(), accountBean.getPageSize(), accountBean));
         return jsonObject;
     }
 

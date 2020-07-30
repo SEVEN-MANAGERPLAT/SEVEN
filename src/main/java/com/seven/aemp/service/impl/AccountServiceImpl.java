@@ -2,6 +2,7 @@ package com.seven.aemp.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.seven.aemp.bean.AccountBean;
 import com.seven.aemp.bean.UmsResourceBean;
 import com.seven.aemp.common.Constant;
@@ -68,6 +69,18 @@ public class AccountServiceImpl extends ServiceImpl<AccountDao, AccountBean> imp
     @Override
     public List<AccountBean> queryAccount(AccountBean accountBean) {
         return accountDao.queryAccount(accountBean);
+    }
+
+    @Override
+    public Page<AccountBean> queryAccount(String page, String pageSize, AccountBean accountBean) throws Exception {
+        if (StringUtils.isBlank(page)) {
+            page = "1";
+        }
+        if (StringUtils.isBlank(pageSize)) {
+            pageSize = "10";
+        }
+        Page<AccountBean> result = new Page<>(Long.valueOf(page), Long.valueOf(pageSize));
+        return result.setRecords(accountDao.queryAccount(result, accountBean));
     }
 
     @Override

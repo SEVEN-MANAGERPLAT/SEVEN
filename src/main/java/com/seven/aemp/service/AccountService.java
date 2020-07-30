@@ -1,8 +1,10 @@
 package com.seven.aemp.service;
 
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.seven.aemp.bean.AccountBean;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.seven.aemp.bean.GroupBean;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.List;
@@ -18,6 +20,8 @@ import java.util.List;
 public interface AccountService extends IService<AccountBean> {
     //查询用户
     public List<AccountBean> queryAccount(AccountBean accountBean);
+
+    public Page<AccountBean> queryAccount(String page, String pageSize, AccountBean accountBean) throws Exception;
 
     //用户登录
     public JSONObject login(AccountBean accountBean) throws Exception;

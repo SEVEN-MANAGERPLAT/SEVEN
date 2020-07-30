@@ -1,5 +1,6 @@
 package com.seven.aemp.bean;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -47,7 +48,20 @@ public class AccountBean implements Serializable {
 
     private Integer businessId;
 
+    //运营人员
     private Integer operateId;
 
+    //销售人员
+    private Integer saleId;
+
+    //审核状态
+    private Integer checkState;
+
     private String accountState;
+
+    @TableField(exist = false)
+    private String page;
+
+    @TableField(exist = false)
+    private String pageSize;
 }
