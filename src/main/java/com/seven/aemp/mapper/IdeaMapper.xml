@@ -19,6 +19,7 @@
         ,I.STATE
         ,SUM(IC.CLICK_NUM) AS CLICK_NUM
         ,I.PROD_URL
+        ,I.CHECK_STATE
         ,SUM(IC.CLICK_NUM)* G.BILL AS CUSTOME
         FROM sevenmanager.extent_idea I
         LEFT JOIN sevenmanager.ideaclick IC ON IC.IDEA_ID = I.IDEA_ID
@@ -36,6 +37,9 @@
             </if>
             <if test="idea.ideaId != null and idea.ideaId != ''">
                 AND I.IDEA_ID  = #{idea.ideaId}
+            </if>
+            <if test="idea.checkState != null and idea.checkState != ''">
+                AND I.CHECK_STATE  = #{idea.checkState}
             </if>
             <if test="idea.begDate != null and idea.begDate != '' and idea.endDate != null and idea.endDate != ''">
                 AND IC.IDEA_DATE  >= #{idea.begDate} AND IC.IDEA_DATE  &lt; #{idea.endDate}
@@ -92,11 +96,23 @@
     <!--插入创意-->
     <insert id="addIdea" useGeneratedKeys="true" keyProperty="ideaId" parameterType="com.seven.aemp.bean.IdeaBean">
         INSERT INTO sevenmanager.extent_idea
-            (PLAN_ID,EG_ID,IDEA_NAME,UPDATE_URL,IDEA_DESCRIBE,PROD_URL,EXHIBITS,CLICK_NUM,CLICK_RATE,UNIT_PRICE,STATE,CREATE_DATE)
+            (PLAN_ID,EG_ID,IDEA_NAME,UPDATE_URL,IDEA_DESCRIBE,PROD_URL,EXHIBITS,CLICK_NUM,CLICK_RATE,UNIT_PRICE,STATE,CHECK_STATE,CREATE_DATE)
         VALUES
-           (#{planId},#{egId},#{ideaName},#{updateUrl},#{ideaDescribe},#{prodUrl},0,0,0,#{unitPrice},#{state},#{createDate})
+           (#{planId},#{egId},#{ideaName},#{updateUrl},#{ideaDescribe},#{prodUrl},0,0,0,#{unitPrice},#{state},#{checkState},#{createDate})
     </insert>
 
+    <!--更新审核状态-->
+    <update id="updateCheckState" useGeneratedKeys="true" keyProperty="ideaId" parameterType="com.seven.aemp.bean.IdeaBean">
+        UPDATE sevenmanager.extent_idea SET
+        <if test="checkState != '' and checkState != null">
+            CHECK_STATE = #{checkState}
+        </if>
+        WHERE
+        <if test="ideaId != '' and ideaId != null">
+            IDEA_ID = #{ideaId}
+        </if>
+    </update>
+    <!--更新点击数-->
     <update id="updateClickIdea" useGeneratedKeys="true" keyProperty="ideaId" parameterType="com.seven.aemp.bean.IdeaBean">
         UPDATE sevenmanager.extent_idea SET
           <if test="prodUrl != '' and prodUrl != null">

@@ -63,6 +63,8 @@ public class IdeaBean implements Serializable {
 
     private String prodUrl;
 
+    private String checkState;
+
     private String createDate;
 
     /**

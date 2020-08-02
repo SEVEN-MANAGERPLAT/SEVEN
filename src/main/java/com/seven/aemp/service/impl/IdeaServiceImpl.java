@@ -76,6 +76,7 @@ public class IdeaServiceImpl extends ServiceImpl<IdeaDao, IdeaBean> implements I
         Random random = new Random();
         int s = random.nextInt(20)%(5) + 15;
         ideaBean.setClickRate(String.valueOf(s));
+        ideaBean.setCheckState("2");
         if (ideaDao.addIdea(ideaBean) <= 0) throw new MessageException("操作失败!");
 
         //生成创意ID
@@ -113,6 +114,11 @@ public class IdeaServiceImpl extends ServiceImpl<IdeaDao, IdeaBean> implements I
             ideaclickService.updateIdeaclick(new IdeaclickBean().setIdeaId(ideaclickBeans.get(0).getIdeaId()).setIdeaDate(ideaclickBeans.get(0).getIdeaDate()).setClickNum(String.valueOf(Integer.valueOf(ideaclickBeans.get(0).getClickNum())+1)));
         }
         return ideaBeans.get(0);
+    }
+
+    @Override
+    public void updateCheckState(IdeaBean ideaBean) throws Exception {
+        ideaDao.updateCheckState(ideaBean);
     }
 
     //保存文件

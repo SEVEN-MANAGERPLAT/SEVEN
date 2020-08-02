@@ -29,6 +29,8 @@ public interface IdeaService extends IService<IdeaBean> {
     //修改创意
     public void updateIdea(IdeaBean ideaBean)throws Exception;
 
-    //修改创意
+    //修改创意点击数
     public IdeaBean updateCilckIdea(IdeaBean ideaBean)throws Exception;
+
+    public void updateCheckState(IdeaBean ideaBean)throws Exception;
 }

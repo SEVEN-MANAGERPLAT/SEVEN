@@ -46,6 +46,8 @@ public class AccountBean implements Serializable {
 
     private String email;
 
+    private String isUse;
+
     private Integer businessId;
 
     //运营人员
@@ -56,6 +58,9 @@ public class AccountBean implements Serializable {
 
     //审核状态
     private Integer checkState;
+
+    //操作状态
+    private Integer operateState;
 
     private String accountState;
 

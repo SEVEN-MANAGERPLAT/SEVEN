@@ -33,5 +33,9 @@ public interface IdeaDao extends BaseMapper<IdeaBean> {
     //添加创意
     int addIdea(IdeaBean ideaBean);
 
+    //更新点击数
     int updateClickIdea(IdeaBean ideaBean);
+
+//    更新审核状态
+    int updateCheckState(IdeaBean ideaBean);
 }
