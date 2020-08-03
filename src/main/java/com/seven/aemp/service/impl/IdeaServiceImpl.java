@@ -108,7 +108,7 @@ public class IdeaServiceImpl extends ServiceImpl<IdeaDao, IdeaBean> implements I
         ideaBean.setCreateDate(newDate);
         //查询当日的创意点击
         List<IdeaclickBean> ideaclickBeans = ideaclickService.queryIdeaclick(new IdeaclickBean().setIdeaId(ideaBeans.get(0).getIdeaId()).setIdeaDate(newDate));
-        if (ideaBeans.isEmpty()){
+        if (ideaclickBeans.isEmpty()){
             ideaclickService.addIdeaclick(new IdeaclickBean().setIdeaId(ideaBeans.get(0).getIdeaId()).setIdeaDate(newDate).setClickNum("1"));
         }else {
             ideaclickService.updateIdeaclick(new IdeaclickBean().setIdeaId(ideaclickBeans.get(0).getIdeaId()).setIdeaDate(ideaclickBeans.get(0).getIdeaDate()).setClickNum(String.valueOf(Integer.valueOf(ideaclickBeans.get(0).getClickNum())+1)));

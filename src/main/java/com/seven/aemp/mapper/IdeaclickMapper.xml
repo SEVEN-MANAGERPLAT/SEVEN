@@ -12,13 +12,13 @@
         FROM SEVENMANAGER.IDEACLICK  IC
         WHERE 1=1
         <if test="ideaId != null and ideaId != ''">
-            IC.IDEA_ID = #{ideaId}
+            AND IC.IDEA_ID = #{ideaId}
         </if>
         <if test="icId != null and icId != ''">
-            IC.IC_ID = #{icId}
+            AND IC.IC_ID = #{icId}
         </if>
         <if test="ideaDate != null and ideaDate != ''">
-            IC.IDEA_DATE = #{ideaDate}
+            AND IC.IDEA_DATE = #{ideaDate}
         </if>
     </select>
 
