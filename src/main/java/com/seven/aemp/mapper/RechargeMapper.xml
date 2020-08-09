@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.seven.aemp.dao.RechargeDao">
+    <!--查询缴费信息-->
+    <select id="queryRechargeList" parameterType="com.seven.aemp.bean.RechargeBean" resultType="com.seven.aemp.bean.RechargeBean">
+        SELECT ACC.FIRM_NAME,RE.RE_MONEY,RE.CREATE_DATE
+        FROM recharge RE
+        LEFT JOIN account ACC ON ACC.ACCOUNT_ID=RE.ACC_ID
+        WHERE 1=1
+        <if test="accountId != null and accountId != ''">
+            AND ACC.ACCOUNT_ID = #{accountId}
+        </if>
+        <if test="begDate != null and begDate != '' and endDate != null and endDate != ''">
+             AND CREATE_DATE >= #{plan.begDate}
+             AND CREATE_DATE &lt;= #{plan.endDate}
+        </if>
+    </select>
+
+    <!--插入缴费信息-->
+    <insert id="addRechargeInfo" parameterType="com.seven.aemp.bean.RechargeBean" keyProperty="RE_ID" useGeneratedKeys="true">
+        INSERT INTO recharge
+                (ACC_ID,RE_MONEY,CREATE_DATE)
+        values
+                (#{accId},#{reMoney},#{createDate})
+    </insert>
+
+</mapper>

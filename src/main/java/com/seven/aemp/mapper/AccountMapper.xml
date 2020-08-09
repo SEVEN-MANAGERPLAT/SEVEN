@@ -4,7 +4,7 @@
     <!--    查询用户-->
     <select id="queryAccount" resultType="com.seven.aemp.bean.AccountBean">
         SELECT ACCOUNT_ID,ACCOUNT_NAME,ACCOUNT_PWD,FIRM_NAME,ADDRESS , INDUSTRY , CERTIFICATE, LINK_MAN , PHONE,
-        EMAIL, BUSINESS_ID, OPERATE_ID, ACCOUNT_STATE,CHECK_STATE,SALE_ID,OPERATE_STATE
+        EMAIL, BUSINESS_ID, OPERATE_ID, ACCOUNT_STATE,SALE_ID
         FROM sevenmanager.account
         <where>
             <if test="account.accountId != null and account.accountId != '' and account.accountId != 1">
@@ -71,9 +71,6 @@
             </if>
             <if test="isUse != null and isUse != ''">
                 IS_USE = #{isUse},
-            </if>
-            <if test="operateState != null and operateState != ''">
-                OPERATE_STATE = #{operateState},
             </if>
         </trim>
         WHERE

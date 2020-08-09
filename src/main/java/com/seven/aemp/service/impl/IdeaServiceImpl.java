@@ -104,14 +104,14 @@ public class IdeaServiceImpl extends ServiceImpl<IdeaDao, IdeaBean> implements I
         List<IdeaBean> ideaBeans = ideaDao.selectList(queryWrapper);
         if(ideaBeans.size() <= 0)throw new MessageException("创意不存在!");
 
-        String newDate = TimeUtil.getDateYYYYMMDD(TimeUtil.getDBTime());
+        String newDate = TimeUtil.getDateYYYY_MM_DD(TimeUtil.getDBTime());
         ideaBean.setCreateDate(newDate);
         //查询当日的创意点击
         List<IdeaclickBean> ideaclickBeans = ideaclickService.queryIdeaclick(new IdeaclickBean().setIdeaId(ideaBeans.get(0).getIdeaId()).setIdeaDate(newDate));
         if (ideaclickBeans.isEmpty()){
             ideaclickService.addIdeaclick(new IdeaclickBean().setIdeaId(ideaBeans.get(0).getIdeaId()).setIdeaDate(newDate).setClickNum("1"));
         }else {
-            ideaclickService.updateIdeaclick(new IdeaclickBean().setIdeaId(ideaclickBeans.get(0).getIdeaId()).setIdeaDate(ideaclickBeans.get(0).getIdeaDate()).setClickNum(String.valueOf(Integer.valueOf(ideaclickBeans.get(0).getClickNum())+1)));
+            ideaclickService.updateIdeaclick(new IdeaclickBean().setIcId(ideaclickBeans.get(0).getIcId()).setClickNum(String.valueOf(Integer.valueOf(ideaclickBeans.get(0).getClickNum())+1)));
         }
         return ideaBeans.get(0);
     }

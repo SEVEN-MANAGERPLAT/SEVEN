@@ -18,7 +18,7 @@
             AND IC.IC_ID = #{icId}
         </if>
         <if test="ideaDate != null and ideaDate != ''">
-            AND IC.IDEA_DATE = #{ideaDate}
+            AND DATE_FORMAT(IC.IDEA_DATE,'%Y-%m-%d') = #{ideaDate}
         </if>
     </select>
 
