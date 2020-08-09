@@ -141,4 +141,10 @@ public class AccountController {
         jsonObject.put(Constant.Result.RETDATA, accountService.addAccount(accountBean));
         return jsonObject;
     }
+
+    //获取当前登录的用户(仅测试使用)
+    @PostMapping("/getCurrentAccount")
+    public JSONObject getCurrentAccount() throws Exception {
+        return CommonResultUtil.retSuccJSONObj(accountService.getCurrentAccount());
+    }
 }

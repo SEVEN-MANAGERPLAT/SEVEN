@@ -35,4 +35,7 @@ public interface AccountService extends IService<AccountBean> {
     UserDetails loadUserByUsername(String userName);
 
     public JSONObject loginTwo(AccountBean accountBean)throws Exception;
+
+    //获取当前登录的用户信息
+    public AccountBean getCurrentAccount();
 }
