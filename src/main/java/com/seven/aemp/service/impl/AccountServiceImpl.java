@@ -34,6 +34,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -164,5 +165,10 @@ public class AccountServiceImpl extends ServiceImpl<AccountDao, AccountBean> imp
         Authentication auth = ctx.getAuthentication();
         AdminUserDetails adminUserDetails = (AdminUserDetails) auth.getPrincipal();
         return adminUserDetails.getUmsAdmin();
+    }
+
+    @Override
+    public Map<String, String> queryConsumAndArrease() throws Exception {
+        return accountDao.queryConsumAndArrease();
     }
 }

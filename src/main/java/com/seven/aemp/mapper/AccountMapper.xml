@@ -78,4 +78,24 @@
             ACCOUNT_ID = #{accountId}
         </if>
     </update>
+
+    <!--统计剩余金额和昨日消费-->
+    <select id="queryConsumAndArrease" resultType="Java.util.Map">
+        SELECT CASE WHEN AP.CONSUM IS NULL THEN 0 ELSE AP.CONSUM END AS consum
+            ,CASE WHEN AP.BALANCE IS NULL THEN 0 ELSE AP.BALANCE END AS balance	 FROM
+        (SELECT SUM(AAPEC.BALANCE) AS BALANCE,SUM(AAPEC.CONSUM) AS CONSUM  FROM
+        (
+        SELECT ACC.BALANCE,SUM(APEC.CONSUM) AS CONSUM FROM account ACC
+        LEFT JOIN
+        (SELECT ACC.ACCOUNT_ID, IFNULL(IC.CLICK_NUM,0)*IFNULL(EG.BILL,0) AS CONSUM
+        FROM account ACC
+        LEFT JOIN plant P ON ACC.ACCOUNT_ID=P.ACC_ID
+        LEFT JOIN extent_group EG ON P.PLAN_ID=EG.PLAN_ID
+        LEFT JOIN extent_idea EI ON EI.EG_ID=EG.EG_ID
+        LEFT JOIN ideaclick IC ON EI.IDEA_ID=IC.IDEA_ID
+        WHERE
+        IC.IDEA_DATE=DATE_SUB(CURDATE(),INTERVAL +1 DAY)) APEC ON ACC.ACCOUNT_ID=APEC.ACCOUNT_ID
+
+        GROUP BY ACC.ACCOUNT_ID) AAPEC) AP
+    </select>
 </mapper>

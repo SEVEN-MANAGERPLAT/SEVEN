@@ -69,4 +69,10 @@ public class AccountBean implements Serializable {
 
     @TableField(exist = false)
     private String pageSize;
+
+    @TableField(exist = false)
+    private String consum;
+
+    @TableField(exist = false)
+    private String balance;
 }

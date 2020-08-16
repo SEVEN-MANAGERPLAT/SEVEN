@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * <p>
@@ -22,7 +23,7 @@ import org.springframework.stereotype.Controller;
  * @author mwl
  * @since 2020-08-07
  */
-@Controller
+@RestController
 @RequestMapping("/rechargeBean")
 public class RechargeController {
 

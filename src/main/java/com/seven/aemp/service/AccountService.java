@@ -8,6 +8,7 @@ import com.seven.aemp.bean.GroupBean;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -38,4 +39,7 @@ public interface AccountService extends IService<AccountBean> {
 
     //获取当前登录的用户信息
     public AccountBean getCurrentAccount();
+
+    //查询充值信息
+    public Map<String,String> queryConsumAndArrease() throws Exception;
 }

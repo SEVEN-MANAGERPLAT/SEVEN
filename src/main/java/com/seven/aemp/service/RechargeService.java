@@ -4,6 +4,7 @@ import com.seven.aemp.bean.RechargeBean;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -20,4 +21,6 @@ public interface RechargeService extends IService<RechargeBean> {
 
     //查询充值信息
     public int addRechargeInfo(RechargeBean rechargeBean) throws Exception;
+
+
 }

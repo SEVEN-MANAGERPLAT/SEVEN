@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Param;
 import org.mapstruct.Mapper;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -25,5 +26,8 @@ public interface AccountDao extends BaseMapper<AccountBean> {
     List<AccountBean> queryAccount(Page<AccountBean> result, @Param("account") AccountBean accountBean);
 
     //修改用户信息
-    public int updateAccount(AccountBean accountBean);
+    int updateAccount(AccountBean accountBean);
+
+    //账户剩余金额和昨日消费
+   Map<String,String> queryConsumAndArrease();
 }

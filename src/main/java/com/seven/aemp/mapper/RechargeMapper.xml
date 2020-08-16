@@ -7,21 +7,17 @@
         FROM recharge RE
         LEFT JOIN account ACC ON ACC.ACCOUNT_ID=RE.ACC_ID
         WHERE 1=1
-        <if test="accountId != null and accountId != ''">
-            AND ACC.ACCOUNT_ID = #{accountId}
-        </if>
-        <if test="begDate != null and begDate != '' and endDate != null and endDate != ''">
-             AND CREATE_DATE >= #{plan.begDate}
-             AND CREATE_DATE &lt;= #{plan.endDate}
+        <if test="accId != null and accId != ''">
+            AND ACC.ACCOUNT_ID = #{accId}
         </if>
     </select>
 
     <!--插入缴费信息-->
-    <insert id="addRechargeInfo" parameterType="com.seven.aemp.bean.RechargeBean" keyProperty="RE_ID" useGeneratedKeys="true">
+    <insert id="addRechargeInfo" parameterType="com.seven.aemp.bean.RechargeBean" keyProperty="reId" useGeneratedKeys="true">
         INSERT INTO recharge
                 (ACC_ID,RE_MONEY,CREATE_DATE)
         values
-                (#{accId},#{reMoney},#{createDate})
+                (#{accId},#{reMoney},getdate())
     </insert>
 
 </mapper>

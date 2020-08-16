@@ -1,6 +1,8 @@
 package com.seven.aemp.bean;
 
 import java.math.BigDecimal;
+
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -42,5 +44,7 @@ public class RechargeBean implements Serializable {
     @ApiModelProperty(value = "充值时间")
     private String createDate;
 
-
+    @ApiModelProperty(value = "公司名称")
+    @TableField(exist = false)
+    private String firmName;
 }
