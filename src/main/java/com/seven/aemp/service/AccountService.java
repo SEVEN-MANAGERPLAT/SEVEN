@@ -42,4 +42,13 @@ public interface AccountService extends IService<AccountBean> {
 
     //查询充值信息
     public Map<String,String> queryConsumAndArrease() throws Exception;
+
+    //查询不同状态的客户数
+    public Map<String,String> queryAccountState() throws Exception;
+
+    //查询每日的点击量，消费情况
+    public List<Map<String,String>> queryConsum(AccountBean accountBean) throws Exception;
+
+    //查询推广账户统计
+    public List<AccountBean> queryFirmSummary(AccountBean accountBean) throws Exception;
 }

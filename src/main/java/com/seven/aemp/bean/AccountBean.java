@@ -64,6 +64,13 @@ public class AccountBean implements Serializable {
 
     private String accountState;
 
+    private String clickRate;
+
+    private String clickNum;
+
+    private String dayPredect;
+
+
     @TableField(exist = false)
     private String page;
 
@@ -71,8 +78,36 @@ public class AccountBean implements Serializable {
     private String pageSize;
 
     @TableField(exist = false)
+    private String exhibits;
+
+    @TableField(exist = false)
     private String consum;
 
     @TableField(exist = false)
+    private String unitPrice;
+
+    @TableField(exist = false)
     private String balance;
+
+    @TableField(exist = false)
+    private String totle;
+
+    @TableField(exist = false)
+    private String throwing;
+
+    @TableField(exist = false)
+    private String stoped;
+
+    @TableField(exist = false)
+    private String checked;
+
+    @TableField(exist = false)
+    private String refuse;
+
+    @TableField(exist = false)
+    private String begDate;
+
+    @TableField(exist = false)
+    private String endDate;
+
 }

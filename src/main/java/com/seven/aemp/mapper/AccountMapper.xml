@@ -80,7 +80,7 @@
     </update>
 
     <!--统计剩余金额和昨日消费-->
-    <select id="queryConsumAndArrease" resultType="Java.util.Map">
+    <select id="queryConsumAndArrease" resultType="java.util.HashMap">
         SELECT CASE WHEN AP.CONSUM IS NULL THEN 0 ELSE AP.CONSUM END AS consum
             ,CASE WHEN AP.BALANCE IS NULL THEN 0 ELSE AP.BALANCE END AS balance	 FROM
         (SELECT SUM(AAPEC.BALANCE) AS BALANCE,SUM(AAPEC.CONSUM) AS CONSUM  FROM
@@ -97,5 +97,54 @@
         IC.IDEA_DATE=DATE_SUB(CURDATE(),INTERVAL +1 DAY)) APEC ON ACC.ACCOUNT_ID=APEC.ACCOUNT_ID
 
         GROUP BY ACC.ACCOUNT_ID) AAPEC) AP
+    </select>
+
+    <!--查询不同状态的客户人数-->
+    <select id="queryAccountState" resultType="java.util.HashMap">
+        SELECT SUM(PT.TOTLE) AS totle,SUM(THROWING) AS throwing,SUM(STOPED) AS stoped,SUM(CHECKED) AS checked,SUM(REFUSE) AS refuse FROM
+            (SELECT COUNT(ACC.ACCOUNT_ID) AS TOTLE,
+            CASE WHEN ACC.ACCOUNT_STATE=1 THEN 1 ELSE 0 END AS THROWING,
+            CASE WHEN ACC.ACCOUNT_STATE=2 THEN 1 ELSE 0 END AS STOPED,
+            CASE WHEN ACC.ACCOUNT_STATE=3 THEN 1 ELSE 0 END AS CHECKED,
+            CASE WHEN ACC.ACCOUNT_STATE=4 THEN 1 ELSE 0 END AS REFUSE
+        FROM account ACC GROUP BY ACC.ACCOUNT_ID,ACC.ACCOUNT_STATE)PT
+    </select>
+
+    <select id="queryConsum" parameterType="com.seven.aemp.bean.AccountBean" resultType="java.util.Map">
+        SELECT DATE_FORMAT(IEPA.IDEA_DATE,'%Y-%m-%d') AS IDEA_DATE
+            ,AVG(IEPA.CLICK_RATE) AS CLICK_RATE
+            ,AVG(IEPA.BILL) AS BILL
+            ,SUM(IEPA.CLICK_NUM) AS CLICK_NUM
+            ,FORMAT(SUM(IEPA.CLICK_NUM)/AVG(IEPA.CLICK_RATE),0) AS EXTENT_NUM
+            ,(SUM(IEPA.CLICK_NUM)*AVG(IEPA.BILL)) AS CONSUM
+        FROM
+        (SELECT ACC.CLICK_RATE,EG.BILL,IC.IDEA_DATE,IC.CLICK_NUM
+        FROM sevenmanager.ideaclick IC
+        LEFT JOIN sevenmanager.extent_idea EI ON EI.IDEA_ID = IC.IDEA_ID
+        LEFT JOIN sevenmanager.extent_group EG ON EG.EG_ID=EI.EG_ID
+        LEFT JOIN sevenmanager.plant P ON EG.PLAN_ID=P.PLAN_ID
+        LEFT JOIN sevenmanager.account ACC ON ACC.ACCOUNT_ID=P.ACC_ID) IEPA
+        GROUP BY IEPA.IDEA_DATE
+        ORDER BY IEPA.IDEA_DATE
+    </select>
+
+    <!--查询所有账户的点击量统计信息-->
+    <select id="queryFirmSummary" parameterType="com.seven.aemp.bean.AccountBean" resultType="com.seven.aemp.bean.AccountBean">
+        SELECT ACC.ACCOUNT_ID,ACC.ACCOUNT_NAME,ACC.FIRM_NAME,ACC.CLICK_RATE,ACC.BALANCE,FA.CLICK_NUM,FA.UNIT_PRICE,ACC.ACCOUNT_STATE,ACC.DAY_PREDECT
+            ,format(FA.CLICK_NUM*100/ACC.CLICK_RATE,0) AS EXHIBITS
+            ,ACC.DAY_PREDECT,FORMAT(FA.CLICK_NUM*FA.UNIT_PRICE,2) AS CONSUM
+        FROM
+        sevenmanager.account ACC
+        LEFT JOIN
+        (SELECT P.ACC_ID,SUM(IC.CLICK_NUM) AS CLICK_NUM
+            ,FORMAT(AVG(EG.BILL),1) AS UNIT_PRICE
+
+
+        FROM sevenmanager.plant P
+        LEFT JOIN sevenmanager.extent_group EG ON P.PLAN_ID=EG.PLAN_ID
+        LEFT JOIN sevenmanager.extent_idea EI ON EI.EG_ID=EG.EG_ID
+        LEFT JOIN sevenmanager.ideaclick IC ON EI.IDEA_ID=IC.IDEA_ID
+
+        GROUP BY P.ACC_ID) FA ON ACC.ACCOUNT_ID=FA.ACC_ID
     </select>
 </mapper>

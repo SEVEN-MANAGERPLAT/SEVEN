@@ -154,4 +154,33 @@ public class AccountController {
         return CommonResultUtil.retSuccJSONObj(accountService.queryConsumAndArrease());
     }
 
+    @GetMapping("/queryAccountState")
+    public JSONObject queryAccountState() throws Exception {
+        return CommonResultUtil.retSuccJSONObj(accountService.queryAccountState());
+    }
+
+    //查询首页消费统计
+    @PostMapping("/queryConsum")
+    public JSONObject queryConsum(@RequestBody String params) throws Exception {
+        if (StringUtils.isBlank(params)) throw new MessageException("参数接收失败!");
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
+        jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
+        AccountBean accountBean = JSONObject.parseObject(params, AccountBean.class);
+        jsonObject.put(Constant.Result.RETDATA, accountService.queryConsum(accountBean));
+        return jsonObject;
+    }
+
+    //公司的消费统计
+    @PostMapping("/queryFirmSummary")
+    public JSONObject queryFirmSummary(@RequestBody String params) throws Exception {
+        if (StringUtils.isBlank(params)) throw new MessageException("参数接收失败!");
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
+        jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
+        AccountBean accountBean = JSONObject.parseObject(params, AccountBean.class);
+        jsonObject.put(Constant.Result.RETDATA, accountService.queryFirmSummary(accountBean));
+        return jsonObject;
+    }
+
 }

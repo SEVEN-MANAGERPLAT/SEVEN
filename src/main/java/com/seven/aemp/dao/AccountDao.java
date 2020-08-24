@@ -30,4 +30,13 @@ public interface AccountDao extends BaseMapper<AccountBean> {
 
     //账户剩余金额和昨日消费
    Map<String,String> queryConsumAndArrease();
+
+    //查询不同状态的公司数
+    Map<String,String> queryAccountState();
+
+    //查询每天的点击量和消费情况
+    List<Map<String,String>> queryConsum(AccountBean accountBean);
+
+    //查询点击量统计信息
+    List<AccountBean> queryFirmSummary(AccountBean accountBean);
 }

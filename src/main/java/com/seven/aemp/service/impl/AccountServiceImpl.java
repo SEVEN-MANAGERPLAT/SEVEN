@@ -171,4 +171,19 @@ public class AccountServiceImpl extends ServiceImpl<AccountDao, AccountBean> imp
     public Map<String, String> queryConsumAndArrease() throws Exception {
         return accountDao.queryConsumAndArrease();
     }
+
+    @Override
+    public Map<String, String> queryAccountState() throws Exception {
+        return accountDao.queryAccountState();
+    }
+
+    @Override
+    public List<Map<String, String>> queryConsum(AccountBean accountBean) throws Exception {
+        return accountDao.queryConsum(accountBean);
+    }
+
+    @Override
+    public List<AccountBean> queryFirmSummary(AccountBean accountBean) throws Exception {
+        return accountDao.queryFirmSummary(accountBean);
+    }
 }
