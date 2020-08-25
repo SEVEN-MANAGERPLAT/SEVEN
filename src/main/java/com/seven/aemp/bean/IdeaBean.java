@@ -49,14 +49,19 @@ public class IdeaBean implements Serializable {
 
     private String ideaDate;
 
+    @TableField(exist = false)
     private String exhibits;
 
+    @TableField(exist = false)
     private String clickNum;
 
+    @TableField(exist = false)
     private String clickRate;
 
+    @TableField(exist = false)
     private String unitPrice;
 
+    @TableField(exist = false)
     private String consume;
 
     private String state;

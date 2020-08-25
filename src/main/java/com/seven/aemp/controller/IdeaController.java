@@ -50,7 +50,7 @@ public class IdeaController {
         jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
         IdeaBean ideaBean = JSONObject.parseObject(params, IdeaBean.class);
 
-        jsonObject.put(Constant.Result.RETDATA, ideaService.queryIdea(ideaBean.getPage(), ideaBean.getPageSize(), ideaBean));
+        jsonObject.put(Constant.Result.RETDATA, ideaService.queryIdeaClickByUnitDay(ideaBean.getPage(), ideaBean.getPageSize(), ideaBean));
 
         return jsonObject;
     }

@@ -50,55 +50,41 @@
 
     <!--查询某短时间内单日的点击量-->
     <select id="queryIdeaClickByUnitDay" resultType="com.seven.aemp.bean.IdeaBean">
-        SELECT I.IDEA_ID
-        ,I.IDEA_NAME
-        ,IC.IDEA_DATE
-        ,I.PLAN_ID
-        ,P.PLAN_NAME
-        ,I.EG_ID
-        ,G.EG_NAME
-        ,I.ADVERTISE_TYPE_ID
-        ,I.UPDATE_URL
-        ,I.IDEA_DESCRIBE
-        ,I.IDEA_DATE
-        ,FORMAT(IC.CLICK_NUM/I.CLICK_RATE*100,0)  AS EXHIBITS
-        ,FORMAT(I.CLICK_RATE/100,2) AS CLICK_RATE
-        ,G.BILL AS UNIT_PRICE
-        ,FORMAT(I.CLICK_NUM/I.UNIT_PRICE,2) AS CUSTOME
-        ,I.STATE
-        ,IC.CLICK_NUM AS CLICK_NUM
-        ,I.PROD_URL
-        ,IC.CLICK_NUM* G.BILL AS CUSTOME
-        FROM sevenmanager.ideaclick IC
-        LEFT JOIN sevenmanager.extent_idea I ON IC.IDEA_ID = I.IDEA_ID
-        LEFT JOIN sevenmanager.extent_group G ON I.EG_ID=G.EG_ID
-        LEFT JOIN  sevenmanager.plant P ON  P.PLAN_ID=I.PLAN_ID
+        SELECT EI.IDEA_NAME,EI.UPDATE_URL,EI.ADVERTISE_TYPE_ID,EI.IDEA_ID,EG.EG_ID,EG.EG_NAME,P.PLAN_ID,P.PLAN_NAME
+        ,CASE WHEN EI.CHECK_STATE=0 THEN '拒绝'
+          WHEN EI.CHECK_STATE=1 THEN '通过' ELSE '审核中' END AS CHECK_STATE
+        ,FORMAT(SIC.CLICK_NUM/ACC.CLICK_RATE,0) AS EXHIBITS,ACC.CLICK_RATE
+        ,AVG(EG.BILL) AS UNIT_PRICE,SIC.CLICK_NUM,SIC.CLICK_NUM*EG.BILL AS CONSUME
+        FROM
+        sevenmanager.account ACC
+        LEFT JOIN sevenmanager.plant P ON P.ACC_ID=ACC.ACCOUNT_ID
+        LEFT JOIN sevenmanager.extent_group EG ON EG.PLAN_ID=P.PLAN_ID
+        LEFT JOIN sevenmanager.extent_idea EI ON EI.EG_ID=EG.EG_ID
+        LEFT JOIN (SELECT IC.IDEA_ID,SUM(IC.CLICK_NUM) AS CLICK_NUM FROM sevenmanager.ideaclick IC GROUP BY IC.IDEA_ID) SIC ON SIC.IDEA_ID=EI.IDEA_ID
         <where>
-            <if test="egId != null and egId != ''">
-                AND  I.EG_ID = #{egId}
+            EI.IDEA_ID IS NOT NULL
+            <if test="idea.ideaId != null and idea.ideaId != ''">
+                AND I.IDEA_ID  = #{idea.ideaId}
             </if>
-            <if test="planId != null and planId != ''">
-                AND I.PLAN_ID = #{planId}
+            <if test="idea.checkState != null and idea.checkState != ''">
+                AND EI.CHECK_STATE  >= #{idea.checkState}
             </if>
-            <if test="prodUrl != null and prodUrl != ''">
-                AND I.PROD_URL = #{prodUrl}
+            <if test="idea.begDate != null and idea.begDate != ''">
+                AND IC.IDEA_DATE  >= #{idea.begDate}
             </if>
-            <if test="ideaId != null and ideaId != ''">
-                AND I.IDEA_ID  = #{ideaId}
-            </if>
-            <if test="begDate != null and begDate != '' and endDate != null and endDate != ''">
-                AND IC.IDEA_DATE  >= #{begDate} AND IC.IDEA_DATE  &lt; #{endDate}
+            <if test="idea.endDate != null and idea.endDate != ''">
+                IC.IDEA_DATE  &lt; #{idea.endDate}
             </if>
         </where>
-        GROUP BY I.IDEA_ID, IC.IDEA_DATE
+        GROUP BY EI.IDEA_NAME,EI.UPDATE_URL,EI.ADVERTISE_TYPE_ID,EI.CHECK_STATE,EI.IDEA_ID,EG.EG_ID,EG.EG_NAME,P.PLAN_ID,P.PLAN_NAME,ACC.CLICK_RATE,SIC.CLICK_NUM
     </select>
 
     <!--插入创意-->
     <insert id="addIdea" useGeneratedKeys="true" keyProperty="ideaId" parameterType="com.seven.aemp.bean.IdeaBean">
         INSERT INTO sevenmanager.extent_idea
-            (PLAN_ID,EG_ID,IDEA_NAME,UPDATE_URL,IDEA_DESCRIBE,PROD_URL,EXHIBITS,CLICK_NUM,CLICK_RATE,UNIT_PRICE,STATE,CHECK_STATE,CREATE_DATE)
+            (PLAN_ID,EG_ID,IDEA_NAME,UPDATE_URL,IDEA_DESCRIBE,PROD_URL,STATE,CHECK_STATE,CREATE_DATE)
         VALUES
-           (#{planId},#{egId},#{ideaName},#{updateUrl},#{ideaDescribe},#{prodUrl},0,0,0,#{unitPrice},#{state},#{checkState},#{createDate})
+           (#{planId},#{egId},#{ideaName},#{updateUrl},#{ideaDescribe},#{prodUrl},#{state},2,#{createDate})
     </insert>
 
     <!--更新审核状态-->

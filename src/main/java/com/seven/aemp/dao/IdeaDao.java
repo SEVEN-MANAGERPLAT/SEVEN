@@ -28,7 +28,7 @@ public interface IdeaDao extends BaseMapper<IdeaBean> {
     List<IdeaBean> queryIdea(Page<IdeaBean> result, @Param("idea") IdeaBean ideaBean);
 
     //查询创意，一段时间内单日点击量数据
-    List<IdeaBean> queryIdeaClickByUnitDay(IdeaBean ideaBean);
+    List<IdeaBean> queryIdeaClickByUnitDay(Page<IdeaBean> result, @Param("idea") IdeaBean ideaBean);
 
     //添加创意
     int addIdea(IdeaBean ideaBean);

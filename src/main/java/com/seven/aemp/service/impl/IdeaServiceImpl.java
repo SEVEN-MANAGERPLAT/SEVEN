@@ -121,6 +121,18 @@ public class IdeaServiceImpl extends ServiceImpl<IdeaDao, IdeaBean> implements I
         ideaDao.updateCheckState(ideaBean);
     }
 
+    @Override
+    public Page<IdeaBean> queryIdeaClickByUnitDay(String page, String pageSize, IdeaBean ideaBean) throws Exception {
+        if (StringUtils.isBlank(page)) {
+            page = "1";
+        }
+        if (StringUtils.isBlank(pageSize)) {
+            pageSize = "10";
+        }
+        Page<IdeaBean> result = new Page<>(Long.valueOf(page), Long.valueOf(pageSize));
+        return result.setRecords(ideaDao.queryIdeaClickByUnitDay(result, ideaBean));
+    }
+
     //保存文件
     private void saveFile(IdeaBean ideaBean, MultipartFile[] file)throws Exception {
         if (file != null) {
