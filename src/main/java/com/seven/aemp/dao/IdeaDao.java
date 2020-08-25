@@ -2,6 +2,7 @@ package com.seven.aemp.dao;
 
 
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.seven.aemp.bean.IdeaBean;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
@@ -38,4 +39,7 @@ public interface IdeaDao extends BaseMapper<IdeaBean> {
 
 //    更新审核状态
     int updateCheckState(IdeaBean ideaBean);
+
+    //广告创意报表【后台管理】
+    IPage<IdeaBean> queryIdeaBackReport(@Param("page") IPage page, @Param("ideaBean") IdeaBean ideaBean);
 }
