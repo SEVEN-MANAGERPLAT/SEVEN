@@ -44,6 +44,7 @@ public class PlantBean implements Serializable {
     //计划名称
     private String planName;
 
+    private String createDate;
 
     /**
      1：今天

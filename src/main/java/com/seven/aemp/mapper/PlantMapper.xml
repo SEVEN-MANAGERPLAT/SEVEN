@@ -32,9 +32,11 @@
     <!--后台查询计划报表-->
     <select id="queryPlantBackReport" resultType="com.seven.aemp.domain.PlantResultBean">
         SELECT
-        P.*,A.CLICK_RATE,EG.AVG_BILL unitPrice,B.CLICK_NUM,
-        B.CLICK_NUM / A.CLICK_RATE exhibits,
-        B.CLICK_NUM * EG.AVG_BILL consume
+        P.PLAN_ID, P.PLAN_PREDICT, P.STATE, P.PLAN_NAME, P.ACC_ID, P.CREATE_DATE,A.CLICK_RATE,
+        FORMAT(EG.AVG_BILL,2) unitPrice,B.CLICK_NUM,
+        FORMAT(B.CLICK_NUM / A.CLICK_RATE,2) exhibits,
+        FORMAT(B.CLICK_NUM * EG.AVG_BILL,2) consume,
+        A.BALANCE
         FROM plant P
         LEFT JOIN account A
         ON P.ACC_ID = A.ACCOUNT_ID

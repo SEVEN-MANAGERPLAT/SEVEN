@@ -111,8 +111,10 @@
     </update>
 
     <select id="queryIdeaBackReport" resultType="com.seven.aemp.bean.IdeaBean">
-        SELECT EI.*,IFNULL(B.CLICK_NUM,0) clickNum,C.CLICK_RATE,C.AVG_BILL unitPrice,
-        B.CLICK_NUM / C.CLICK_RATE EXHIBITS,B.CLICK_NUM * C.AVG_BILL CONSUME
+        SELECT EI.*,IFNULL(B.CLICK_NUM,0) clickNum,C.CLICK_RATE,
+        FORMAT(C.AVG_BILL,2) unitPrice,
+        FORMAT(B.CLICK_NUM / C.CLICK_RATE,2) EXHIBITS,
+        FORMAT(B.CLICK_NUM * C.AVG_BILL,2) CONSUME,C.BALANCE
         FROM extent_idea EI
         LEFT JOIN (
             SELECT IDEA_ID,SUM(IDEA.CLICK_NUM) CLICK_NUM
@@ -121,7 +123,7 @@
         ) B
         ON B.IDEA_ID = EI.IDEA_ID
         LEFT JOIN (
-            SELECT EG.*,A.CLICK_RATE
+            SELECT EG.*,A.CLICK_RATE,A.BALANCE
             FROM
             (
                 SELECT PLAN_ID,SUM(BILL) BILL,COUNT(*) COUNT,SUM(BILL) / COUNT(*) AVG_BILL

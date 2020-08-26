@@ -2,8 +2,10 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.seven.aemp.dao.GroupDao">
     <select id="queryGroup" resultType="com.seven.aemp.bean.GroupBean">
-        SELECT G.EG_ID,G.PLAN_ID,P.ACC_ID, G.EG_NAME, G.PLAN_DATE,G.PREDICT,G.COMPARE_PATTERN,G.BILL,G.THROW_URL,G.SOURCE_ID,G.SEX,G.AGE
-          ,G.INTREST,G.PLAT,G.APP_ACTION,G.THROW_AREA,G.THROW_BEG_DATE,G.THROW_END_DATE,G.THROW_SEG_DATE,G.STATE,P.PLAN_NAME,SUM(IC.CLICK_NUM) AS CLICK_NUM
+        SELECT G.EG_ID,G.PLAN_ID,P.ACC_ID, G.EG_NAME,
+        G.PLAN_DATE,G.PREDICT,G.COMPARE_PATTERN,G.BILL,G.THROW_URL,G.SOURCE_ID,G.SEX,G.AGE
+        ,G.INTREST,G.PLAT,G.APP_ACTION,G.THROW_AREA,G.THROW_BEG_DATE,G.THROW_END_DATE,G.THROW_SEG_DATE,G.STATE,P.PLAN_NAME,SUM(IC.CLICK_NUM)
+        AS CLICK_NUM
         ,SUM(IC.CLICK_NUM)* G.BILL AS CONSUME
         FROM sevenmanager.extent_group G
         LEFT JOIN sevenmanager.plant P ON G.PLAN_ID = P.PLAN_ID
@@ -17,13 +19,13 @@
                 AND G.PLAN_ID = #{group.planId}
             </if>
             <if test="group.egName != null and group.egName != ''">
-                AND G.EG_NAME  = #{group.egName}
+                AND G.EG_NAME = #{group.egName}
             </if>
             <if test="group.accId != null and group.accId != '' and group.accId != 1">
-                AND P.ACC_ID  = #{group.accId}
+                AND P.ACC_ID = #{group.accId}
             </if>
             <if test="group.begDate != null and group.begDate != '' and group.endDate != null and group.endDate != ''">
-                AND IC.IDEA_DATE  >= #{group.begDate} AND IC.IDEA_DATE  &lt; #{group.endDate}
+                AND IC.IDEA_DATE >= #{group.begDate} AND IC.IDEA_DATE &lt; #{group.endDate}
             </if>
         </where>
         GROUP BY G.EG_ID
@@ -31,8 +33,10 @@
 
     <!--查询某段时间内本组单日的点击量-->
     <select id="queryGroupIdeaClickByUnitDay" resultType="com.seven.aemp.bean.GroupBean">
-        SELECT G.EG_ID,G.PLAN_ID,P.ACC_ID, G.EG_NAME, G.PLAN_DATE,G.PREDICT,G.COMPARE_PATTERN,G.BILL,G.THROW_URL,G.SOURCE_ID,G.SEX,G.AGE
-        ,G.INTREST,G.PLAT,G.APP_ACTION,G.THROW_AREA,G.THROW_BEG_DATE,G.THROW_END_DATE,G.THROW_SEG_DATE,G.STATE,P.PLAN_NAME,SUM(IC.CLICK_NUM) AS CLICK_NUM
+        SELECT G.EG_ID,G.PLAN_ID,P.ACC_ID, G.EG_NAME,
+        G.PLAN_DATE,G.PREDICT,G.COMPARE_PATTERN,G.BILL,G.THROW_URL,G.SOURCE_ID,G.SEX,G.AGE
+        ,G.INTREST,G.PLAT,G.APP_ACTION,G.THROW_AREA,G.THROW_BEG_DATE,G.THROW_END_DATE,G.THROW_SEG_DATE,G.STATE,P.PLAN_NAME,SUM(IC.CLICK_NUM)
+        AS CLICK_NUM
         ,SUM(IC.CLICK_NUM)* G.BILL AS CONSUME,IC.IDEA_DATE
         FROM sevenmanager.extent_group G
         LEFT JOIN sevenmanager.plant P ON G.PLAN_ID = P.PLAN_ID
@@ -46,13 +50,13 @@
                 AND PLAN_ID = #{planId}
             </if>
             <if test="egName != null and egName != ''">
-                AND EG_NAME  = #{egName}
+                AND EG_NAME = #{egName}
             </if>
             <if test="accId != null and accId != '' and accId != 1">
-                AND P.ACC_ID  = #{accId}
+                AND P.ACC_ID = #{accId}
             </if>
             <if test="begDate != null and begDate != '' and endDate != null and endDate != ''">
-                AND IC.IDEA_DATE  >= #{begDate} AND IC.IDEA_DATE  &lt; #{endDate}
+                AND IC.IDEA_DATE >= #{begDate} AND IC.IDEA_DATE &lt; #{endDate}
             </if>
         </where>
         GROUP BY G.EG_ID, IC.IDEA_DATE
@@ -66,4 +70,36 @@
         (#{planId},#{egName},#{planDate},#{predict},#{comparePattern},#{bill},#{throwUrl},#{sourceId}
         ,#{sex},#{age},#{intrest},#{plat},#{appAction},#{throwArea},#{throwBegDate},#{throwEndDate},#{throwSegDate},#{state},#{createDate})
     </insert>
+
+    <!--后台查询组报表-->
+    <select id="queryGroupBackReport" resultType="com.seven.aemp.domain.GroupResultBean">
+        SELECT EG.EG_ID, EG.PLAN_ID, EG.EG_NAME, EG.PLAN_DATE, EG.PREDICT,
+        EG.COMPARE_PATTERN, FORMAT(EG.BILL,2) unitPrice, EG.THROW_URL, EG.SOURCE_ID, EG.SEX, EG.AGE,
+        EG.INTREST, EG.PLAT, EG.APP_ACTION, EG.THROW_AREA, EG.THROW_BEG_DATE,
+        EG.THROW_END_DATE, EG.THROW_SEG_DATE, EG.STATE, EG.CREATE_DATE,
+        A.CLICK_RATE,B.CLICK_NUM,
+        FORMAT(B.CLICK_NUM / A.CLICK_RATE,2) exhibits,
+        FORMAT(B.CLICK_NUM * EG.BILL,2) consume,A.BALANCE
+        FROM extent_group EG
+        LEFT JOIN plant P
+        ON EG.PLAN_ID = EG.PLAN_ID
+        LEFT JOIN account A
+        ON A.ACCOUNT_ID = P.ACC_ID
+        LEFT JOIN (
+        SELECT EI.EG_ID,SUM(IDEA.CLICK_NUM) CLICK_NUM
+        FROM ideaclick IDEA
+        LEFT JOIN extent_idea EI
+        ON EI.IDEA_ID = IDEA.IDEA_ID
+        GROUP BY EI.EG_ID
+        ) B
+        ON B.EG_ID = EG.EG_ID
+        <where>
+            <if test="groupBean.begDate != null and groupBean.begDate != ''">
+                AND EG.CREATE_DATE >= #{groupBean.begDate}
+            </if>
+            <if test="groupBean.endDate != null and groupBean.endDate != ''">
+                AND EG.CREATE_DATE &lt; #{groupBean.endDate}
+            </if>
+        </where>
+    </select>
 </mapper>

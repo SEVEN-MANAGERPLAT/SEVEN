@@ -1,5 +1,6 @@
 package com.seven.aemp.dao;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.seven.aemp.bean.GroupBean;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
@@ -9,7 +10,7 @@ import java.util.List;
 
 /**
  * <p>
- *  Mapper 接口
+ * Mapper 接口
  * </p>
  *
  * @author mwl
@@ -28,5 +29,8 @@ public interface GroupDao extends BaseMapper<GroupBean> {
     List<GroupBean> queryGroupIdeaClickByUnitDay(GroupBean groupBean);
 
     int insertGroup(GroupBean groupBean);
+
+    //后台查询组报表
+    IPage queryGroupBackReport(@Param("page") IPage page,@Param("groupBean") GroupBean groupBean);
 
 }

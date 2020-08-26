@@ -6,6 +6,7 @@ import com.seven.aemp.bean.GroupBean;
 import com.seven.aemp.common.Constant;
 import com.seven.aemp.exception.MessageException;
 import com.seven.aemp.service.GroupService;
+import com.seven.aemp.util.CommonResultUtil;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -16,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * <p>
- *  前端控制器
+ * 前端控制器
  * </p>
  *
  * @author mwl
@@ -92,5 +93,13 @@ public class GroupController {
         GroupBean groupMBean = JSONObject.parseObject(params, GroupBean.class);
         groupService.updateGroup(groupMBean);
         return jsonObject;
+    }
+
+    //后台查询组报表
+    @PostMapping("/queryGroupBackReport")
+    public JSONObject queryGroupBackReport(@RequestBody String params) throws Exception {
+        if (StringUtils.isBlank(params)) throw new MessageException("参数接收失败!");
+        GroupBean groupMBean = JSONObject.parseObject(params, GroupBean.class);
+        return CommonResultUtil.retSuccJSONObj(groupService.queryGroupBackReport(groupMBean));
     }
 }

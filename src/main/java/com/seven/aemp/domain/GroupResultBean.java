@@ -1,6 +1,6 @@
 package com.seven.aemp.domain;
 
-import com.seven.aemp.bean.PlantBean;
+import com.seven.aemp.bean.GroupBean;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class PlantResultBean extends PlantBean {
+public class GroupResultBean extends GroupBean {
 
     //展现量
     private int exhibits;
@@ -29,5 +29,4 @@ public class PlantResultBean extends PlantBean {
 
     //余额
     private BigDecimal balance;
-
 }
