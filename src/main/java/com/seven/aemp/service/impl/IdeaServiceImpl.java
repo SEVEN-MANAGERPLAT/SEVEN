@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
+import java.sql.Time;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
@@ -135,10 +136,12 @@ public class IdeaServiceImpl extends ServiceImpl<IdeaDao, IdeaBean> implements I
     }
 
     @Override
-    public IPage queryIdeaBackReport(IdeaBean ideaBean) {
+    public IPage queryIdeaBackReport(IdeaBean ideaBean) throws Exception {
         Page page = new Page();
         page.setCurrent(StringUtils.isBlank(ideaBean.getPage()) ? 1L : Long.valueOf(ideaBean.getPage()));
         page.setSize(StringUtils.isBlank(ideaBean.getPageSize()) ? 10L : Long.valueOf(ideaBean.getPageSize()));
+        if (StringUtils.isNotBlank(ideaBean.getEndDate()))
+            ideaBean.setEndDate(TimeUtil.getDateYYYY_MM_DD_HH_MM_SS(TimeUtil.dateAdd(TimeUtil.parseAnyDate(ideaBean.getEndDate()), TimeUtil.UNIT_DAY, 1)));
         return ideaDao.queryIdeaBackReport(page, ideaBean);
     }
 

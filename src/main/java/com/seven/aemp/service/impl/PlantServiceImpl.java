@@ -1,6 +1,7 @@
 package com.seven.aemp.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.seven.aemp.bean.PlantBean;
 import com.seven.aemp.dao.PlantDao;
@@ -16,7 +17,7 @@ import java.util.List;
 
 /**
  * <p>
- *  服务实现类
+ * 服务实现类
  * </p>
  *
  * @author mwl
@@ -47,14 +48,14 @@ public class PlantServiceImpl extends ServiceImpl<PlantDao, PlantBean> implement
 
     @Override
     public void addPlant(PlantBean plantBean) throws MessageException {
-        if(StringUtils.isBlank(plantBean.getPlanName())) throw new MessageException("计划名称不能为空");
+        if (StringUtils.isBlank(plantBean.getPlanName())) throw new MessageException("计划名称不能为空");
         if (StringUtils.isBlank(plantBean.getPlanPredict())) throw new MessageException("预算不能为空");
         if (StringUtils.isBlank(plantBean.getAccId())) throw new MessageException("登录账号已过期，请重新登录");
         QueryWrapper<PlantBean> queryWrapper = new QueryWrapper<PlantBean>();
         queryWrapper.select("*");
         queryWrapper.eq("PLAN_NAME", plantBean.getPlanName());
         List<PlantBean> plantBeans = plantDao.selectList(queryWrapper);
-        if(plantBeans.size() > 0)throw new MessageException("计划名不能重复!");
+        if (plantBeans.size() > 0) throw new MessageException("计划名不能重复!");
         if (plantDao.insert(plantBean) <= 0) throw new MessageException("操作失败!");
     }
 
@@ -64,7 +65,17 @@ public class PlantServiceImpl extends ServiceImpl<PlantDao, PlantBean> implement
         queryWrapper.select("*");
         queryWrapper.ne("plan_id", plantBean.getPlanId());
         List<PlantBean> plantBeans = plantDao.selectList(queryWrapper);
-        if(plantBeans.size() > 0)throw new MessageException("计划名不能重复!");
+        if (plantBeans.size() > 0) throw new MessageException("计划名不能重复!");
         if (plantDao.updateById(plantBean) <= 0) throw new MessageException("操作失败!");
+    }
+
+    @Override
+    public IPage queryPlantBackReport(PlantBean plantBean) throws Exception {
+        Page page = new Page();
+        page.setCurrent(StringUtils.isBlank(plantBean.getPage()) ? 1L : Long.valueOf(plantBean.getPage()));
+        page.setSize(StringUtils.isBlank(plantBean.getPageSize()) ? 10L : Long.valueOf(plantBean.getPageSize()));
+        if (StringUtils.isNotBlank(plantBean.getEndDate()))
+            plantBean.setEndDate(TimeUtil.getDateYYYY_MM_DD_HH_MM_SS(TimeUtil.dateAdd(TimeUtil.parseAnyDate(plantBean.getEndDate()), TimeUtil.UNIT_DAY, 1)));
+        return plantDao.queryPlantBackReport(page, plantBean);
     }
 }

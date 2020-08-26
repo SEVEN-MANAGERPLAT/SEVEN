@@ -6,6 +6,7 @@ import com.seven.aemp.bean.PlantBean;
 import com.seven.aemp.common.Constant;
 import com.seven.aemp.exception.MessageException;
 import com.seven.aemp.service.PlantService;
+import com.seven.aemp.util.CommonResultUtil;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -18,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * <p>
- *  前端控制器
+ * 前端控制器
  * </p>
  *
  * @author mwl
@@ -94,5 +95,13 @@ public class PlantController {
         PlantBean plantBean = JSONObject.parseObject(params, PlantBean.class);
         plantService.updatePlant(plantBean);
         return jsonObject;
+    }
+
+    //后台查询计划报表
+    @PostMapping("/queryPlantBackReport")
+    public JSONObject queryPlantBackReport(@RequestBody String params) throws Exception {
+        if (StringUtils.isBlank(params)) throw new MessageException("参数接收失败!");
+        PlantBean plantBean = JSONObject.parseObject(params, PlantBean.class);
+        return CommonResultUtil.retSuccJSONObj(plantService.queryPlantBackReport(plantBean));
     }
 }

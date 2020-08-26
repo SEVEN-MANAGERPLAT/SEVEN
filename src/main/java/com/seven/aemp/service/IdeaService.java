@@ -40,5 +40,5 @@ public interface IdeaService extends IService<IdeaBean> {
     public Page<IdeaBean> queryIdeaClickByUnitDay(String page, String pageSize, IdeaBean ideaBean) throws Exception;
 
     //广告创意报表【后台管理】
-    public IPage queryIdeaBackReport(IdeaBean ideaBean);
+    public IPage queryIdeaBackReport(IdeaBean ideaBean) throws Exception;
 }
