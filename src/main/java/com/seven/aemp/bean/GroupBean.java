@@ -99,7 +99,7 @@ public class GroupBean implements Serializable {
      * 0：取消
        1：使用中
      */
-    private Integer state;
+    private String state;
 
     /**
      1：今天
@@ -126,9 +126,17 @@ public class GroupBean implements Serializable {
     @TableField(exist = false)
     private String accId;
 
-    //账号ID
+    //点击量
     @TableField(exist = false)
     private BigDecimal clickNum;
+
+    //展现量
+    @TableField(exist = false)
+    private String exhibits;
+
+    //点击率
+    @TableField(exist = false)
+    private String clickRate;
 
     //组总消费
     @TableField(exist = false)

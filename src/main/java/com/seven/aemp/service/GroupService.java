@@ -32,4 +32,7 @@ public interface GroupService extends IService<GroupBean> {
     //后台查询组报表
     IPage queryGroupBackReport(GroupBean groupBean) throws Exception;
 
+    public Page<GroupBean> queryGroupIdeaClickByUnitDay(String page, String pageSize, GroupBean groupBean) throws Exception;
+
+
 }

@@ -79,4 +79,16 @@ public class GroupServiceImpl extends ServiceImpl<GroupDao, GroupBean> implement
             groupBean.setEndDate(TimeUtil.getDateYYYY_MM_DD_HH_MM_SS(TimeUtil.dateAdd(TimeUtil.parseAnyDate(groupBean.getEndDate()), TimeUtil.UNIT_DAY, 1)));
         return groupDao.queryGroupBackReport(page,groupBean);
     }
+
+    @Override
+    public Page<GroupBean> queryGroupIdeaClickByUnitDay(String page, String pageSize, GroupBean groupBean) throws Exception {
+        if (StringUtils.isBlank(page)) {
+            page = "1";
+        }
+        if (StringUtils.isBlank(pageSize)) {
+            pageSize = "10";
+        }
+        Page<GroupBean> result = new Page<>(Long.valueOf(page), Long.valueOf(pageSize));
+        return result.setRecords(groupDao.queryGroupIdeaClickByUnitDay(result, groupBean));
+    }
 }
