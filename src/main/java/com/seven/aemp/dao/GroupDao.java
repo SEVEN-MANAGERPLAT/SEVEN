@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.seven.aemp.bean.GroupBean;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Param;
-import org.mapstruct.Mapper;
 
 import java.util.List;
 
@@ -16,7 +15,7 @@ import java.util.List;
  * @author mwl
  * @since 2019-11-19
  */
-@Mapper
+
 public interface GroupDao extends BaseMapper<GroupBean> {
 
     //查询组内创意，一段时间内汇总点击量

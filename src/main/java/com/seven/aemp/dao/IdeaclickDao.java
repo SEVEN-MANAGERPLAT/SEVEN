@@ -2,7 +2,6 @@ package com.seven.aemp.dao;
 
 import com.seven.aemp.bean.IdeaclickBean;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import org.mapstruct.Mapper;
 
 import java.util.List;
 
@@ -14,7 +13,6 @@ import java.util.List;
  * @author mwl
  * @since 2020-04-03
  */
-@Mapper
 public interface IdeaclickDao extends BaseMapper<IdeaclickBean> {
 
     //查询点击数

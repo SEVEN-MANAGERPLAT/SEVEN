@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.seven.aemp.bean.PlantBean;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Param;
-import org.mapstruct.Mapper;
 
 import java.util.List;
 
@@ -16,7 +15,6 @@ import java.util.List;
  * @author mwl
  * @since 2019-11-19
  */
-@Mapper
 public interface PlantDao extends BaseMapper<PlantBean> {
 
     List<PlantBean> queryPlant(@Param("plan") PlantBean plantBean);
