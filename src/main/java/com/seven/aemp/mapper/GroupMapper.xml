@@ -31,31 +31,38 @@
 
     <!--查询某段时间内本组单日的点击量-->
     <select id="queryGroupIdeaClickByUnitDay" resultType="com.seven.aemp.bean.GroupBean">
-        SELECT G.EG_ID,G.PLAN_ID,P.ACC_ID, G.EG_NAME, G.PLAN_DATE,G.PREDICT,G.COMPARE_PATTERN,G.BILL,G.THROW_URL,G.SOURCE_ID,G.SEX,G.AGE
-        ,G.INTREST,G.PLAT,G.APP_ACTION,G.THROW_AREA,G.THROW_BEG_DATE,G.THROW_END_DATE,G.THROW_SEG_DATE,G.STATE,P.PLAN_NAME,SUM(IC.CLICK_NUM) AS CLICK_NUM
-        ,SUM(IC.CLICK_NUM)* G.BILL AS CONSUME,IC.IDEA_DATE
-        FROM sevenmanager.extent_group G
-        LEFT JOIN sevenmanager.plant P ON G.PLAN_ID = P.PLAN_ID
-        LEFT JOIN sevenmanager.extent_idea EI ON EI.EG_ID = G.EG_ID
-        LEFT JOIN sevenmanager.ideaclick IC ON EI.IDEA_ID = IC.IDEA_ID
+        SELECT EG.EG_ID,EG.EG_NAME,EG.BILL,EG.PREDICT,P.PLAN_ID,P.PLAN_NAME,ACC.CLICK_RATE,GIC.CLICK_NUM
+        ,CASE WHEN EG.STATE=0 THEN '暂停' ELSE '开启' END AS STATE
+        ,FORMAT(GIC.CLICK_NUM/ACC.CLICK_RATE,0) AS EXHIBITS
+        ,AVG(EG.BILL) AS UNIT_PRICE,GIC.CLICK_NUM*EG.BILL AS CONSUME
+        FROM
+        sevenmanager.account ACC
+        LEFT JOIN sevenmanager.plant P ON P.ACC_ID=ACC.ACCOUNT_ID
+        LEFT JOIN sevenmanager.extent_group EG ON EG.PLAN_ID=P.PLAN_ID
+        LEFT JOIN (SELECT EI.EG_ID,SUM(IC.CLICK_NUM) AS CLICK_NUM
+        FROM sevenmanager.ideaclick IC LEFT JOIN sevenmanager.extent_idea EI ON IC.IDEA_ID=EI.IDEA_ID GROUP BY EI.EG_ID) GIC ON GIC.EG_ID=EG.EG_ID
         <where>
-            <if test="egId != null and egId != ''">
-                AND EG_ID = #{egId}
+            EG.EG_ID IS NOT NULL
+            <if test="group.egId != null and group.egId != ''">
+                AND EG.EG_ID = #{group.egId}
             </if>
-            <if test="planId != null and planId != ''">
-                AND PLAN_ID = #{planId}
+            <if test="group.planId != null and group.planId != ''">
+                AND P.PLAN_ID = #{group.planId}
             </if>
-            <if test="egName != null and egName != ''">
-                AND EG_NAME  = #{egName}
+            <if test="group.egName != null and group.egName != ''">
+                AND EG.EG_NAME  = #{group.egName}
             </if>
-            <if test="accId != null and accId != '' and accId != 1">
-                AND P.ACC_ID  = #{accId}
+            <if test="group.accId != null and group.accId != '' and group.accId != 1">
+                AND P.ACC_ID  = #{group.accId}
             </if>
-            <if test="begDate != null and begDate != '' and endDate != null and endDate != ''">
-                AND IC.IDEA_DATE  >= #{begDate} AND IC.IDEA_DATE  &lt; #{endDate}
+            <if test="group.begDate != null and group.begDate != ''">
+                AND IC.IDEA_DATE  >= #{group.begDate}
+            </if>
+            <if test="group.endDate != null and group.endDate != ''">
+                AND IC.IDEA_DATE  &lt; #{group.endDate}
             </if>
         </where>
-        GROUP BY G.EG_ID, IC.IDEA_DATE
+        GROUP BY EG.EG_ID,EG.BILL,EG.EG_NAME,EG.PREDICT,P.PLAN_ID,P.PLAN_NAME,ACC.CLICK_RATE,GIC.CLICK_NUM,EG.STATE
     </select>
 
     <!--插入组数据-->

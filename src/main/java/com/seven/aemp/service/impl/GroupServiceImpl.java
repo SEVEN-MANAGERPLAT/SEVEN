@@ -68,4 +68,16 @@ public class GroupServiceImpl extends ServiceImpl<GroupDao, GroupBean> implement
         if(groupBeans.size() > 0)throw new MessageException("组名不能重复!");
         if (groupDao.updateById(groupBean) <= 0) throw new MessageException("操作失败!");
     }
+
+    @Override
+    public Page<GroupBean> queryGroupIdeaClickByUnitDay(String page, String pageSize, GroupBean groupBean) throws Exception {
+        if (StringUtils.isBlank(page)) {
+            page = "1";
+        }
+        if (StringUtils.isBlank(pageSize)) {
+            pageSize = "10";
+        }
+        Page<GroupBean> result = new Page<>(Long.valueOf(page), Long.valueOf(pageSize));
+        return result.setRecords(groupDao.queryGroupIdeaClickByUnitDay(result, groupBean));
+    }
 }

@@ -28,4 +28,7 @@ public interface GroupService extends IService<GroupBean> {
     //修改推广组
     public void updateGroup(GroupBean groupBean)throws MessageException;
 
+    public Page<GroupBean> queryGroupIdeaClickByUnitDay(String page, String pageSize, GroupBean groupBean) throws Exception;
+
+
 }
