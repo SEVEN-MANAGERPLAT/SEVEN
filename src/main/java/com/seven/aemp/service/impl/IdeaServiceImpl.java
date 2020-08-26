@@ -1,6 +1,7 @@
 package com.seven.aemp.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.seven.aemp.bean.IdeaBean;
 import com.seven.aemp.bean.IdeaclickBean;
@@ -18,13 +19,14 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
+import java.sql.Time;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
 /**
  * <p>
- *  服务实现类
+ * 服务实现类
  * </p>
  *
  * @author mwl
@@ -68,13 +70,13 @@ public class IdeaServiceImpl extends ServiceImpl<IdeaDao, IdeaBean> implements I
         queryWrapper.eq("EG_ID", ideaBean.getEgId());
         queryWrapper.eq("IDEA_NAME", ideaBean.getIdeaName());
         List<IdeaBean> ideaBeans = ideaDao.selectList(queryWrapper);
-        if(ideaBeans.size() > 0)throw new MessageException("创意名不能重复!");
+        if (ideaBeans.size() > 0) throw new MessageException("创意名不能重复!");
 
         String newDate = TimeUtil.getDateYYYYMMDD(TimeUtil.getDBTime());
         ideaBean.setCreateDate(newDate);
         //设置点击率
         Random random = new Random();
-        int s = random.nextInt(20)%(5) + 15;
+        int s = random.nextInt(20) % (5) + 15;
         ideaBean.setClickRate(String.valueOf(s));
         ideaBean.setCheckState("2");
         if (ideaDao.addIdea(ideaBean) <= 0) throw new MessageException("操作失败!");
@@ -91,7 +93,7 @@ public class IdeaServiceImpl extends ServiceImpl<IdeaDao, IdeaBean> implements I
         queryWrapper.select("*");
         queryWrapper.eq("IDEA_ID", ideaBean.getIdeaId());
         List<IdeaBean> ideaBeans = ideaDao.selectList(queryWrapper);
-        if(ideaBeans.size() <= 0)throw new MessageException("创意不存在!");
+        if (ideaBeans.size() <= 0) throw new MessageException("创意不存在!");
         if (ideaDao.updateById(ideaBean) <= 0) throw new MessageException("操作失败!");
     }
 
@@ -102,16 +104,16 @@ public class IdeaServiceImpl extends ServiceImpl<IdeaDao, IdeaBean> implements I
         queryWrapper.select("*");
         queryWrapper.eq("PROD_URL", ideaBean.getProdUrl());
         List<IdeaBean> ideaBeans = ideaDao.selectList(queryWrapper);
-        if(ideaBeans.size() <= 0)throw new MessageException("创意不存在!");
+        if (ideaBeans.size() <= 0) throw new MessageException("创意不存在!");
 
         String newDate = TimeUtil.getDateYYYY_MM_DD(TimeUtil.getDBTime());
         ideaBean.setCreateDate(newDate);
         //查询当日的创意点击
         List<IdeaclickBean> ideaclickBeans = ideaclickService.queryIdeaclick(new IdeaclickBean().setIdeaId(ideaBeans.get(0).getIdeaId()).setIdeaDate(newDate));
-        if (ideaclickBeans.isEmpty()){
+        if (ideaclickBeans.isEmpty()) {
             ideaclickService.addIdeaclick(new IdeaclickBean().setIdeaId(ideaBeans.get(0).getIdeaId()).setIdeaDate(newDate).setClickNum("1"));
-        }else {
-            ideaclickService.updateIdeaclick(new IdeaclickBean().setIcId(ideaclickBeans.get(0).getIcId()).setClickNum(String.valueOf(Integer.valueOf(ideaclickBeans.get(0).getClickNum())+1)));
+        } else {
+            ideaclickService.updateIdeaclick(new IdeaclickBean().setIcId(ideaclickBeans.get(0).getIcId()).setClickNum(String.valueOf(Integer.valueOf(ideaclickBeans.get(0).getClickNum()) + 1)));
         }
         return ideaBeans.get(0);
     }
@@ -133,24 +135,34 @@ public class IdeaServiceImpl extends ServiceImpl<IdeaDao, IdeaBean> implements I
         return result.setRecords(ideaDao.queryIdeaClickByUnitDay(result, ideaBean));
     }
 
+    @Override
+    public IPage queryIdeaBackReport(IdeaBean ideaBean) throws Exception {
+        Page page = new Page();
+        page.setCurrent(StringUtils.isBlank(ideaBean.getPage()) ? 1L : Long.valueOf(ideaBean.getPage()));
+        page.setSize(StringUtils.isBlank(ideaBean.getPageSize()) ? 10L : Long.valueOf(ideaBean.getPageSize()));
+        if (StringUtils.isNotBlank(ideaBean.getEndDate()))
+            ideaBean.setEndDate(TimeUtil.getDateYYYY_MM_DD_HH_MM_SS(TimeUtil.dateAdd(TimeUtil.parseAnyDate(ideaBean.getEndDate()), TimeUtil.UNIT_DAY, 1)));
+        return ideaDao.queryIdeaBackReport(page, ideaBean);
+    }
+
     //保存文件
-    private void saveFile(IdeaBean ideaBean, MultipartFile[] file)throws Exception {
+    private void saveFile(IdeaBean ideaBean, MultipartFile[] file) throws Exception {
         if (file != null) {
             for (MultipartFile multipartFile : file) {
                 //原文件名
                 String fileName = multipartFile.getOriginalFilename();
                 fileName = fileName.substring(fileName.lastIndexOf("."));
 
-                System.out.println("introduce"+ideaBean.toString());
+                System.out.println("introduce" + ideaBean.toString());
                 File directory = new File("");// 参数为空
                 String path = directory.getCanonicalPath();
-                String imgName=("img_").concat(ideaBean.getIdeaId().toString()).concat(fileName);
+                String imgName = ("img_").concat(ideaBean.getIdeaId().toString()).concat(fileName);
                 File dir = new File(path);
                 if (!dir.exists()) dir.mkdirs();
                 path = path.concat("/webapps/img/evaluation/").concat(imgName);
-                System.out.println("路径："+path);
+                System.out.println("路径：" + path);
                 ideaBean.setUpdateUrl(baseUrl.concat("img/evaluation/").concat(imgName));
-                System.out.println("introduce"+ideaBean.toString());
+                System.out.println("introduce" + ideaBean.toString());
                 this.updateIdea(ideaBean);
 
                 //读写文件
@@ -177,4 +189,6 @@ public class IdeaServiceImpl extends ServiceImpl<IdeaDao, IdeaBean> implements I
             }
         }
     }
+
+
 }

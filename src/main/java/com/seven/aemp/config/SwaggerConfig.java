@@ -1,5 +1,6 @@
 package com.seven.aemp.config;
 
+import com.github.xiaoymin.swaggerbootstrapui.annotations.EnableSwaggerBootstrapUI;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -27,6 +28,7 @@ import java.util.List;
 //开启Swagger2
 @EnableSwagger2
 @Profile("dev")
+@EnableSwaggerBootstrapUI
 public class SwaggerConfig {
 
     //配置要扫描接口的方式

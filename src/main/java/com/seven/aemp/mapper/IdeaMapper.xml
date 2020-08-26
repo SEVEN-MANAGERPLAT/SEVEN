@@ -73,7 +73,7 @@
                 AND IC.IDEA_DATE  >= #{idea.begDate}
             </if>
             <if test="idea.endDate != null and idea.endDate != ''">
-                IC.IDEA_DATE  &lt; #{idea.endDate}
+                AND IC.IDEA_DATE  &lt; #{idea.endDate}
             </if>
         </where>
         GROUP BY EI.IDEA_NAME,EI.UPDATE_URL,EI.ADVERTISE_TYPE_ID,EI.CHECK_STATE,EI.IDEA_ID,EG.EG_ID,EG.EG_NAME,P.PLAN_ID,P.PLAN_NAME,ACC.CLICK_RATE,SIC.CLICK_NUM
@@ -109,4 +109,35 @@
             PROD_URL = #{prodUrl}
         </if>
     </update>
+
+    <select id="queryIdeaBackReport" resultType="com.seven.aemp.bean.IdeaBean">
+        SELECT EI.*,IFNULL(B.CLICK_NUM,0) clickNum,C.CLICK_RATE,C.AVG_BILL unitPrice,
+        B.CLICK_NUM / C.CLICK_RATE EXHIBITS,B.CLICK_NUM * C.AVG_BILL CONSUME
+        FROM extent_idea EI
+        LEFT JOIN (
+            SELECT IDEA_ID,SUM(IDEA.CLICK_NUM) CLICK_NUM
+            FROM ideaclick IDEA
+            GROUP BY IDEA.IDEA_ID
+        ) B
+        ON B.IDEA_ID = EI.IDEA_ID
+        LEFT JOIN (
+            SELECT EG.*,A.CLICK_RATE
+            FROM
+            (
+                SELECT PLAN_ID,SUM(BILL) BILL,COUNT(*) COUNT,SUM(BILL) / COUNT(*) AVG_BILL
+                FROM extent_group
+                GROUP BY PLAN_ID
+            ) EG
+            LEFT JOIN plant P ON P.PLAN_ID = EG.PLAN_ID
+            LEFT JOIN account A ON P.ACC_ID = A.ACCOUNT_ID
+        ) C ON C.PLAN_ID = EI.PLAN_ID
+        <where>
+            <if test="ideaBean.begDate != null and ideaBean.begDate != ''">
+                AND EI.IDEA_DATE >= #{ideaBean.begDate}
+            </if>
+            <if test="ideaBean.endDate != null and ideaBean.endDate != ''">
+                AND EI.IDEA_DATE &lt; #{ideaBean.endDate}
+            </if>
+        </where>
+    </select>
 </mapper>

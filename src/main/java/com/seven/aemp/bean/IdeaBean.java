@@ -49,18 +49,23 @@ public class IdeaBean implements Serializable {
 
     private String ideaDate;
 
+    //展现量
     @TableField(exist = false)
     private String exhibits;
 
+    //点击量
     @TableField(exist = false)
     private String clickNum;
 
+    //点击率
     @TableField(exist = false)
     private String clickRate;
 
+    //单价
     @TableField(exist = false)
     private String unitPrice;
 
+    //消费
     @TableField(exist = false)
     private String consume;
 

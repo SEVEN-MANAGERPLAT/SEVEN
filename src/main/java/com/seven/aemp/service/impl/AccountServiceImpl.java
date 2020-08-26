@@ -15,7 +15,6 @@ import com.seven.aemp.service.UmsResourceService;
 import com.seven.aemp.util.CookieTools;
 import com.seven.aemp.util.JwtTokenUtil;
 import org.apache.commons.lang.StringUtils;
-import org.mapstruct.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -32,7 +31,6 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletResponse;
 import java.net.URLEncoder;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 

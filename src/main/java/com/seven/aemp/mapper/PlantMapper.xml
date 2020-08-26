@@ -28,4 +28,41 @@
             </if>
         </where>
     </select>
+
+    <!--后台查询计划报表-->
+    <select id="queryPlantBackReport" resultType="com.seven.aemp.domain.PlantResultBean">
+        SELECT
+        P.*,A.CLICK_RATE,EG.AVG_BILL unitPrice,B.CLICK_NUM,
+        B.CLICK_NUM / A.CLICK_RATE exhibits,
+        B.CLICK_NUM * EG.AVG_BILL consume
+        FROM plant P
+        LEFT JOIN account A
+        ON P.ACC_ID = A.ACCOUNT_ID
+        LEFT JOIN (
+            SELECT
+            PLAN_ID,SUM(BILL) BILL,COUNT(*) COUNT,
+            SUM(BILL) / COUNT(*) AVG_BILL
+            FROM extent_group
+            GROUP BY PLAN_ID
+        ) EG
+        ON EG.PLAN_ID = P.PLAN_ID
+        LEFT JOIN (
+            SELECT P.PLAN_ID,SUM(IDEA.CLICK_NUM) CLICK_NUM
+            FROM ideaclick IDEA
+            LEFT JOIN extent_idea EI
+            ON EI.IDEA_ID = IDEA.IDEA_ID
+            LEFT JOIN plant P
+            ON P.PLAN_ID = EI.PLAN_ID
+            GROUP BY P.PLAN_ID
+        ) B
+        ON P.PLAN_ID = B.PLAN_ID
+        <where>
+            <if test="plantBean.begDate != null and plantBean.begDate != ''">
+                AND P.CREATE_DATE >= #{plantBean.begDate}
+            </if>
+            <if test="plantBean.endDate != null and plantBean.endDate != ''">
+                AND P.CREATE_DATE &lt; #{plantBean.endDate}
+            </if>
+        </where>
+    </select>
 </mapper>

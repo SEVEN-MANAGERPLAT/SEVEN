@@ -1,9 +1,7 @@
 package com.seven.aemp.dao;
 
-import com.seven.aemp.bean.AccountBean;
 import com.seven.aemp.bean.SystemAccountBean;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import org.mapstruct.Mapper;
 
 import java.util.List;
 
@@ -15,7 +13,6 @@ import java.util.List;
  * @author mwl
  * @since 2020-03-31
  */
-@Mapper
 public interface SystemAccountDao extends BaseMapper<SystemAccountBean> {
 
 

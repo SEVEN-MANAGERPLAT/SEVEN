@@ -6,6 +6,7 @@ import com.seven.aemp.bean.IdeaBean;
 import com.seven.aemp.common.Constant;
 import com.seven.aemp.exception.MessageException;
 import com.seven.aemp.service.IdeaService;
+import com.seven.aemp.util.CommonResultUtil;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -19,7 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 /**
  * <p>
- *  前端控制器
+ * 前端控制器
  * </p>
  *
  * @author mwl
@@ -71,7 +72,7 @@ public class IdeaController {
         jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
         jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
         IdeaBean ideaBean = JSONObject.parseObject(params, IdeaBean.class);
-        ideaService.addIdea(ideaBean,file);
+        ideaService.addIdea(ideaBean, file);
         return jsonObject;
     }
 
@@ -116,5 +117,12 @@ public class IdeaController {
         IdeaBean ideaBean = JSONObject.parseObject(params, IdeaBean.class);
         ideaService.updateCheckState(ideaBean);
         return jsonObject;
+    }
+
+    //广告创意报表【后台管理】
+    @PostMapping("/queryIdeaBackReport")
+    public JSONObject queryIdeaBackReport(@RequestBody String params) throws Exception {
+        if (StringUtils.isBlank(params)) throw new MessageException("参数接收失败!");
+        return CommonResultUtil.retSuccJSONObj(ideaService.queryIdeaBackReport(JSONObject.parseObject(params, IdeaBean.class)));
     }
 }
