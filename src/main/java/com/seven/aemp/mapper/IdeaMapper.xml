@@ -51,7 +51,7 @@
     <!--查询某短时间内单日的点击量-->
     <select id="queryIdeaClickByUnitDay" resultType="com.seven.aemp.bean.IdeaBean">
         SELECT EI.IDEA_NAME,EI.UPDATE_URL,EI.ADVERTISE_TYPE_ID,EI.IDEA_ID,EG.EG_ID,EG.EG_NAME,P.PLAN_ID,P.PLAN_NAME
-        ,CASE WHEN EI.CHECK_STATE=0 THEN '拒绝'
+        ,CASE WHEN EI.CHECK_STATE=0 THEN '未通过'
           WHEN EI.CHECK_STATE=1 THEN '通过' ELSE '审核中' END AS CHECK_STATE
         ,FORMAT(SIC.CLICK_NUM/ACC.CLICK_RATE,0) AS EXHIBITS,ACC.CLICK_RATE
         ,AVG(EG.BILL) AS UNIT_PRICE,SIC.CLICK_NUM,SIC.CLICK_NUM*EG.BILL AS CONSUME
@@ -60,20 +60,26 @@
         LEFT JOIN sevenmanager.plant P ON P.ACC_ID=ACC.ACCOUNT_ID
         LEFT JOIN sevenmanager.extent_group EG ON EG.PLAN_ID=P.PLAN_ID
         LEFT JOIN sevenmanager.extent_idea EI ON EI.EG_ID=EG.EG_ID
-        LEFT JOIN (SELECT IC.IDEA_ID,SUM(IC.CLICK_NUM) AS CLICK_NUM FROM sevenmanager.ideaclick IC GROUP BY IC.IDEA_ID) SIC ON SIC.IDEA_ID=EI.IDEA_ID
+        LEFT JOIN (SELECT IC.IDEA_ID,SUM(IC.CLICK_NUM) AS CLICK_NUM FROM sevenmanager.ideaclick IC
+        <where>
+            <if test="idea.begDate != null and idea.begDate != ''">
+                AND IC.IDEA_DATE  >= #{idea.begDate}
+            </if>
+            <if test="idea.endDate != null and idea.endDate != ''">
+                AND IC.IDEA_DATE  &lt; #{idea.endDate}
+            </if>
+        </where>
+        GROUP BY IC.IDEA_ID) SIC ON SIC.IDEA_ID=EI.IDEA_ID
         <where>
             EI.IDEA_ID IS NOT NULL
             <if test="idea.ideaId != null and idea.ideaId != ''">
                 AND I.IDEA_ID  = #{idea.ideaId}
             </if>
             <if test="idea.checkState != null and idea.checkState != ''">
-                AND EI.CHECK_STATE  >= #{idea.checkState}
+                AND EI.CHECK_STATE  = #{idea.checkState}
             </if>
-            <if test="idea.begDate != null and idea.begDate != ''">
-                AND IC.IDEA_DATE  >= #{idea.begDate}
-            </if>
-            <if test="idea.endDate != null and idea.endDate != ''">
-                AND IC.IDEA_DATE  &lt; #{idea.endDate}
+            <if test="idea.ideaName != null and idea.ideaName != ''">
+                AND EI.IDEA_NAME  LIKE  "%"#{idea.ideaName}"%"
             </if>
         </where>
         GROUP BY EI.IDEA_NAME,EI.UPDATE_URL,EI.ADVERTISE_TYPE_ID,EI.CHECK_STATE,EI.IDEA_ID,EG.EG_ID,EG.EG_NAME,P.PLAN_ID,P.PLAN_NAME,ACC.CLICK_RATE,SIC.CLICK_NUM
@@ -109,6 +115,7 @@
             PROD_URL = #{prodUrl}
         </if>
     </update>
+
 
     <select id="queryIdeaBackReport" resultType="com.seven.aemp.bean.IdeaBean">
         SELECT EI.*,IFNULL(B.CLICK_NUM,0) clickNum,C.CLICK_RATE,C.AVG_BILL unitPrice,

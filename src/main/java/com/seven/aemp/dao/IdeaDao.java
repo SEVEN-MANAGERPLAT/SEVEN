@@ -20,7 +20,6 @@ import java.util.List;
  * @author mwl
  * @since 2019-11-19
  */
-@Mapper
 public interface IdeaDao extends BaseMapper<IdeaBean> {
 
     //查询创意，一段时间内汇总点击量

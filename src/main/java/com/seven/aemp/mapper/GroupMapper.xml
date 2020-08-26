@@ -40,7 +40,16 @@
         LEFT JOIN sevenmanager.plant P ON P.ACC_ID=ACC.ACCOUNT_ID
         LEFT JOIN sevenmanager.extent_group EG ON EG.PLAN_ID=P.PLAN_ID
         LEFT JOIN (SELECT EI.EG_ID,SUM(IC.CLICK_NUM) AS CLICK_NUM
-        FROM sevenmanager.ideaclick IC LEFT JOIN sevenmanager.extent_idea EI ON IC.IDEA_ID=EI.IDEA_ID GROUP BY EI.EG_ID) GIC ON GIC.EG_ID=EG.EG_ID
+            FROM sevenmanager.ideaclick IC LEFT JOIN sevenmanager.extent_idea EI ON IC.IDEA_ID=EI.IDEA_ID
+            <where>
+                <if test="group.begDate != null and group.begDate != ''">
+                    AND IC.IDEA_DATE  >= #{group.begDate}
+                </if>
+                <if test="group.endDate != null and group.endDate != ''">
+                    AND IC.IDEA_DATE  &lt; #{group.endDate}
+                </if>
+            </where>
+            GROUP BY EI.EG_ID) GIC ON GIC.EG_ID=EG.EG_ID
         <where>
             EG.EG_ID IS NOT NULL
             <if test="group.egId != null and group.egId != ''">
@@ -50,16 +59,13 @@
                 AND P.PLAN_ID = #{group.planId}
             </if>
             <if test="group.egName != null and group.egName != ''">
-                AND EG.EG_NAME  = #{group.egName}
+                AND EG.EG_NAME  LIKE "%"#{group.egName}"%"
+            </if>
+            <if test="group.state != null and group.state != ''">
+                AND EG.STATE  = #{group.state}
             </if>
             <if test="group.accId != null and group.accId != '' and group.accId != 1">
                 AND P.ACC_ID  = #{group.accId}
-            </if>
-            <if test="group.begDate != null and group.begDate != ''">
-                AND IC.IDEA_DATE  >= #{group.begDate}
-            </if>
-            <if test="group.endDate != null and group.endDate != ''">
-                AND IC.IDEA_DATE  &lt; #{group.endDate}
             </if>
         </where>
         GROUP BY EG.EG_ID,EG.BILL,EG.EG_NAME,EG.PREDICT,P.PLAN_ID,P.PLAN_NAME,ACC.CLICK_RATE,GIC.CLICK_NUM,EG.STATE
