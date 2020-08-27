@@ -132,11 +132,11 @@ public class GroupBean implements Serializable {
 
     //展现量
     @TableField(exist = false)
-    private String exhibits;
+    private int exhibits;
 
     //点击率
     @TableField(exist = false)
-    private String clickRate;
+    private BigDecimal clickRate;
 
     //组总消费
     @TableField(exist = false)

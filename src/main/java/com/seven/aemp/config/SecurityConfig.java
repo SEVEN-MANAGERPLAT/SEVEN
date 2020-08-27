@@ -41,6 +41,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         }
         //允许跨域请求的OPTIONS请求
         registry.antMatchers(HttpMethod.OPTIONS).permitAll();
+        //swagger3.0资源过滤释放
+        registry.antMatchers("/swagger-ui/").permitAll().antMatchers("/swagger-resources/**").permitAll()
+                .antMatchers("/v3/api-docs").permitAll().antMatchers("/configuration/ui").permitAll();
         // 任何请求需要身份认证
         registry.and()
                 .authorizeRequests()
