@@ -148,7 +148,6 @@ public class AccountController {
         return CommonResultUtil.retSuccJSONObj(accountService.getCurrentAccount());
     }
 
-
     @GetMapping("/queryConsumAndArrease")
     public JSONObject queryConsumAndArrease() throws Exception {
         return CommonResultUtil.retSuccJSONObj(accountService.queryConsumAndArrease());
