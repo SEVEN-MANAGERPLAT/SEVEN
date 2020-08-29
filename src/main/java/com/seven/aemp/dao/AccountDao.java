@@ -37,4 +37,15 @@ public interface AccountDao extends BaseMapper<AccountBean> {
 
     //查询点击量统计信息
     List<AccountBean> queryFirmSummary(AccountBean accountBean);
+
+    //前台首页 昨日消费 今日消费 账户余额，账户预算
+    Map<String,String> queryUnitAccout(String accountName);
+
+    //前台首页 查询创意待审核、被拒的个数
+    Map<String,String> queryCheckIdea(Integer accId);
+
+    //前台首页 账户每日点击量统计
+    List<AccountBean> queryAccoutClickNum(Page<AccountBean> result, @Param("account") AccountBean accountBean);
+
+
 }

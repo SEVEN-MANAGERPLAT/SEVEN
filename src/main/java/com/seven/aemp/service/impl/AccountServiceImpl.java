@@ -26,6 +26,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -183,5 +184,25 @@ public class AccountServiceImpl extends ServiceImpl<AccountDao, AccountBean> imp
     @Override
     public List<AccountBean> queryFirmSummary(AccountBean accountBean) throws Exception {
         return accountDao.queryFirmSummary(accountBean);
+    }
+
+    @Override
+    public JSONObject queryTotleData() throws Exception {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("checkData",accountDao.queryCheckIdea(this.getCurrentAccount().getAccountId()));
+        jsonObject.put("accoutData", accountDao.queryUnitAccout(this.getCurrentAccount().getAccountName()));
+        return jsonObject;
+    }
+
+    @Override
+    public Page<AccountBean> queryAccoutClickNum(String page, String pageSize, AccountBean accountBean) throws Exception {
+        if (StringUtils.isBlank(page)) {
+            page = "1";
+        }
+        if (StringUtils.isBlank(pageSize)) {
+            pageSize = "10";
+        }
+        Page<AccountBean> result = new Page<>(Long.valueOf(page), Long.valueOf(pageSize));
+        return result.setRecords(accountDao.queryAccoutClickNum(result, accountBean.setAccountId(this.getCurrentAccount().getAccountId())));
     }
 }

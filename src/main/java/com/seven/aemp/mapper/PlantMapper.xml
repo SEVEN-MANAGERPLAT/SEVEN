@@ -29,6 +29,47 @@
         </where>
     </select>
 
+    <!--查询计划点击量-->
+    <select id="queryPlanClickNum" resultType="com.seven.aemp.domain.PlantResultBean">
+        SELECT P.PLAN_ID,P.PLAN_NAME,P.PLAN_PREDICT,ACC.CLICK_RATE,IFNULL(PIC.CLICK_NUM,0) CLICK_NUM,IFNULL(PIC.UNIT_PRICE,0) UNIT_PRICE,IFNULL(PIC.CONSUME,0) CONSUME
+            ,IFNULL(FORMAT(PIC.CLICK_NUM/ACC.CLICK_RATE,0),0) AS EXHIBITS
+            ,CASE WHEN P.STATE=0 THEN '暂停' ELSE '开启' END AS STATE
+        FROM
+        sevenmanager.account ACC
+        LEFT JOIN sevenmanager.plant P ON P.ACC_ID=ACC.ACCOUNT_ID
+        LEFT JOIN
+            (SELECT PGIC.PLAN_ID,AVG(PGIC.BILL) UNIT_PRICE,SUM(CLICK_NUM) CLICK_NUM,SUM(PGIC.CONSUME) CONSUME FROM
+            (SELECT EG.PLAN_ID,EI.EG_ID,EG.BILL,SUM(IC.CLICK_NUM) AS CLICK_NUM,IFNULL(SUM(IC.CLICK_NUM),0)*EG.BILL AS CONSUME
+            FROM sevenmanager.ideaclick IC
+            LEFT JOIN sevenmanager.extent_idea EI ON IC.IDEA_ID=EI.IDEA_ID
+            LEFT JOIN sevenmanager.extent_group EG ON EG.EG_ID=EI.EG_ID
+            <where>
+                <if test="plan.begDate != null and plan.begDate != ''">
+                    AND IC.IDEA_DATE  >= #{plan.begDate}
+                </if>
+                <if test="plan.endDate != null and plan.endDate != ''">
+                    AND IC.IDEA_DATE  &lt; #{plan.endDate}
+                </if>
+            </where>
+            GROUP BY EG.PLAN_ID,EI.EG_ID,EG.BILL)PGIC
+            GROUP BY PGIC.PLAN_ID)PIC ON PIC.PLAN_ID=P.PLAN_ID
+        <where>
+            P.PLAN_ID IS NOT NULL
+            <if test="plan.planId != null and plan.planId != ''">
+                AND P.PLAN_ID = #{plan.planId}
+            </if>
+            <if test="plan.planName != null and plan.planName != ''">
+                AND P.PLAN_NAME  LIKE "%"#{plan.planName}"%"
+            </if>
+            <if test="plan.state != null and plan.state != ''">
+                AND P.STATE  = #{plan.state}
+            </if>
+            <if test="plan.accId != null and plan.accId != '' and plan.accId != 1">
+                AND P.ACC_ID  = #{plan.accId}
+            </if>
+        </where>
+    </select>
+
     <!--后台查询计划报表-->
     <select id="queryPlantBackReport" resultType="com.seven.aemp.domain.PlantResultBean">
         SELECT

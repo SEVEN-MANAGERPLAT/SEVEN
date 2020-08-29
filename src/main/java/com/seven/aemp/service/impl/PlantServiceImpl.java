@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.seven.aemp.bean.PlantBean;
 import com.seven.aemp.dao.PlantDao;
 import com.seven.aemp.exception.MessageException;
+import com.seven.aemp.service.AccountService;
 import com.seven.aemp.service.PlantService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.seven.aemp.util.TimeUtil;
@@ -28,6 +29,9 @@ public class PlantServiceImpl extends ServiceImpl<PlantDao, PlantBean> implement
 
     @Autowired
     private PlantDao plantDao;
+
+    @Autowired
+    private AccountService accountService;
 
     @Override
     public List<PlantBean> queryPlant(PlantBean plantBean) throws Exception {
@@ -77,5 +81,18 @@ public class PlantServiceImpl extends ServiceImpl<PlantDao, PlantBean> implement
         if (StringUtils.isNotBlank(plantBean.getEndDate()))
             plantBean.setEndDate(TimeUtil.getDateYYYY_MM_DD_HH_MM_SS(TimeUtil.dateAdd(TimeUtil.parseAnyDate(plantBean.getEndDate()), TimeUtil.UNIT_DAY, 1)));
         return plantDao.queryPlantBackReport(page, plantBean);
+    }
+
+    @Override
+    public Page<PlantBean> queryPlanClickNum(String page, String pageSize, PlantBean plantBean) throws Exception {
+        System.out.println(accountService.getCurrentAccount());
+        if (StringUtils.isBlank(page)) {
+            page = "1";
+        }
+        if (StringUtils.isBlank(pageSize)) {
+            pageSize = "10";
+        }
+        Page<PlantBean> result = new Page<>(Long.valueOf(page), Long.valueOf(pageSize));
+        return result.setRecords(plantDao.queryPlanClickNum(result, plantBean));
     }
 }
