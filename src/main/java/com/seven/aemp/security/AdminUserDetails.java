@@ -63,7 +63,7 @@ public class AdminUserDetails implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return umsAdmin.getAccountState().equals(1);
+        return "1".equals(umsAdmin.getAccountState());
     }
 
     public AccountBean getUmsAdmin() {
