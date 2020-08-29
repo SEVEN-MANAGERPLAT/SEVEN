@@ -190,7 +190,7 @@ public class AccountServiceImpl extends ServiceImpl<AccountDao, AccountBean> imp
     public JSONObject queryTotleData() throws Exception {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("checkData",accountDao.queryCheckIdea(this.getCurrentAccount().getAccountId()));
-        jsonObject.put("accoutData", accountDao.queryUnitAccout(this.getCurrentAccount().getAccountName()));
+        jsonObject.put("accoutData", accountDao.queryUnitAccout(this.getCurrentAccount().getAccountId()));
         return jsonObject;
     }
 

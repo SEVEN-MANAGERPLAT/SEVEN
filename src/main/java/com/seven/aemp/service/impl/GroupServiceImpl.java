@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.seven.aemp.bean.GroupBean;
 import com.seven.aemp.dao.GroupDao;
 import com.seven.aemp.exception.MessageException;
+import com.seven.aemp.service.AccountService;
 import com.seven.aemp.service.GroupService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.seven.aemp.util.TimeUtil;
@@ -28,6 +29,9 @@ public class GroupServiceImpl extends ServiceImpl<GroupDao, GroupBean> implement
 
     @Autowired
     GroupDao groupDao;
+
+    @Autowired
+    private AccountService accountService;
 
     @Override
     public List<GroupBean> queryGroup(GroupBean groupBean) throws Exception {
@@ -89,6 +93,6 @@ public class GroupServiceImpl extends ServiceImpl<GroupDao, GroupBean> implement
             pageSize = "10";
         }
         Page<GroupBean> result = new Page<>(Long.valueOf(page), Long.valueOf(pageSize));
-        return result.setRecords(groupDao.queryGroupIdeaClickByUnitDay(result, groupBean));
+        return result.setRecords(groupDao.queryGroupIdeaClickByUnitDay(result, groupBean.setAccId(String.valueOf(accountService.getCurrentAccount().getAccountId()))));
     }
 }

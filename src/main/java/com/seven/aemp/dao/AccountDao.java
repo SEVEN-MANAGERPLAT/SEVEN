@@ -39,7 +39,7 @@ public interface AccountDao extends BaseMapper<AccountBean> {
     List<AccountBean> queryFirmSummary(AccountBean accountBean);
 
     //前台首页 昨日消费 今日消费 账户余额，账户预算
-    Map<String,String> queryUnitAccout(String accountName);
+    Map<String,String> queryUnitAccout(Integer accId);
 
     //前台首页 查询创意待审核、被拒的个数
     Map<String,String> queryCheckIdea(Integer accId);

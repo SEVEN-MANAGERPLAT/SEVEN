@@ -54,20 +54,20 @@ public class PlantServiceImpl extends ServiceImpl<PlantDao, PlantBean> implement
     public void addPlant(PlantBean plantBean) throws MessageException {
         if (StringUtils.isBlank(plantBean.getPlanName())) throw new MessageException("计划名称不能为空");
         if (StringUtils.isBlank(plantBean.getPlanPredict())) throw new MessageException("预算不能为空");
-        if (StringUtils.isBlank(plantBean.getAccId())) throw new MessageException("登录账号已过期，请重新登录");
         QueryWrapper<PlantBean> queryWrapper = new QueryWrapper<PlantBean>();
         queryWrapper.select("*");
         queryWrapper.eq("PLAN_NAME", plantBean.getPlanName());
         List<PlantBean> plantBeans = plantDao.selectList(queryWrapper);
         if (plantBeans.size() > 0) throw new MessageException("计划名不能重复!");
-        if (plantDao.insert(plantBean) <= 0) throw new MessageException("操作失败!");
+        if (plantDao.insert(plantBean.setAccId(String.valueOf(accountService.getCurrentAccount().getAccountId()))) <= 0) throw new MessageException("操作失败!");
     }
 
     @Override
     public void updatePlant(PlantBean plantBean) throws MessageException {
         QueryWrapper<PlantBean> queryWrapper = new QueryWrapper<PlantBean>();
         queryWrapper.select("*");
-        queryWrapper.ne("plan_id", plantBean.getPlanId());
+        queryWrapper.ne("PLAN_ID", plantBean.getPlanId());
+        queryWrapper.eq("PLAN_NAME", plantBean.getPlanName());
         List<PlantBean> plantBeans = plantDao.selectList(queryWrapper);
         if (plantBeans.size() > 0) throw new MessageException("计划名不能重复!");
         if (plantDao.updateById(plantBean) <= 0) throw new MessageException("操作失败!");

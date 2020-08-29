@@ -33,7 +33,7 @@
     <select id="queryPlanClickNum" resultType="com.seven.aemp.domain.PlantResultBean">
         SELECT P.PLAN_ID,P.PLAN_NAME,P.PLAN_PREDICT,ACC.CLICK_RATE,IFNULL(PIC.CLICK_NUM,0) CLICK_NUM,IFNULL(PIC.UNIT_PRICE,0) UNIT_PRICE,IFNULL(PIC.CONSUME,0) CONSUME
             ,IFNULL(FORMAT(PIC.CLICK_NUM/ACC.CLICK_RATE,0),0) AS EXHIBITS
-            ,CASE WHEN P.STATE=0 THEN '暂停' ELSE '开启' END AS STATE
+            ,P.STATE
         FROM
         sevenmanager.account ACC
         LEFT JOIN sevenmanager.plant P ON P.ACC_ID=ACC.ACCOUNT_ID
