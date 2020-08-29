@@ -20,6 +20,7 @@
         <java.version>1.8</java.version>
         <jjwt.version>0.9.0</jjwt.version>
         <p6spy.version>3.8.1</p6spy.version>
+        <knife4j.version>2.0.4</knife4j.version>
         <fastjson.version>1.2.72</fastjson.version>
         <commons-io.version>2.2</commons-io.version>
         <hutool-all.version>4.5.7</hutool-all.version>
@@ -39,10 +40,15 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-freemarker</artifactId>
+        </dependency>
+
         <!--<dependency>-->
-            <!--<groupId>com.microsoft.sqlserver</groupId>-->
-            <!--<artifactId>mssql-jdbc</artifactId>-->
-            <!--<version>7.2.2.jre8</version>-->
+        <!--<groupId>com.microsoft.sqlserver</groupId>-->
+        <!--<artifactId>mssql-jdbc</artifactId>-->
+        <!--<version>7.2.2.jre8</version>-->
         <!--</dependency>-->
         <dependency>
             <groupId>mysql</groupId>
@@ -143,17 +149,18 @@
             <version>${springfox-swagger.version}</version>
         </dependency>
         <!--<dependency>-->
-            <!--<groupId>io.springfox</groupId>-->
-            <!--<artifactId>springfox-boot-starter</artifactId>-->
-            <!--<version>${springfox-swagger.version}</version>-->
+        <!--<groupId>io.springfox</groupId>-->
+        <!--<artifactId>springfox-boot-starter</artifactId>-->
+        <!--<version>${springfox-swagger.version}</version>-->
         <!--</dependency>-->
         <!--        导入swagger2依赖 end-->
 
         <!--swagger-ui美化依赖-->
+        <!-- https://mvnrepository.com/artifact/com.github.xiaoymin/knife4j-spring-boot-starter -->
         <dependency>
             <groupId>com.github.xiaoymin</groupId>
-            <artifactId>swagger-bootstrap-ui</artifactId>
-            <version>${swagger-bootstrap-ui.version}</version>
+            <artifactId>knife4j-spring-boot-starter</artifactId>
+            <version>${knife4j.version}</version>
         </dependency>
 
         <!--SpringSecurity依赖配置-->

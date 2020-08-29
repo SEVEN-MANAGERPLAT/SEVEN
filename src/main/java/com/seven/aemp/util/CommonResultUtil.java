@@ -17,7 +17,7 @@ public class CommonResultUtil {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
         jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
-        jsonObject.put(Constant.Result.RETDATA, data == null ? "无数据" : data);
+        jsonObject.put(Constant.Result.RETDATA, data);
         return jsonObject;
     }
 
@@ -31,7 +31,7 @@ public class CommonResultUtil {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put(Constant.Result.RETCODE, Constant.Result.ERROR);
         jsonObject.put(Constant.Result.RETMSG, StringUtils.isBlank(msg) ? Constant.Result.ERROR_MSG : msg);
-        jsonObject.put(Constant.Result.RETDATA, data == null ? "无数据" : data);
+        jsonObject.put(Constant.Result.RETDATA, data);
         return jsonObject;
     }
 
@@ -40,7 +40,7 @@ public class CommonResultUtil {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put(Constant.Result.RETCODE, StringUtils.isBlank(code) ? Constant.Result.ERROR : code);
         jsonObject.put(Constant.Result.RETMSG, StringUtils.isBlank(msg) ? Constant.Result.ERROR_MSG : msg);
-        jsonObject.put(Constant.Result.RETDATA, data == null ? "无数据" : data);
+        jsonObject.put(Constant.Result.RETDATA, data);
         return jsonObject;
     }
 }

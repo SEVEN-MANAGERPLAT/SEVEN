@@ -4,20 +4,21 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.seven.aemp.bean.AccountBean;
+import com.seven.aemp.bean.UmsAdminRoleRelationBean;
+import com.seven.aemp.security.AdminUserDetails;
 import com.seven.aemp.bean.UmsResourceBean;
 import com.seven.aemp.common.Constant;
 import com.seven.aemp.dao.AccountDao;
 import com.seven.aemp.exception.MessageException;
-import com.seven.aemp.security.AdminUserDetails;
 import com.seven.aemp.service.AccountService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.seven.aemp.service.UmsAdminRoleRelationService;
 import com.seven.aemp.service.UmsResourceService;
 import com.seven.aemp.util.CookieTools;
 import com.seven.aemp.util.JwtTokenUtil;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -66,6 +67,9 @@ public class AccountServiceImpl extends ServiceImpl<AccountDao, AccountBean> imp
 
     @Autowired
     private UmsResourceService resourceService;
+
+    @Autowired
+    private UmsAdminRoleRelationService roleRelationService;
 
     @Override
     public List<AccountBean> queryAccount(AccountBean accountBean) {
@@ -121,7 +125,9 @@ public class AccountServiceImpl extends ServiceImpl<AccountDao, AccountBean> imp
         if (StringUtils.isBlank(accountBean.getAccountPwd())) throw new MessageException("密码不能为空!");
         List<AccountBean> accountBeans = queryAccount(new AccountBean().setAccountName(accountBean.getAccountName()));
         if (!accountBeans.isEmpty()) throw new MessageException("账号重复!");
+        accountBean.setAccountPwd(passwordEncoder.encode(accountBean.getAccountPwd()));
         if (accountDao.insert(accountBean) <= 0) throw new MessageException("操作失败!");
+        roleRelationService.save(new UmsAdminRoleRelationBean().setAdminId(Long.valueOf(accountBean.getAccountId())).setRoleId(1L));
         return accountBean;
     }
 
@@ -142,9 +148,9 @@ public class AccountServiceImpl extends ServiceImpl<AccountDao, AccountBean> imp
         if (StringUtils.isBlank(accountBean.getAccountPwd())) throw new MessageException("密码不能为空!");
         UserDetails userDetails = loadUserByUsername(accountBean.getAccountName());
         //String accountPwd = passwordEncoder.encode(accountBean.getAccountPwd());
-        String password = passwordEncoder.encode(userDetails.getPassword());
-        log.debug("password:{}" + password);
-        if (!passwordEncoder.matches(accountBean.getAccountPwd(), password)) {
+//        String password = passwordEncoder.encode(userDetails.getPassword());
+//        log.debug("password:{}" + password);
+        if (!passwordEncoder.matches(accountBean.getAccountPwd(), userDetails.getPassword())) {
             throw new MessageException("密码不正确!");
         }
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
