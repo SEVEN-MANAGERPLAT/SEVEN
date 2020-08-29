@@ -51,4 +51,13 @@ public interface AccountService extends IService<AccountBean> {
 
     //查询推广账户统计
     public List<AccountBean> queryFirmSummary(AccountBean accountBean) throws Exception;
+
+
+
+    //前台接口
+    //公共数据查询
+    public JSONObject queryTotleData() throws Exception;
+
+    //前台首页查询
+    public Page<AccountBean> queryAccoutClickNum(String page, String pageSize, AccountBean accountBean) throws Exception;
 }

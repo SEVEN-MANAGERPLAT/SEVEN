@@ -25,4 +25,7 @@ public interface PlantDao extends BaseMapper<PlantBean> {
 
     //后台查询计划报表
     IPage queryPlantBackReport(@Param("page") IPage page, @Param("plantBean") PlantBean plantBean);
+
+    //查询点击量
+    List<PlantBean> queryPlanClickNum(Page<PlantBean> result, @Param("plan") PlantBean plantBean);
 }

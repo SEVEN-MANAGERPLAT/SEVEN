@@ -147,4 +147,53 @@
 
         GROUP BY P.ACC_ID) FA ON ACC.ACCOUNT_ID=FA.ACC_ID
     </select>
+
+    <!--前台首页 昨日消费 今日消费 账户余额，账户预算-->
+    <select id="queryUnitAccout" resultType="java.util.Map">
+        SELECT ACC.ACC_PREDECT,ACC.BALANCE
+        ,SUM(CASE WHEN DATE_FORMAT(AIC.IDEA_DATE,'%Y-%m-%d')=DATE_FORMAT(NOW(),'%Y-%m-%d') THEN AIC.CONSUME ELSE 0 END)  NOW_CONSUME
+        ,SUM(CASE WHEN DATE_FORMAT(AIC.IDEA_DATE,'%Y-%m-%d')=date_sub(DATE_FORMAT(NOW(),'%Y-%m-%d'),interval 1 day) THEN AIC.CONSUME ELSE 0 END)  YESTERDAY_CONSUME
+        FROM
+        sevenmanager.account ACC
+        LEFT JOIN
+        (SELECT P.ACC_ID,IC.IDEA_DATE,EG.BILL*IC.CLICK_NUM AS CONSUME FROM sevenmanager.ideaclick IC
+        LEFT JOIN sevenmanager.extent_idea EI ON EI.IDEA_ID=IC.IDEA_ID
+        LEFT JOIN sevenmanager.extent_group EG ON EG.EG_ID=EI.EG_ID
+        LEFT JOIN sevenmanager.plant P ON P.PLAN_ID=EG.EG_ID
+        WHERE DATE_FORMAT(IC.IDEA_DATE,'%Y-%m-%d')=DATE_FORMAT(NOW(),'%Y-%m-%d')
+            OR DATE_FORMAT(IC.IDEA_DATE,'%Y-%m-%d')=date_sub(DATE_FORMAT(NOW(),'%Y-%m-%d'),interval 1 day))AIC ON AIC.ACC_ID=ACC.ACCOUNT_ID
+        WHERE ACC.ACCOUNT_NAME=#{accountName}
+        GROUP BY ACC.ACCOUNT_ID,ACC.ACC_PREDECT,ACC.BALANCE
+    </select>
+
+    <!--前台首页 查询创意待审核、被拒的个数-->
+    <select id="queryCheckIdea" resultType="java.util.Map">
+        SELECT IFNULL(SUM(CASE WHEN EI.CHECK_STATE=0 THEN 1 ELSE 0 END),0) AS REFUSE_NUM
+            ,IFNULL(SUM(CASE WHEN EI.CHECK_STATE=2 THEN 1 ELSE 0 END),0) AS REVIEWED
+        FROM sevenmanager.extent_idea EI
+        LEFT JOIN sevenmanager.extent_group EG ON EG.EG_ID=EI.EG_ID
+        LEFT JOIN sevenmanager.plant P ON P.PLAN_ID=EG.EG_ID
+        WHERE P.ACC_ID=#{accId}
+        GROUP BY P.ACC_ID
+    </select>
+
+    <select id="queryAccoutClickNum" parameterType="com.seven.aemp.bean.AccountBean" resultType="com.seven.aemp.bean.AccountBean">
+        SELECT AIC.IDEA_DATE,ACC.CLICK_RATE,FORMAT(AVG(AIC.BILL)*1000,0) THOUSAND_CONSUME
+            ,FORMAT(SUM(AIC.CLICK_NUM)/ACC.CLICK_RATE,0) EXHIBITS
+            ,FORMAT(AVG(AIC.BILL),2) UNIT_PRICE
+            ,FORMAT(SUM(AIC.CONSUME),2) CONSUME
+            ,FORMAT(SUM(AIC.CLICK_NUM),0) CLICK_NUM
+        FROM
+        (SELECT P.ACC_ID,IC.IDEA_DATE,EG.BILL,IC.CLICK_NUM,EG.BILL*IC.CLICK_NUM CONSUME
+        FROM sevenmanager.ideaclick IC
+        LEFT JOIN sevenmanager.extent_idea EI ON EI.IDEA_ID=IC.IDEA_ID
+        LEFT JOIN sevenmanager.extent_group EG ON EG.EG_ID=EI.EG_ID
+        LEFT JOIN sevenmanager.plant P ON P.PLAN_ID=EG.PLAN_ID
+        WHERE P.ACC_ID=#{account.accountId}
+        ) AIC
+        LEFT JOIN sevenmanager.account ACC ON ACC.ACCOUNT_ID=AIC.ACC_ID
+        GROUP BY AIC.IDEA_DATE,ACC.CLICK_RATE
+        ORDER BY AIC.IDEA_DATE DESC
+    </select>
+
 </mapper>

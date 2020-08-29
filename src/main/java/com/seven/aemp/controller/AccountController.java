@@ -183,4 +183,26 @@ public class AccountController {
         return jsonObject;
     }
 
+
+    //前台  首页 统计数据
+    @GetMapping("/queryTotleData")
+    public JSONObject queryTotleData() throws Exception {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
+        jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
+        jsonObject.put(Constant.Result.RETDATA, accountService.queryTotleData());
+        return jsonObject;
+    }
+
+    //前台  首页 列表
+    @PostMapping("/queryAccoutClickNum")
+    public JSONObject queryAccoutClickNum(@RequestBody String params) throws Exception {
+        if (StringUtils.isBlank(params)) throw new MessageException("参数接收失败!");
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
+        jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
+        AccountBean accountBean = JSONObject.parseObject(params, AccountBean.class);
+        jsonObject.put(Constant.Result.RETDATA, accountService.queryAccoutClickNum(accountBean.getPage(), accountBean.getPageSize(), accountBean));
+        return jsonObject;
+    }
 }

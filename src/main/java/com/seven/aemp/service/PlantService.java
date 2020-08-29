@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.seven.aemp.bean.PlantBean;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.seven.aemp.exception.MessageException;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -31,4 +32,8 @@ public interface PlantService extends IService<PlantBean> {
 
     //后台查询计划报表
     public IPage queryPlantBackReport(PlantBean plantBean) throws Exception;
+
+    //查询计划点击量
+    public Page<PlantBean> queryPlanClickNum(String page, String pageSize, PlantBean plantBean) throws Exception;
+
 }
