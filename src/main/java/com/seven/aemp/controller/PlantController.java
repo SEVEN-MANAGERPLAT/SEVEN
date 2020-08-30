@@ -49,11 +49,11 @@ public class PlantController {
         jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
         jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
         PlantBean plantBean = JSONObject.parseObject(params, PlantBean.class);
-//        if (plantBean.getPage() == null && plantBean.getPageSize() == null) {
-//            jsonObject.put(Constant.Result.RETDATA, plantService.queryPlant(plantBean));
-//        } else {
+        if (plantBean.getPage() == null && plantBean.getPageSize() == null) {
+            jsonObject.put(Constant.Result.RETDATA, plantService.queryPlant(plantBean));
+        } else {
             jsonObject.put(Constant.Result.RETDATA, plantService.queryPlanClickNum(plantBean.getPage(), plantBean.getPageSize(), plantBean));
-//        }
+        }
         return jsonObject;
     }
 

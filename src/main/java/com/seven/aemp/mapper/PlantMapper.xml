@@ -15,7 +15,7 @@
             <if test="plan.planId != null and plan.planId != ''">
                 AND PLAN_ID = #{plan.planId}
             </if>
-            <if test="plan.accId != null and plan.accId != '' and plan.accId != 1">
+            <if test="plan.accId != null and plan.accId != ''">
                 AND ACC_ID  = #{plan.accId}
             </if>
             <if test="plan.begDate != null and plan.begDate != '' and plan.endDate != null and plan.endDate != ''">

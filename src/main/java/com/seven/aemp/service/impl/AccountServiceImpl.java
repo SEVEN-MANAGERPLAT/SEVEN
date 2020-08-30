@@ -10,8 +10,8 @@ import com.seven.aemp.bean.UmsResourceBean;
 import com.seven.aemp.common.Constant;
 import com.seven.aemp.dao.AccountDao;
 import com.seven.aemp.exception.MessageException;
-import com.seven.aemp.service.AccountService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.seven.aemp.service.AccountService;
 import com.seven.aemp.service.UmsAdminRoleRelationService;
 import com.seven.aemp.service.UmsResourceService;
 import com.seven.aemp.util.CookieTools;
@@ -27,7 +27,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -45,7 +44,7 @@ import java.util.Map;
  * @since 2019-11-19
  */
 @Service
-public class AccountServiceImpl extends ServiceImpl<AccountDao, AccountBean> implements AccountService {
+public class AccountServiceImpl extends ServiceImpl<AccountDao, AccountBean>  implements AccountService {
 
     @Value("${tokenLife}")
     private int tokenLife;

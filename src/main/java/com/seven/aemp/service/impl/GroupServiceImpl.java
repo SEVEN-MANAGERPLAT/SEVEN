@@ -35,7 +35,7 @@ public class GroupServiceImpl extends ServiceImpl<GroupDao, GroupBean> implement
 
     @Override
     public List<GroupBean> queryGroup(GroupBean groupBean) throws Exception {
-        return groupDao.queryGroup(groupBean);
+        return groupDao.queryGroup(groupBean.setAccId(String.valueOf(accountService.getCurrentAccount().getAccountId())));
     }
 
     @Override

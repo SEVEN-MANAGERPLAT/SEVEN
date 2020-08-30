@@ -35,7 +35,7 @@ public class PlantServiceImpl extends ServiceImpl<PlantDao, PlantBean> implement
 
     @Override
     public List<PlantBean> queryPlant(PlantBean plantBean) throws Exception {
-        return plantDao.queryPlant(plantBean);
+        return plantDao.queryPlant(plantBean.setAccId(String.valueOf(accountService.getCurrentAccount().getAccountId())));
     }
 
     @Override
@@ -93,6 +93,6 @@ public class PlantServiceImpl extends ServiceImpl<PlantDao, PlantBean> implement
             pageSize = "10";
         }
         Page<PlantBean> result = new Page<>(Long.valueOf(page), Long.valueOf(pageSize));
-        return result.setRecords(plantDao.queryPlanClickNum(result, plantBean));
+        return result.setRecords(plantDao.queryPlanClickNum(result, plantBean.setAccId(String.valueOf(accountService.getCurrentAccount().getAccountId()))));
     }
 }

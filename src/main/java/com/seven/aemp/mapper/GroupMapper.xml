@@ -73,7 +73,7 @@
 
     <!--插入组数据-->
     <insert id="insertGroup" parameterType="com.seven.aemp.bean.GroupBean">
-        INSERT INTO EXTENT_GROUP
+        INSERT INTO extent_group
         (PLAN_ID,EG_NAME,PLAN_DATE,PREDICT,COMPARE_PATTERN,BILL,THROW_URL,SOURCE_ID,SEX,AGE,INTREST,PLAT,APP_ACTION,THROW_AREA,THROW_BEG_DATE,THROW_END_DATE,THROW_SEG_DATE,STATE,CREATE_DATE)
         VALUES
         (#{planId},#{egName},#{planDate},#{predict},#{comparePattern},#{bill},#{throwUrl},#{sourceId}
