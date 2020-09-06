@@ -53,4 +53,32 @@
         GROUP BY
             r.id
     </select>
+    <update id="updateByPrimaryKeySelective" parameterType="com.seven.aemp.bean.UmsRoleBean">
+        update ums_role
+        <set>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="description != null">
+                description = #{description,jdbcType=VARCHAR},
+            </if>
+            <if test="adminCount != null">
+                admin_count = #{adminCount,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="sort != null">
+                sort = #{sort,jdbcType=INTEGER},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <select id="umsRoleList" parameterType="com.seven.aemp.bean.UmsRoleBean" resultType="com.seven.aemp.bean.UmsRoleBean">
+        select * from sevenmanager.ums_role
+    </select>
 </mapper>

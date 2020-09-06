@@ -1,5 +1,6 @@
 package com.seven.aemp.service;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.seven.aemp.bean.AccountBean;
 import com.seven.aemp.bean.UmsResourceBean;
@@ -18,4 +19,12 @@ public interface UmsResourceService extends IService<UmsResourceBean> {
     List<UmsResourceBean> queryUmsResource(UmsResourceBean umsResourceBean);
 
     List<UmsResourceBean> queryUmsResourceByAdminId(AccountBean accountBean);
+
+    /**
+     * 添加资源
+     */
+    int create(UmsResourceBean umsResource);
+
+    //查询资源
+    public Page<UmsResourceBean> umsResourceList(String page, String pageSize, UmsResourceBean umsResourceBean) throws Exception;
 }

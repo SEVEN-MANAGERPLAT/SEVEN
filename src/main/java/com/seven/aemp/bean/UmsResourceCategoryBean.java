@@ -1,6 +1,5 @@
 package com.seven.aemp.bean;
 
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -10,39 +9,21 @@ import lombok.experimental.Accessors;
 import java.io.Serializable;
 import java.util.Date;
 
-/**
- * @desc:
- * @date: 2020-06-10 13:24
- * @author: dx
- * @version: 1.0
- */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("ums_resource")
-public class UmsResourceBean implements Serializable {
+@TableName("ums_resource_category")
+public class UmsResourceCategoryBean implements Serializable {
     private Long id;
 
     @ApiModelProperty(value = "创建时间")
     private Date createTime;
 
-    @ApiModelProperty(value = "资源名称")
+    @ApiModelProperty(value = "分类名称")
     private String name;
 
-    @ApiModelProperty(value = "资源URL")
-    private String url;
-
-    @ApiModelProperty(value = "描述")
-    private String description;
-
-    @ApiModelProperty(value = "资源分类ID")
-    private Long categoryId;
-
-    @TableField(exist = false)
-    private String page;
-
-    @TableField(exist = false)
-    private String pageSize;
+    @ApiModelProperty(value = "排序")
+    private Integer sort;
 
     private static final long serialVersionUID = 1L;
 
@@ -70,28 +51,12 @@ public class UmsResourceBean implements Serializable {
         this.name = name;
     }
 
-    public String getUrl() {
-        return url;
+    public Integer getSort() {
+        return sort;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public Long getCategoryId() {
-        return categoryId;
-    }
-
-    public void setCategoryId(Long categoryId) {
-        this.categoryId = categoryId;
+    public void setSort(Integer sort) {
+        this.sort = sort;
     }
 
     @Override
@@ -103,9 +68,7 @@ public class UmsResourceBean implements Serializable {
         sb.append(", id=").append(id);
         sb.append(", createTime=").append(createTime);
         sb.append(", name=").append(name);
-        sb.append(", url=").append(url);
-        sb.append(", description=").append(description);
-        sb.append(", categoryId=").append(categoryId);
+        sb.append(", sort=").append(sort);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

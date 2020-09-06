@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.seven.aemp.dao.UmsMenuDao">
+    <select id="umsMenuList" parameterType="com.seven.aemp.bean.UmsMenuBean" resultType="com.seven.aemp.bean.UmsMenuBean">
+        SELECT
+        id,parent_id,create_time,title,level,sort,name,icon,hidden
+        FROM
+        sevenmanager.ums_menu
+    </select>
+</mapper>

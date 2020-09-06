@@ -1,10 +1,20 @@
 package com.seven.aemp.bean;
 
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.Serializable;
 import java.util.Date;
 
+@Data
+@EqualsAndHashCode(callSuper = false)
+@Accessors(chain = true)
+@TableName("ums_role")
 public class UmsRoleBean implements Serializable {
     private Long id;
 
@@ -24,6 +34,13 @@ public class UmsRoleBean implements Serializable {
     private Integer status;
 
     private Integer sort;
+
+    @TableField(exist = false)
+    private String page;
+
+    @TableField(exist = false)
+    private String pageSize;
+
 
     private static final long serialVersionUID = 1L;
 

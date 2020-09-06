@@ -1,10 +1,19 @@
 package com.seven.aemp.bean;
 
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 import java.util.Date;
 
+@Data
+@EqualsAndHashCode(callSuper = false)
+@Accessors(chain = true)
+@TableName("ums_menu")
 public class UmsMenuBean implements Serializable {
     private Long id;
 
@@ -31,6 +40,12 @@ public class UmsMenuBean implements Serializable {
 
     @ApiModelProperty(value = "前端隐藏")
     private Integer hidden;
+
+    @TableField(exist = false)
+    private String page;
+
+    @TableField(exist = false)
+    private String pageSize;
 
     private static final long serialVersionUID = 1L;
 
