@@ -15,13 +15,16 @@ public interface UmsMenuService {
     int create(UmsMenuBean umsMenu);
 
     //查询目录列表
-    public Page<UmsMenuBean> umsMenuList(String page, String pageSize, UmsMenuBean umsMenuBean) throws Exception;
-//
-//    /**
-//     * 修改后台菜单
-//     */
-//    int update(Long id, UmsMenu umsMenu);
-//
+    public Page<UmsMenuBean> umsMenuList(Integer page, Integer pageSize, UmsMenuBean umsMenuBean) throws Exception;
+
+    /**
+     * 修改后台菜单
+     */
+    int updateMenu(UmsMenuBean umsMenu);
+
+    public UmsMenuBean queryMenu(UmsMenuBean umsMenuBean) throws Exception;
+
+
 //    /**
 //     * 根据ID获取菜单详情
 //     */

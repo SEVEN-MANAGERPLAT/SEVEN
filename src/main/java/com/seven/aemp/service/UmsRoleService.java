@@ -33,6 +33,9 @@ public interface UmsRoleService extends IService<UmsRoleBean> {
      */
     int create(UmsRoleBean role);
 
+
+    int updateRole(UmsRoleBean roleBean);
+
     /**
      * 修改角色信息
      */

@@ -21,6 +21,8 @@ public interface UmsMenuDao {
      */
     List<UmsMenuBean> umsMenuList(Page<UmsMenuBean> result, @Param("menu") UmsMenuBean umsMenuBean);
 
+    UmsMenuBean umsMenuList(@Param("menu") UmsMenuBean umsMenuBean);
+
 //    int insertSelective(UmsMenu record);
 //
 //    List<UmsMenu> selectByExample(UmsMenuExample example);
@@ -31,7 +33,7 @@ public interface UmsMenuDao {
 //
 //    int updateByExample(@Param("record") UmsMenu record, @Param("example") UmsMenuExample example);
 //
-//    int updateByPrimaryKeySelective(UmsMenu record);
+    int updateMenu(UmsMenuBean record);
 //
 //    int updateByPrimaryKey(UmsMenu record);
 }

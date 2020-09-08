@@ -1,6 +1,7 @@
 package com.seven.aemp.service;
 
 
+import com.seven.aemp.bean.UmsResourceBean;
 import com.seven.aemp.bean.UmsResourceCategoryBean;
 
 import java.util.List;
@@ -16,11 +17,13 @@ public interface UmsResourceCategoryService {
      */
     List<UmsResourceCategoryBean> listAll();
 
-//    /**
-//     * 创建资源分类
-//     */
-//    int create(UmsResourceCategory umsResourceCategory);
-//
+    int updateResourceCategory(UmsResourceCategoryBean resourceCategoryBean);
+
+    /**
+     * 创建资源分类
+     */
+    int create(UmsResourceCategoryBean umsResourceCategory);
+
 //    /**
 //     * 修改资源分类
 //     */

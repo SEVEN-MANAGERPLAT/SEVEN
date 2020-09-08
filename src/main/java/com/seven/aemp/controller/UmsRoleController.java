@@ -2,6 +2,7 @@ package com.seven.aemp.controller;
 
 
 import com.alibaba.fastjson.JSONObject;
+import com.seven.aemp.bean.UmsMenuBean;
 import com.seven.aemp.bean.UmsRoleBean;
 import com.seven.aemp.common.Constant;
 import com.seven.aemp.exception.MessageException;
@@ -46,6 +47,17 @@ public class UmsRoleController {
 
         jsonObject.put(Constant.Result.RETDATA, roleService.umsRoleList(umsRoleBean.getPage(), umsRoleBean.getPageSize(), umsRoleBean));
 
+        return jsonObject;
+    }
+
+    @PostMapping("/updateRole")
+    public JSONObject updateRole(@RequestBody String params) throws MessageException {
+        if (StringUtils.isBlank(params)) throw new MessageException("参数接收失败!");
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
+        jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
+        UmsRoleBean umsRoleBean = JSONObject.parseObject(params, UmsRoleBean.class);
+        roleService.updateRole(umsRoleBean);
         return jsonObject;
     }
 //

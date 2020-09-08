@@ -44,6 +44,11 @@ public class UmsResourceServiceImpl extends ServiceImpl<UmsResourceDao, UmsResou
     }
 
     @Override
+    public int updateResource(UmsResourceBean umsResourceBean) {
+        return umsResourceDao.updateResource(umsResourceBean);
+    }
+
+    @Override
     public Page<UmsResourceBean> umsResourceList(String page, String pageSize, UmsResourceBean umsResourceBean) throws Exception {
         if (StringUtils.isBlank(page)) {
             page = "1";

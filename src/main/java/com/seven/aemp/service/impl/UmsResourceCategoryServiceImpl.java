@@ -1,12 +1,15 @@
 package com.seven.aemp.service.impl;
 
 
+import com.seven.aemp.bean.UmsMenuBean;
+import com.seven.aemp.bean.UmsResourceBean;
 import com.seven.aemp.bean.UmsResourceCategoryBean;
 import com.seven.aemp.dao.UmsResourceCategoryDao;
 import com.seven.aemp.service.UmsResourceCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 
@@ -20,9 +23,20 @@ public class UmsResourceCategoryServiceImpl implements UmsResourceCategoryServic
     private UmsResourceCategoryDao umsResourceCategoryDao;
 
     @Override
+    public int create(UmsResourceCategoryBean resourceCategoryBean) {
+        resourceCategoryBean.setCreateTime(new Date());
+        return umsResourceCategoryDao.insert(resourceCategoryBean);
+    }
+
+    @Override
     public List<UmsResourceCategoryBean> listAll() {
         UmsResourceCategoryBean umsResourceCategoryBean = new UmsResourceCategoryBean();
         return umsResourceCategoryDao.queryUmsResourceCategoryList();
+    }
+
+    @Override
+    public int updateResourceCategory(UmsResourceCategoryBean resourceCategoryBean) {
+        return umsResourceCategoryDao.updateResourceCategory(resourceCategoryBean);
     }
 
 //    @Override

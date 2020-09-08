@@ -28,6 +28,8 @@ public interface UmsRoleDao extends BaseMapper<UmsRoleBean> {
      */
     List<UmsResourceBean> getResourceListByRoleId(@Param("roleId") Long roleId);
 
+    int updateRole(UmsRoleBean role);
+
     /**
      * 分页查询角色
      * @param result

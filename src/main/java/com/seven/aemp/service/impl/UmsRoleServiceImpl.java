@@ -50,6 +50,11 @@ public class UmsRoleServiceImpl extends ServiceImpl<UmsRoleDao, UmsRoleBean> imp
         return umsRoleDao.insert(role);
     }
 
+    @Override
+    public int updateRole(UmsRoleBean umsRoleBean) {
+        return umsRoleDao.updateById(umsRoleBean);
+    }
+
 //    @Override
 //    public int update(Long id, UmsRoleBean role) {
 //        role.setId(id);

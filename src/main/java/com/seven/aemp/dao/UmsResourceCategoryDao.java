@@ -10,13 +10,15 @@ public interface UmsResourceCategoryDao {
 
     List<UmsResourceCategoryBean> queryUmsResourceCategoryList();
 
+    int updateResourceCategory(UmsResourceCategoryBean resourceCategoryBean);
+
 //    long countByExample(UmsResourceCategoryExample example);
 //
 //    int deleteByExample(UmsResourceCategoryExample example);
 //
 //    int deleteByPrimaryKey(Long id);
 //
-//    int insert(UmsResourceCategory record);
+    int insert(UmsResourceCategoryBean resourceCategoryBean);
 //
 //    int insertSelective(UmsResourceCategory record);
 //

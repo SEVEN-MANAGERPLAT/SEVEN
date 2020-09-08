@@ -22,4 +22,6 @@ public interface UmsResourceDao extends BaseMapper<UmsResourceBean> {
     List<UmsResourceBean> queryUmsResourceByAdminId(AccountBean accountBean);
 
     List<UmsResourceBean> queryUmsResource(Page<UmsResourceBean> result, @Param("resource") UmsResourceBean umsResourceBean);
+
+    int updateResource(UmsResourceBean resourceBean);
 }

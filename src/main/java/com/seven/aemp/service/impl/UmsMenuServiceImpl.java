@@ -51,23 +51,20 @@ public class UmsMenuServiceImpl implements UmsMenuService {
         }
     }
 
-    public Page<UmsMenuBean> umsMenuList(String page, String pageSize, UmsMenuBean umsMenuBean) throws Exception {
-        if (StringUtils.isBlank(page)) {
-            page = "1";
-        }
-        if (StringUtils.isBlank(pageSize)) {
-            pageSize = "10";
-        }
+    public Page<UmsMenuBean> umsMenuList(Integer page, Integer pageSize, UmsMenuBean umsMenuBean) throws Exception {
         Page<UmsMenuBean> result = new Page<>(Long.valueOf(page), Long.valueOf(pageSize));
         return result.setRecords(umsMenuDao.umsMenuList(result, umsMenuBean));
     }
 
-//    @Override
-//    public int update(Long id, UmsMenu umsMenu) {
-//        umsMenu.setId(id);
-//        updateLevel(umsMenu);
-//        return menuMapper.updateByPrimaryKeySelective(umsMenu);
-//    }
+    @Override
+    public int updateMenu(UmsMenuBean umsMenu) {
+        return umsMenuDao.updateMenu(umsMenu);
+    }
+
+    @Override
+    public UmsMenuBean queryMenu(UmsMenuBean umsMenuBean) throws Exception {
+        return umsMenuDao.umsMenuList(umsMenuBean);
+    }
 //
 //    @Override
 //    public UmsMenu getItem(Long id) {

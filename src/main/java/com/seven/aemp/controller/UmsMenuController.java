@@ -10,6 +10,7 @@ import com.seven.aemp.util.CommonResultUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang.StringUtils;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -39,32 +40,45 @@ public class UmsMenuController {
         }
     }
 
-    @PostMapping("/list")
-    public JSONObject queryMenuList(@RequestBody String params) throws Exception {
-        if (StringUtils.isBlank(params)) throw new MessageException("参数接收失败!");
+    @GetMapping(value = "/list/{parentId}")
+    public JSONObject queryMenuList(@PathVariable Long parentId,@RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize,
+                                    @RequestParam(value = "pageNum", defaultValue = "1") Integer page) throws Exception {
+        if (parentId<0) throw new MessageException("id接收失败!");
         JSONObject jsonObject = new JSONObject();
         jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
         jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
-        UmsMenuBean umsMenuBean = JSONObject.parseObject(params, UmsMenuBean.class);
-
-        jsonObject.put(Constant.Result.RETDATA, menuService.umsMenuList(umsMenuBean.getPage(), umsMenuBean.getPageSize(), umsMenuBean));
+        UmsMenuBean umsMenuBean = new UmsMenuBean();
+        jsonObject.put(Constant.Result.RETDATA, menuService.umsMenuList(page, pageSize, umsMenuBean));
 
         return jsonObject;
     }
 
-//
-//    @ApiOperation("修改后台菜单")
-//    @RequestMapping(value = "/update/{id}", method = RequestMethod.POST)
-//    @ResponseBody
-//    public CommonResult update(@PathVariable Long id,
-//                               @RequestBody UmsMenu umsMenu) {
-//        int count = menuService.update(id, umsMenu);
-//        if (count > 0) {
-//            return CommonResult.success(count);
-//        } else {
-//            return CommonResult.failed();
-//        }
-//    }
+    @GetMapping(value = "/{id}")
+    public JSONObject queryMenu(@PathVariable Long id) throws Exception {
+        if (id<0) throw new MessageException("id接收失败!");
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
+        jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
+        UmsMenuBean umsMenuBean = new UmsMenuBean();
+        umsMenuBean.setId(id);
+        jsonObject.put(Constant.Result.RETDATA, menuService.queryMenu(umsMenuBean));
+
+        return jsonObject;
+    }
+
+
+    @PostMapping(value = "/update/{id}")
+    public JSONObject updateMenu(@PathVariable Long id,@RequestBody String params) throws Exception {
+        if (StringUtils.isBlank(params)) throw new MessageException("参数接收失败!");
+        if (id<0) throw new MessageException("id接收失败!");
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
+        jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
+        UmsMenuBean umsMenuBean = JSONObject.parseObject(params, UmsMenuBean.class);
+        umsMenuBean.setId(id);
+        menuService.updateMenu(umsMenuBean);
+        return jsonObject;
+    }
 //
 //    @ApiOperation("根据ID获取菜单详情")
 //    @RequestMapping(value = "/{id}", method = RequestMethod.GET)

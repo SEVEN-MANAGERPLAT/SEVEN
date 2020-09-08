@@ -47,7 +47,7 @@ public class UmsResourceController {
 
 
     @PostMapping("/list")
-    public JSONObject queryMenuList(@RequestBody String params) throws Exception {
+    public JSONObject queryResourceList(@RequestBody String params) throws Exception {
         if (StringUtils.isBlank(params)) throw new MessageException("参数接收失败!");
         JSONObject jsonObject = new JSONObject();
         jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
@@ -58,20 +58,19 @@ public class UmsResourceController {
 
         return jsonObject;
     }
-//
-//    @ApiOperation("修改后台资源")
-//    @RequestMapping(value = "/update/{id}", method = RequestMethod.POST)
-//    @ResponseBody
-//    public CommonResult update(@PathVariable Long id,
-//                               @RequestBody UmsResource umsResource) {
-//        int count = resourceService.update(id, umsResource);
-//        dynamicSecurityMetadataSource.clearDataSource();
-//        if (count > 0) {
-//            return CommonResult.success(count);
-//        } else {
-//            return CommonResult.failed();
-//        }
-//    }
+
+    @PostMapping(value = "/updateResource/{id}")
+    public JSONObject updateResource(@PathVariable Long id, @RequestBody String params) throws MessageException {
+        if (StringUtils.isBlank(params)) throw new MessageException("参数接收失败!");
+        if (id<0) throw new MessageException("id接收失败!");
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
+        jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
+        UmsResourceBean umsResourceBean = JSONObject.parseObject(params, UmsResourceBean.class);
+        umsResourceBean.setId(id);
+        resourceService.updateResource(umsResourceBean);
+        return jsonObject;
+    }
 //
 //    @ApiOperation("根据ID获取资源详情")
 //    @RequestMapping(value = "/{id}", method = RequestMethod.GET)

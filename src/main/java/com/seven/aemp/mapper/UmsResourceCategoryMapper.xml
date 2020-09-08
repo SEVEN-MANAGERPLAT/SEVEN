@@ -7,4 +7,22 @@
         FROM
         sevenmanager.ums_resource_category
     </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        insert into sevenmanager.ums_resource_category (create_time, name, sort)
+        values (#{createTime}, #{name}, #{sort})
+    </insert>
+
+    <update id="updateResourceCategory" parameterType="com.seven.aemp.bean.UmsResourceCategoryBean">
+        update sevenmanager.ums_resource_category
+        <set>
+            <if test="name != null">
+                name = #{name},
+            </if>
+            <if test="sort != null">
+                sort = #{sort},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
 </mapper>
