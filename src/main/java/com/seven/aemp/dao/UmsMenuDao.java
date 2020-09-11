@@ -1,12 +1,13 @@
 package com.seven.aemp.dao;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.seven.aemp.bean.UmsMenuBean;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
-public interface UmsMenuDao {
+public interface UmsMenuDao  extends BaseMapper<UmsMenuBean> {
 //    long countByExample(UmsMenuExample example);
 //
 //    int deleteByExample(UmsMenuExample example);
@@ -15,6 +16,7 @@ public interface UmsMenuDao {
 
     int insert(UmsMenuBean record);
 
+
     /**
      * 分页查询目录
      * @param result
@@ -22,6 +24,8 @@ public interface UmsMenuDao {
     List<UmsMenuBean> umsMenuList(Page<UmsMenuBean> result, @Param("menu") UmsMenuBean umsMenuBean);
 
     UmsMenuBean umsMenuList(@Param("menu") UmsMenuBean umsMenuBean);
+
+    List<UmsMenuBean> umsMenu(@Param("menu") UmsMenuBean umsMenuBean);
 
 //    int insertSelective(UmsMenu record);
 //

@@ -56,11 +56,11 @@ public interface UmsRoleService extends IService<UmsRoleBean> {
 //     */
 //    @Transactional
 //    int updatePermission(Long roleId, List<Long> permissionIds);
-//
-//    /**
-//     * 获取所有角色列表
-//     */
-//    List<UmsRoleBean> list();
+
+    /**
+     * 获取所有角色列表
+     */
+    List<UmsRoleBean> list();
 
     /**
      * 分页获取角色列表
@@ -70,25 +70,25 @@ public interface UmsRoleService extends IService<UmsRoleBean> {
     //查询角色列表
     public Page<UmsRoleBean> umsRoleList(String page, String pageSize, UmsRoleBean ideaBean) throws Exception;
 
-//    /**
-//     * 获取角色相关菜单
-//     */
-//    List<UmsMenuBean> listMenu(Long roleId);
-//
+    /**
+     * 获取角色相关菜单
+     */
+    List<UmsMenuBean> listMenu(Long roleId);
+
 //    /**
 //     * 获取角色相关资源
 //     */
 ////    List<UmsResource> listResource(Long roleId);
 //
-//    /**
-//     * 给角色分配菜单
-//     */
-//    @Transactional
-//    int allocMenu(Long roleId, List<Long> menuIds);
-//
-//    /**
-//     * 给角色分配资源
-//     */
-//    @Transactional
-//    int allocResource(Long roleId, List<Long> resourceIds);
+    /**
+     * 给角色分配菜单
+     */
+    @Transactional
+    int allocMenu(Long roleId, List<Long> menuIds);
+
+    /**
+     * 给角色分配资源
+     */
+    @Transactional
+    int allocResource(Long roleId, List<Long> resourceIds);
 }

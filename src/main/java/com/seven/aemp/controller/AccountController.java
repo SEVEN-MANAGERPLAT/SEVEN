@@ -3,6 +3,7 @@ package com.seven.aemp.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.seven.aemp.bean.AccountBean;
+import com.seven.aemp.bean.UmsRoleBean;
 import com.seven.aemp.common.Constant;
 import com.seven.aemp.exception.MessageException;
 import com.seven.aemp.service.AccountService;
@@ -203,5 +204,35 @@ public class AccountController {
         AccountBean accountBean = JSONObject.parseObject(params, AccountBean.class);
         jsonObject.put(Constant.Result.RETDATA, accountService.queryAccoutClickNum(accountBean.getPage(), accountBean.getPageSize(), accountBean));
         return jsonObject;
+    }
+
+
+    @ApiOperation("根据用户名或姓名分页获取用户列表")
+    @RequestMapping(value = "/list", method = RequestMethod.GET)
+    @ResponseBody
+    public JSONObject list(@RequestParam(value = "keyword", required = false) String keyword,
+                                                   @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize,
+                                                   @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum) {
+        return CommonResultUtil.retSuccJSONObj(accountService.list(pageNum, pageSize, new AccountBean().setAccountName(keyword)));
+    }
+
+//    @ApiOperation("给用户分配角色")
+//    @RequestMapping(value = "/role/update", method = RequestMethod.POST)
+//    @ResponseBody
+//    public JSONObject updateRole(@RequestParam("adminId") Long adminId,
+//                                   @RequestParam("roleIds") List<Long> roleIds) {
+//        int count = accountService.updateRole(adminId, roleIds);
+//        if (count >= 0) {
+//            return CommonResultUtil.retSuccJSONObj(count);
+//        }
+//        return CommonResultUtil.retFailJSONObj();
+//    }
+//
+    @ApiOperation("获取指定用户的角色")
+    @RequestMapping(value = "/role/{adminId}", method = RequestMethod.GET)
+    @ResponseBody
+    public JSONObject getRoleList(@PathVariable Long adminId) {
+        List<UmsRoleBean> roleList = accountService.getRoleList(adminId);
+        return CommonResultUtil.retSuccJSONObj(roleList);
     }
 }

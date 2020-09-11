@@ -3,6 +3,9 @@ package com.seven.aemp.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.seven.aemp.bean.UmsMenuBean;
+import com.seven.aemp.dto.UmsMenuNode;
+
+import java.util.List;
 
 /**
  * 后台菜单管理Service
@@ -39,11 +42,11 @@ public interface UmsMenuService {
 //     * 分页查询后台菜单
 //     */
 //    List<UmsMenu> list(Long parentId, Integer pageSize, Integer pageNum);
-//
-//    /**
-//     * 树形结构返回所有菜单列表
-//     */
-//    List<UmsMenuNode> treeList();
+
+    /**
+     * 树形结构返回所有菜单列表
+     */
+    List<UmsMenuNode> treeList();
 
     /**
      * 修改菜单显示状态

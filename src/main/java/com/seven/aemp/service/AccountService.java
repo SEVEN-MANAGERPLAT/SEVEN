@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.seven.aemp.bean.AccountBean;
+import com.seven.aemp.bean.UmsRoleBean;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.List;
@@ -51,4 +52,11 @@ public interface AccountService extends IService<AccountBean> {
 
   //前台首页查询
   public Page<AccountBean> queryAccoutClickNum(String page, String pageSize, AccountBean accountBean) throws Exception;
+
+  //查询账户列表
+  public Page<AccountBean> list(Integer page, Integer pageSize, AccountBean accountBean);
+
+//  public int updateRole(Long adminId, List<Long> roleIds);
+
+  public List<UmsRoleBean> getRoleList(Long adminId);
 }

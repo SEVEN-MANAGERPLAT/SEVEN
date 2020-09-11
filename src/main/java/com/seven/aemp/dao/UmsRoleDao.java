@@ -2,7 +2,6 @@ package com.seven.aemp.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.seven.aemp.bean.PlantBean;
 import com.seven.aemp.bean.UmsMenuBean;
 import com.seven.aemp.bean.UmsResourceBean;
 import com.seven.aemp.bean.UmsRoleBean;
@@ -36,4 +35,13 @@ public interface UmsRoleDao extends BaseMapper<UmsRoleBean> {
      * @param umsRoleBean
      */
     List<UmsRoleBean> umsRoleList(Page<UmsRoleBean> result, @Param("role") UmsRoleBean umsRoleBean);
+
+    /**
+     * 查询所有角色
+     */
+    List<UmsRoleBean> umsRoleList();
+
+
+    List<UmsRoleBean> getRoleList(@Param("adminId") Long adminId);
+
 }

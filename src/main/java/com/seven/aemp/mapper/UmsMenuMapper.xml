@@ -10,6 +10,24 @@
             <if test="menu.id != null">
                 id = #{menu.id}
             </if>
+            <if test="menu.parentId != null">
+                parent_id = #{menu.parentId}
+            </if>
+        </where>
+    </select>
+
+    <select id="umsMenu" parameterType="com.seven.aemp.bean.UmsMenuBean" resultType="com.seven.aemp.bean.UmsMenuBean">
+        SELECT
+        id,parent_id,create_time,title,level,sort,name,icon,hidden
+        FROM
+        sevenmanager.ums_menu
+        <where>
+            <if test="menu.id != null">
+                id = #{menu.id}
+            </if>
+            <if test="menu.parentId != null">
+                parent_id = #{menu.parentId}
+            </if>
         </where>
     </select>
 

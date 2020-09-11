@@ -4,6 +4,7 @@ package com.seven.aemp.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.seven.aemp.bean.UmsMenuBean;
 import com.seven.aemp.common.Constant;
+import com.seven.aemp.dto.UmsMenuNode;
 import com.seven.aemp.exception.MessageException;
 import com.seven.aemp.service.UmsMenuService;
 import com.seven.aemp.util.CommonResultUtil;
@@ -14,6 +15,8 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 /**
@@ -48,6 +51,7 @@ public class UmsMenuController {
         jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
         jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
         UmsMenuBean umsMenuBean = new UmsMenuBean();
+        umsMenuBean.setParentId(parentId);
         jsonObject.put(Constant.Result.RETDATA, menuService.umsMenuList(page, pageSize, umsMenuBean));
 
         return jsonObject;
@@ -100,23 +104,15 @@ public class UmsMenuController {
 //        }
 //    }
 //
-//    @ApiOperation("分页查询后台菜单")
-//    @RequestMapping(value = "/list/{parentId}", method = RequestMethod.GET)
-//    @ResponseBody
-//    public CommonResult<CommonPage<UmsMenu>> list(@PathVariable Long parentId,
-//                                                  @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize,
-//                                                  @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum) {
-//        List<UmsMenu> menuList = menuService.list(parentId, pageSize, pageNum);
-//        return CommonResult.success(CommonPage.restPage(menuList));
-//    }
-//
-//    @ApiOperation("树形结构返回所有菜单列表")
-//    @RequestMapping(value = "/treeList", method = RequestMethod.GET)
-//    @ResponseBody
-//    public CommonResult<List<UmsMenuNode>> treeList() {
-//        List<UmsMenuNode> list = menuService.treeList();
-//        return CommonResult.success(list);
-//    }
+
+
+    @ApiOperation("树形结构返回所有菜单列表")
+    @RequestMapping(value = "/treeList", method = RequestMethod.GET)
+    @ResponseBody
+    public JSONObject treeList() {
+        List<UmsMenuNode> list = menuService.treeList();
+        return CommonResultUtil.retSuccJSONObj(list);
+    }
 //
 //    @ApiOperation("修改菜单显示状态")
 //    @RequestMapping(value = "/updateHidden/{id}", method = RequestMethod.POST)

@@ -4,12 +4,16 @@ package com.seven.aemp.service.impl;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.seven.aemp.bean.UmsMenuBean;
 import com.seven.aemp.dao.UmsMenuDao;
+import com.seven.aemp.dto.UmsMenuNode;
 import com.seven.aemp.service.UmsMenuService;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 后台菜单管理Service实现类
@@ -65,7 +69,8 @@ public class UmsMenuServiceImpl implements UmsMenuService {
     public UmsMenuBean queryMenu(UmsMenuBean umsMenuBean) throws Exception {
         return umsMenuDao.umsMenuList(umsMenuBean);
     }
-//
+
+    //
 //    @Override
 //    public UmsMenu getItem(Long id) {
 //        return menuMapper.selectByPrimaryKey(id);
@@ -85,14 +90,14 @@ public class UmsMenuServiceImpl implements UmsMenuService {
 //        return menuMapper.selectByExample(example);
 //    }
 //
-//    @Override
-//    public List<UmsMenuNode> treeList() {
-//        List<UmsMenu> menuList = menuMapper.selectByExample(new UmsMenuExample());
-//        List<UmsMenuNode> result = menuList.stream()
-//                .filter(menu -> menu.getParentId().equals(0L))
-//                .map(menu -> covertMenuNode(menu, menuList)).collect(Collectors.toList());
-//        return result;
-//    }
+    @Override
+    public List<UmsMenuNode> treeList() {
+        List<UmsMenuBean> menuList = umsMenuDao.umsMenu(new UmsMenuBean());
+        List<UmsMenuNode> result = menuList.stream()
+                .filter(menu -> menu.getParentId().equals(0L))
+                .map(menu -> covertMenuNode(menu, menuList)).collect(Collectors.toList());
+        return result;
+    }
 //
 //    @Override
 //    public int updateHidden(Long id, Integer hidden) {
@@ -105,13 +110,13 @@ public class UmsMenuServiceImpl implements UmsMenuService {
 //    /**
 //     * 将UmsMenu转化为UmsMenuNode并设置children属性
 //     */
-//    private UmsMenuNode covertMenuNode(UmsMenu menu, List<UmsMenu> menuList) {
-//        UmsMenuNode node = new UmsMenuNode();
-//        BeanUtils.copyProperties(menu, node);
-//        List<UmsMenuNode> children = menuList.stream()
-//                .filter(subMenu -> subMenu.getParentId().equals(menu.getId()))
-//                .map(subMenu -> covertMenuNode(subMenu, menuList)).collect(Collectors.toList());
-//        node.setChildren(children);
-//        return node;
-//    }
+    private UmsMenuNode covertMenuNode(UmsMenuBean menu, List<UmsMenuBean> menuList) {
+        UmsMenuNode node = new UmsMenuNode();
+        BeanUtils.copyProperties(menu, node);
+        List<UmsMenuNode> children = menuList.stream()
+                .filter(subMenu -> subMenu.getParentId().equals(menu.getId()))
+                .map(subMenu -> covertMenuNode(subMenu, menuList)).collect(Collectors.toList());
+        node.setChildren(children);
+        return node;
+    }
 }

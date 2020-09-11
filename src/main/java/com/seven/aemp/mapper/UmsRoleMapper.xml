@@ -119,4 +119,12 @@
     <select id="umsRoleList" parameterType="com.seven.aemp.bean.UmsRoleBean" resultType="com.seven.aemp.bean.UmsRoleBean">
         select * from sevenmanager.ums_role
     </select>
+
+
+    <select id="getRoleList" resultType="com.seven.aemp.bean.UmsRoleBean">
+        select r.*
+        from ums_admin_role_relation ar left join ums_role r on ar.role_id = r.id
+        where ar.admin_id = #{adminId}
+    </select>
+
 </mapper>
