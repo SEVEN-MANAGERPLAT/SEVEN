@@ -21,7 +21,7 @@ public interface UmsAdminRoleRelationDao extends BaseMapper<UmsAdminRoleRelation
     /**
      * 批量插入用户角色关系
      */
-//    int insertList(@Param("list") List<UmsAdminRoleRelation> adminRoleRelationList);
+    int insertList(@Param("list") List<UmsAdminRoleRelation> adminRoleRelationList);
 
     /**
      * 获取用于所有角色
@@ -49,5 +49,5 @@ public interface UmsAdminRoleRelationDao extends BaseMapper<UmsAdminRoleRelation
 //    List<Long> getAdminIdList(@Param("resourceId") Long resourceId);
 
 
-//    int deleteByExample(UmsAdminRoleRelationExample example);
+    int deleteByExample(UmsAdminRoleRelationExample example);
 }

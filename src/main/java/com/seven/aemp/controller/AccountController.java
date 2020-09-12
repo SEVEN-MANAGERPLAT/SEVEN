@@ -216,18 +216,18 @@ public class AccountController {
         return CommonResultUtil.retSuccJSONObj(accountService.list(pageNum, pageSize, new AccountBean().setAccountName(keyword)));
     }
 
-//    @ApiOperation("给用户分配角色")
-//    @RequestMapping(value = "/role/update", method = RequestMethod.POST)
-//    @ResponseBody
-//    public JSONObject updateRole(@RequestParam("adminId") Long adminId,
-//                                   @RequestParam("roleIds") List<Long> roleIds) {
-//        int count = accountService.updateRole(adminId, roleIds);
-//        if (count >= 0) {
-//            return CommonResultUtil.retSuccJSONObj(count);
-//        }
-//        return CommonResultUtil.retFailJSONObj();
-//    }
-//
+    @ApiOperation("给用户分配角色")
+    @RequestMapping(value = "/role/update", method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject updateRole(@RequestParam("adminId") Long adminId,
+                                   @RequestParam("roleIds") List<Long> roleIds) {
+        int count = accountService.updateRole(adminId, roleIds);
+        if (count >= 0) {
+            return CommonResultUtil.retSuccJSONObj(count);
+        }
+        return CommonResultUtil.retFailJSONObj();
+    }
+
     @ApiOperation("获取指定用户的角色")
     @RequestMapping(value = "/role/{adminId}", method = RequestMethod.GET)
     @ResponseBody

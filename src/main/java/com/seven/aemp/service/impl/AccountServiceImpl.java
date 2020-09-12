@@ -231,27 +231,27 @@ public class AccountServiceImpl extends ServiceImpl<AccountDao, AccountBean>  im
     }
 
 
-//    @Override
-//    public int updateRole(Long adminId, List<Long> roleIds) {
-//        int count = roleIds == null ? 0 : roleIds.size();
-//        //先删除原来的关系
-//        UmsAdminRoleRelationExample adminRoleRelationExample = new UmsAdminRoleRelationExample();
-//        adminRoleRelationExample.createCriteria().andAdminIdEqualTo(adminId);
-//        umsAdminRoleRelationDao.deleteByExample(adminRoleRelationExample);
-//        //建立新关系
-//        if (!CollectionUtils.isEmpty(roleIds)) {
-//            List<UmsAdminRoleRelation> list = new ArrayList<>();
-//            for (Long roleId : roleIds) {
-//                UmsAdminRoleRelation roleRelation = new UmsAdminRoleRelation();
-//                roleRelation.setAdminId(adminId);
-//                roleRelation.setRoleId(roleId);
-//                list.add(roleRelation);
-//            }
-//            umsAdminRoleRelationDao.insertList(list);
-//        }
+    @Override
+    public int updateRole(Long adminId, List<Long> roleIds) {
+        int count = roleIds == null ? 0 : roleIds.size();
+        //先删除原来的关系
+        UmsAdminRoleRelationExample adminRoleRelationExample = new UmsAdminRoleRelationExample();
+        adminRoleRelationExample.createCriteria().andAdminIdEqualTo(adminId);
+        umsAdminRoleRelationDao.deleteByExample(adminRoleRelationExample);
+        //建立新关系
+        if (!CollectionUtils.isEmpty(roleIds)) {
+            List<UmsAdminRoleRelation> list = new ArrayList<>();
+            for (Long roleId : roleIds) {
+                UmsAdminRoleRelation roleRelation = new UmsAdminRoleRelation();
+                roleRelation.setAdminId(adminId);
+                roleRelation.setRoleId(roleId);
+                list.add(roleRelation);
+            }
+            umsAdminRoleRelationDao.insertList(list);
+        }
 //        adminCacheService.delResourceList(adminId);
-//        return count;
-//    }
+        return count;
+    }
 
     @Override
     public List<UmsRoleBean> getRoleList(Long adminId) {

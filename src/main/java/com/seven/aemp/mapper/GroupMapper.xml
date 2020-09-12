@@ -29,6 +29,8 @@
         GROUP BY G.EG_ID
     </select>
 
+
+
     <!--查询某段时间内本组单日的点击量-->
     <select id="queryGroupIdeaClickByUnitDay" resultType="com.seven.aemp.bean.GroupBean">
         SELECT EG.EG_ID,EG.EG_NAME,EG.BILL,EG.PREDICT,P.PLAN_ID,P.PLAN_NAME,ACC.CLICK_RATE,GIC.CLICK_NUM

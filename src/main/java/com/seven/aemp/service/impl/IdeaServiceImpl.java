@@ -110,6 +110,9 @@ public class IdeaServiceImpl extends ServiceImpl<IdeaDao, IdeaBean> implements I
         List<IdeaBean> ideaBeans = ideaDao.selectList(queryWrapper);
         if (ideaBeans.size() <= 0) throw new MessageException("创意不存在!");
 
+        //修改账户余额
+        ideaDao.updateAccountBalance(new IdeaBean().setAccId(String.valueOf(accountService.getCurrentAccount().getAccountId())).setProdUrl(ideaBean.getProdUrl()));
+
         String newDate = TimeUtil.getDateYYYY_MM_DD(TimeUtil.getDBTime());
         ideaBean.setCreateDate(newDate);
         //查询当日的创意点击

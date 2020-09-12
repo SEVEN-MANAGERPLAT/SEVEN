@@ -149,4 +149,16 @@
             </if>
         </where>
     </select>
+
+    <!--更新账户余额-->
+    <update id="updateAccountBalance" parameterType="com.seven.aemp.bean.IdeaBean">
+        UPDATE sevenmanager.account SET
+        BALANCE=BALANCE-(SELECT EG.BILL FROM sevenmanager.extent_group EG
+         LEFT JOIN sevenmanager.extent_idea EI ON EI.EG_ID=EG.EG_ID
+        WHERE
+        EI.PROD_URL=#{prodUrl}
+        )
+        WHERE ACCOUNT_ID=#{accId}
+    </update>
+
 </mapper>

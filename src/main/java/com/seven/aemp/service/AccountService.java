@@ -56,7 +56,7 @@ public interface AccountService extends IService<AccountBean> {
   //查询账户列表
   public Page<AccountBean> list(Integer page, Integer pageSize, AccountBean accountBean);
 
-//  public int updateRole(Long adminId, List<Long> roleIds);
+  public int updateRole(Long adminId, List<Long> roleIds);
 
   public List<UmsRoleBean> getRoleList(Long adminId);
 }
