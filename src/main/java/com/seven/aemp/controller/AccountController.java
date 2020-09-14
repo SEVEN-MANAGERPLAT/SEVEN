@@ -211,8 +211,8 @@ public class AccountController {
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     @ResponseBody
     public JSONObject list(@RequestParam(value = "keyword", required = false) String keyword,
-                                                   @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize,
-                                                   @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum) {
+                           @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize,
+                           @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum) {
         return CommonResultUtil.retSuccJSONObj(accountService.list(pageNum, pageSize, new AccountBean().setAccountName(keyword)));
     }
 
@@ -220,7 +220,7 @@ public class AccountController {
     @RequestMapping(value = "/role/update", method = RequestMethod.POST)
     @ResponseBody
     public JSONObject updateRole(@RequestParam("adminId") Long adminId,
-                                   @RequestParam("roleIds") List<Long> roleIds) {
+                                 @RequestParam("roleIds") List<Long> roleIds) {
         int count = accountService.updateRole(adminId, roleIds);
         if (count >= 0) {
             return CommonResultUtil.retSuccJSONObj(count);
