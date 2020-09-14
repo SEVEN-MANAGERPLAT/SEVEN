@@ -8,6 +8,11 @@
         FROM ums_resource
     </select>
 
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        insert into sevenmanager.ums_resource (create_time, name, url,description, category_id)
+    values (#{createTime}, #{name}, #{url},#{description}, #{categoryId})
+    </insert>
+
     <select id="queryUmsResourceByAdminId" resultType="com.seven.aemp.bean.UmsResourceBean">
         SELECT UR.ID          ID,
                UR.CREATE_TIME CREATETIME,
@@ -23,4 +28,26 @@
           AND UR.ID IS NOT NULL
         GROUP BY UR.ID
     </select>
+
+    <update id="updateResource" parameterType="com.seven.aemp.bean.UmsResourceBean">
+        update sevenmanager.ums_resource
+        <set>
+            <if test="categoryId != null">
+                category_id = #{categoryId},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+            <if test="name != null">
+                name = #{name},
+            </if>
+            <if test="url != null">
+                url = #{url},
+            </if>
+            <if test="description != null">
+                description = #{description},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
 </mapper>

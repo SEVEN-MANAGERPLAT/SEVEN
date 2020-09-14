@@ -20,6 +20,12 @@
           AND m.id IS NOT NULL
         GROUP BY m.id
     </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        insert into sevenmanager.ums_resource_category (create_time, name, sort)
+        values (#{createTime}, #{name}, #{sort})
+    </insert>
+
     <select id="getMenuListByRoleId" resultType="com.seven.aemp.bean.UmsMenuBean">
         SELECT m.id          id,
                m.parent_id   parentId,
@@ -53,4 +59,72 @@
         GROUP BY
             r.id
     </select>
+    <update id="updateByPrimaryKeySelective" parameterType="com.seven.aemp.bean.UmsRoleBean">
+        update ums_role
+        <set>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="description != null">
+                description = #{description,jdbcType=VARCHAR},
+            </if>
+            <if test="adminCount != null">
+                admin_count = #{adminCount,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="sort != null">
+                sort = #{sort,jdbcType=INTEGER},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="updateMenu" parameterType="com.seven.aemp.bean.UmsMenuBean">
+        update ums_menu
+        <set>
+            <if test="parentId != null">
+                parent_id = #{parentId},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+            <if test="title != null">
+                title = #{title},
+            </if>
+            <if test="level != null">
+                level = #{level},
+            </if>
+            <if test="sort != null">
+                sort = #{sort},
+            </if>
+            <if test="name != null">
+                name = #{name},
+            </if>
+            <if test="icon != null">
+                icon = #{icon},
+            </if>
+            <if test="hidden != null">
+                hidden = #{hidden},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+
+    <select id="umsRoleList" parameterType="com.seven.aemp.bean.UmsRoleBean" resultType="com.seven.aemp.bean.UmsRoleBean">
+        select * from sevenmanager.ums_role
+    </select>
+
+
+    <select id="getRoleList" resultType="com.seven.aemp.bean.UmsRoleBean">
+        select r.*
+        from ums_admin_role_relation ar left join ums_role r on ar.role_id = r.id
+        where ar.admin_id = #{adminId}
+    </select>
+
 </mapper>

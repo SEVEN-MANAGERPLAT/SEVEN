@@ -1,7 +1,7 @@
 package com.seven.aemp.service;
 
-import com.seven.aemp.bean.UmsAdminRoleRelationBean;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.seven.aemp.model.UmsAdminRoleRelation;
 
 /**
  * <p>
@@ -11,6 +11,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @author dx
  * @since 2020-08-29
  */
-public interface UmsAdminRoleRelationService extends IService<UmsAdminRoleRelationBean> {
+public interface UmsAdminRoleRelationService extends IService<UmsAdminRoleRelation> {
 
 }

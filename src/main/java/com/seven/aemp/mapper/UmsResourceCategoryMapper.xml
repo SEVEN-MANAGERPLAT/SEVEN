@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.seven.aemp.dao.UmsResourceCategoryDao">
+  <select id="queryUmsResourceCategoryList" resultType="com.seven.aemp.bean.UmsResourceCategoryBean">
+        SELECT
+        id,create_time,name,sort
+        FROM
+        sevenmanager.ums_resource_category
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        insert into sevenmanager.ums_resource_category (create_time, name, sort)
+        values (#{createTime}, #{name}, #{sort})
+    </insert>
+
+    <update id="updateResourceCategory" parameterType="com.seven.aemp.bean.UmsResourceCategoryBean">
+        update sevenmanager.ums_resource_category
+        <set>
+            <if test="name != null">
+                name = #{name},
+            </if>
+            <if test="sort != null">
+                sort = #{sort},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+</mapper>

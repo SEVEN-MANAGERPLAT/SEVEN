@@ -7,9 +7,8 @@
         IC.IC_ID
         ,IC.IDEA_ID
         ,IC.IDEA_DATE
-        ,IC.IS_EXHIBIT
         ,IC.CLICK_NUM
-        FROM SEVENMANAGER.IDEACLICK  IC
+        FROM sevenmanager.ideaclick  IC
         WHERE 1=1
         <if test="ideaId != null and ideaId != ''">
             AND IC.IDEA_ID = #{ideaId}
@@ -24,13 +23,13 @@
 
     <!--插入点击数-->
     <insert id="addIdeaclick" keyProperty="icId" useGeneratedKeys="true" parameterType="com.seven.aemp.bean.IdeaclickBean">
-        INSERT INTO SEVENMANAGER.IDEACLICK
+        INSERT INTO sevenmanager.ideaclick
         (IDEA_ID,IDEA_DATE,CLICK_NUM) VALUES (#{ideaId},#{ideaDate},#{clickNum})
     </insert>
 
     <!--更新点击数-->
     <update id="updateIdeaclick" parameterType="com.seven.aemp.bean.IdeaclickBean">
-        UPDATE SEVENMANAGER.IDEACLICK SET
+        UPDATE sevenmanager.ideaclick SET
         <if test="clickNum != null and clickNum != ''">
             CLICK_NUM = #{clickNum}
         </if>

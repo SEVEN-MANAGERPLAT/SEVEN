@@ -2,6 +2,7 @@ package com.seven.aemp.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.seven.aemp.bean.AccountBean;
 import com.seven.aemp.bean.SystemAccountBean;
 import com.seven.aemp.common.Constant;
@@ -85,4 +86,6 @@ public class SystemAccountServiceImpl extends ServiceImpl<SystemAccountDao, Syst
         if (systemAccountDao.insert(systemAccountBean) <= 0) throw new MessageException("操作失败!");
         return systemAccountBean;
     }
+
+
 }

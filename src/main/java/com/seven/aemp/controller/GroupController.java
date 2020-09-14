@@ -47,11 +47,11 @@ public class GroupController {
         jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
         jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
         GroupBean groupBean = JSONObject.parseObject(params, GroupBean.class);
-//        if (groupBean.getPage() == null && groupBean.getPageSize() == null) {
-//            jsonObject.put(Constant.Result.RETDATA, groupService.queryGroup(groupBean));
-//        } else {
+        if (groupBean.getPage() == null && groupBean.getPageSize() == null) {
+            jsonObject.put(Constant.Result.RETDATA, groupService.queryGroup(groupBean));
+        } else {
             jsonObject.put(Constant.Result.RETDATA, groupService.queryGroupIdeaClickByUnitDay(groupBean.getPage(), groupBean.getPageSize(), groupBean));
-//        }
+        }
         return jsonObject;
     }
 

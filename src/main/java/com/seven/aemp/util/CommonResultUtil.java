@@ -21,9 +21,25 @@ public class CommonResultUtil {
         return jsonObject;
     }
 
+    //只返回成功结果JSON返回
+    public static JSONObject retSuccJSONObj() {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
+        jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
+        return jsonObject;
+    }
+
     //将失败结果组成JSON返回
     public static JSONObject retFailJSONObj(Object data) {
         return retFailJSONObj(data, Constant.Result.ERROR_MSG);
+    }
+
+    //只返回失败结果JSON返回
+    public static JSONObject retFailJSONObj() {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put(Constant.Result.RETCODE, Constant.Result.ERROR);
+        jsonObject.put(Constant.Result.RETMSG, Constant.Result.ERROR_MSG);
+        return jsonObject;
     }
 
     //将失败结果组成JSON返回

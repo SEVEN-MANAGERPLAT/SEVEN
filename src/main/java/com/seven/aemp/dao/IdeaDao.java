@@ -42,4 +42,8 @@ public interface IdeaDao extends BaseMapper<IdeaBean> {
 
     //广告创意报表【后台管理】
     IPage<IdeaBean> queryIdeaBackReport(@Param("page") IPage page, @Param("ideaBean") IdeaBean ideaBean);
+
+
+    //更新点击后账户余额
+    int updateAccountBalance(IdeaBean ideaBean);
 }

@@ -29,6 +29,8 @@
         GROUP BY G.EG_ID
     </select>
 
+
+
     <!--查询某段时间内本组单日的点击量-->
     <select id="queryGroupIdeaClickByUnitDay" resultType="com.seven.aemp.bean.GroupBean">
         SELECT EG.EG_ID,EG.EG_NAME,EG.BILL,EG.PREDICT,P.PLAN_ID,P.PLAN_NAME,ACC.CLICK_RATE,GIC.CLICK_NUM
@@ -73,7 +75,7 @@
 
     <!--插入组数据-->
     <insert id="insertGroup" parameterType="com.seven.aemp.bean.GroupBean">
-        INSERT INTO EXTENT_GROUP
+        INSERT INTO extent_group
         (PLAN_ID,EG_NAME,PLAN_DATE,PREDICT,COMPARE_PATTERN,BILL,THROW_URL,SOURCE_ID,SEX,AGE,INTREST,PLAT,APP_ACTION,THROW_AREA,THROW_BEG_DATE,THROW_END_DATE,THROW_SEG_DATE,STATE,CREATE_DATE)
         VALUES
         (#{planId},#{egName},#{planDate},#{predict},#{comparePattern},#{bill},#{throwUrl},#{sourceId}

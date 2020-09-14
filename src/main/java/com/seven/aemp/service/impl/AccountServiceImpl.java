@@ -4,18 +4,23 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.seven.aemp.bean.AccountBean;
-import com.seven.aemp.bean.UmsAdminRoleRelationBean;
+import com.seven.aemp.bean.UmsRoleBean;
+import com.seven.aemp.dao.UmsAdminRoleRelationDao;
+import com.seven.aemp.dao.UmsRoleDao;
+import com.seven.aemp.model.UmsAdminRoleRelation;
+import com.seven.aemp.model.UmsAdminRoleRelationExample;
 import com.seven.aemp.security.AdminUserDetails;
 import com.seven.aemp.bean.UmsResourceBean;
 import com.seven.aemp.common.Constant;
 import com.seven.aemp.dao.AccountDao;
 import com.seven.aemp.exception.MessageException;
-import com.seven.aemp.service.AccountService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.seven.aemp.service.AccountService;
 import com.seven.aemp.service.UmsAdminRoleRelationService;
 import com.seven.aemp.service.UmsResourceService;
 import com.seven.aemp.util.CookieTools;
 import com.seven.aemp.util.JwtTokenUtil;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,12 +32,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletResponse;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -45,7 +50,7 @@ import java.util.Map;
  * @since 2019-11-19
  */
 @Service
-public class AccountServiceImpl extends ServiceImpl<AccountDao, AccountBean> implements AccountService {
+public class AccountServiceImpl extends ServiceImpl<AccountDao, AccountBean>  implements AccountService {
 
     @Value("${tokenLife}")
     private int tokenLife;
@@ -71,6 +76,12 @@ public class AccountServiceImpl extends ServiceImpl<AccountDao, AccountBean> imp
 
     @Autowired
     private UmsAdminRoleRelationService roleRelationService;
+
+    @Autowired
+    private UmsRoleDao umsRoleDao;
+
+    @Autowired
+    private UmsAdminRoleRelationDao umsAdminRoleRelationDao;
 
     @Override
     public List<AccountBean> queryAccount(AccountBean accountBean) {
@@ -128,7 +139,6 @@ public class AccountServiceImpl extends ServiceImpl<AccountDao, AccountBean> imp
         if (!accountBeans.isEmpty()) throw new MessageException("账号重复!");
         accountBean.setAccountPwd(passwordEncoder.encode(accountBean.getAccountPwd()));
         if (accountDao.insert(accountBean) <= 0) throw new MessageException("操作失败!");
-        roleRelationService.save(new UmsAdminRoleRelationBean().setAdminId(Long.valueOf(accountBean.getAccountId())).setRoleId(1L));
         return accountBean;
     }
 
@@ -196,7 +206,7 @@ public class AccountServiceImpl extends ServiceImpl<AccountDao, AccountBean> imp
     public JSONObject queryTotleData() throws Exception {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("checkData",accountDao.queryCheckIdea(this.getCurrentAccount().getAccountId()));
-        jsonObject.put("accoutData", accountDao.queryUnitAccout(this.getCurrentAccount().getAccountName()));
+        jsonObject.put("accoutData", accountDao.queryUnitAccout(this.getCurrentAccount().getAccountId()));
         return jsonObject;
     }
 
@@ -210,5 +220,41 @@ public class AccountServiceImpl extends ServiceImpl<AccountDao, AccountBean> imp
         }
         Page<AccountBean> result = new Page<>(Long.valueOf(page), Long.valueOf(pageSize));
         return result.setRecords(accountDao.queryAccoutClickNum(result, accountBean.setAccountId(this.getCurrentAccount().getAccountId())));
+    }
+
+
+    @Override
+    public Page<AccountBean> list(Integer page, Integer pageSize, AccountBean accountBean){
+
+        Page<AccountBean> result = new Page<>(Long.valueOf(page), Long.valueOf(pageSize));
+        return result.setRecords(accountDao.queryAccount(result, accountBean));
+    }
+
+
+    @Override
+    public int updateRole(Long adminId, List<Long> roleIds) {
+        int count = roleIds == null ? 0 : roleIds.size();
+        //先删除原来的关系
+        UmsAdminRoleRelationExample adminRoleRelationExample = new UmsAdminRoleRelationExample();
+        adminRoleRelationExample.createCriteria().andAdminIdEqualTo(adminId);
+        umsAdminRoleRelationDao.deleteByExample(adminRoleRelationExample);
+        //建立新关系
+        if (!CollectionUtils.isEmpty(roleIds)) {
+            List<UmsAdminRoleRelation> list = new ArrayList<>();
+            for (Long roleId : roleIds) {
+                UmsAdminRoleRelation roleRelation = new UmsAdminRoleRelation();
+                roleRelation.setAdminId(adminId);
+                roleRelation.setRoleId(roleId);
+                list.add(roleRelation);
+            }
+            umsAdminRoleRelationDao.insertList(list);
+        }
+//        adminCacheService.delResourceList(adminId);
+        return count;
+    }
+
+    @Override
+    public List<UmsRoleBean> getRoleList(Long adminId) {
+        return umsRoleDao.getRoleList(adminId);
     }
 }

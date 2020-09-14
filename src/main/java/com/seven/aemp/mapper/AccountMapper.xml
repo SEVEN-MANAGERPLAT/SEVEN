@@ -162,7 +162,7 @@
         LEFT JOIN sevenmanager.plant P ON P.PLAN_ID=EG.EG_ID
         WHERE DATE_FORMAT(IC.IDEA_DATE,'%Y-%m-%d')=DATE_FORMAT(NOW(),'%Y-%m-%d')
             OR DATE_FORMAT(IC.IDEA_DATE,'%Y-%m-%d')=date_sub(DATE_FORMAT(NOW(),'%Y-%m-%d'),interval 1 day))AIC ON AIC.ACC_ID=ACC.ACCOUNT_ID
-        WHERE ACC.ACCOUNT_NAME=#{accountName}
+        WHERE ACC.ACCOUNT_ID=#{accId}
         GROUP BY ACC.ACCOUNT_ID,ACC.ACC_PREDECT,ACC.BALANCE
     </select>
 

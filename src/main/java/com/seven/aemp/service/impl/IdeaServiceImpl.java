@@ -7,6 +7,7 @@ import com.seven.aemp.bean.IdeaBean;
 import com.seven.aemp.bean.IdeaclickBean;
 import com.seven.aemp.dao.IdeaDao;
 import com.seven.aemp.exception.MessageException;
+import com.seven.aemp.service.AccountService;
 import com.seven.aemp.service.IdeaService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.seven.aemp.service.IdeaclickService;
@@ -43,6 +44,9 @@ public class IdeaServiceImpl extends ServiceImpl<IdeaDao, IdeaBean> implements I
 
     @Autowired
     private IdeaclickService ideaclickService;
+
+    @Autowired
+    private AccountService accountService;
 
     @Override
     public List<IdeaBean> queryIdea(IdeaBean ideaBean) throws Exception {
@@ -106,6 +110,9 @@ public class IdeaServiceImpl extends ServiceImpl<IdeaDao, IdeaBean> implements I
         List<IdeaBean> ideaBeans = ideaDao.selectList(queryWrapper);
         if (ideaBeans.size() <= 0) throw new MessageException("创意不存在!");
 
+        //修改账户余额
+        ideaDao.updateAccountBalance(new IdeaBean().setAccId(String.valueOf(accountService.getCurrentAccount().getAccountId())).setProdUrl(ideaBean.getProdUrl()));
+
         String newDate = TimeUtil.getDateYYYY_MM_DD(TimeUtil.getDBTime());
         ideaBean.setCreateDate(newDate);
         //查询当日的创意点击
@@ -132,7 +139,7 @@ public class IdeaServiceImpl extends ServiceImpl<IdeaDao, IdeaBean> implements I
             pageSize = "10";
         }
         Page<IdeaBean> result = new Page<>(Long.valueOf(page), Long.valueOf(pageSize));
-        return result.setRecords(ideaDao.queryIdeaClickByUnitDay(result, ideaBean));
+        return result.setRecords(ideaDao.queryIdeaClickByUnitDay(result, ideaBean.setAccId(String.valueOf(accountService.getCurrentAccount().getAccountId()))));
     }
 
     @Override
