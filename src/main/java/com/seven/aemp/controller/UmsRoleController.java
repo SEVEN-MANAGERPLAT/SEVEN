@@ -3,6 +3,7 @@ package com.seven.aemp.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.seven.aemp.bean.UmsMenuBean;
+import com.seven.aemp.bean.UmsResourceBean;
 import com.seven.aemp.bean.UmsRoleBean;
 import com.seven.aemp.common.Constant;
 import com.seven.aemp.exception.MessageException;
@@ -93,15 +94,15 @@ public class UmsRoleController {
         List<UmsMenuBean> roleList = roleService.listMenu(roleId);
         return CommonResultUtil.retSuccJSONObj(roleList);
     }
-//
-//    @ApiOperation("获取角色相关资源")
-//    @RequestMapping(value = "/listResource/{roleId}", method = RequestMethod.GET)
-//    @ResponseBody
-//    public CommonResult<List<UmsResource>> listResource(@PathVariable Long roleId) {
-//        List<UmsResource> roleList = roleService.listResource(roleId);
-//        return CommonResultUtil.success(roleList);
-//    }
-//
+
+    @ApiOperation("获取角色相关资源")
+    @RequestMapping(value = "/listResource/{roleId}", method = RequestMethod.GET)
+    @ResponseBody
+    public JSONObject listResource(@PathVariable Long roleId) {
+        List<UmsResourceBean> roleList = roleService.listResource(roleId);
+        return CommonResultUtil.retSuccJSONObj(roleList);
+    }
+
     @ApiOperation("给角色分配菜单")
     @RequestMapping(value = "/allocMenu", method = RequestMethod.POST)
     @ResponseBody

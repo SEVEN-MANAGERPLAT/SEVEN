@@ -1,7 +1,10 @@
 package com.seven.aemp.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.seven.aemp.bean.UmsRoleBean;
 import com.seven.aemp.model.UmsAdminRoleRelation;
+
+import java.util.List;
 
 /**
  * <p>

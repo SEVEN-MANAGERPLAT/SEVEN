@@ -54,6 +54,9 @@
             GROUP BY EI.EG_ID) GIC ON GIC.EG_ID=EG.EG_ID
         <where>
             EG.EG_ID IS NOT NULL
+            <if test="group.accId != null and group.accId != ''">
+                AND  P.ACC_ID = #{group.accId}
+            </if>
             <if test="group.egId != null and group.egId != ''">
                 AND EG.EG_ID = #{group.egId}
             </if>

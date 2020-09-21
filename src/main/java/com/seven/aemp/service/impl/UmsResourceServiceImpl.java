@@ -6,6 +6,7 @@ import com.seven.aemp.bean.AccountBean;
 import com.seven.aemp.bean.UmsMenuBean;
 import com.seven.aemp.bean.UmsResourceBean;
 import com.seven.aemp.dao.UmsResourceDao;
+import com.seven.aemp.model.UmsResourceExample;
 import com.seven.aemp.service.UmsResourceService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,5 +59,10 @@ public class UmsResourceServiceImpl extends ServiceImpl<UmsResourceDao, UmsResou
         }
         Page<UmsResourceBean> result = new Page<>(Long.valueOf(page), Long.valueOf(pageSize));
         return result.setRecords(umsResourceDao.queryUmsResource(result, umsResourceBean));
+    }
+
+    @Override
+    public List<UmsResourceBean> listAll() {
+        return umsResourceDao.selectByExample(new UmsResourceExample());
     }
 }

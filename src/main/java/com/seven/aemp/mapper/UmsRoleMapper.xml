@@ -45,7 +45,7 @@
     <select id="getResourceListByRoleId" resultType="com.seven.aemp.bean.UmsResourceBean">
         SELECT r.id          id,
                r.create_time createTime,
-               r.` name ` ` name `,
+               r.`name` `name `,
             r.url url,
             r.description description,
             r.category_id categoryId

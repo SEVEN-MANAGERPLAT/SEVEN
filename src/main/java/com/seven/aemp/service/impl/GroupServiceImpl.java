@@ -35,7 +35,12 @@ public class GroupServiceImpl extends ServiceImpl<GroupDao, GroupBean> implement
 
     @Override
     public List<GroupBean> queryGroup(GroupBean groupBean) throws Exception {
-        return groupDao.queryGroup(groupBean.setAccId(String.valueOf(accountService.getCurrentAccount().getAccountId())));
+        if(StringUtils.isEmpty(groupBean.getAccId())){
+            return groupDao.queryGroup(groupBean.setAccId(String.valueOf(accountService.getCurrentAccount().getAccountId())));
+        }else {
+            return groupDao.queryGroup(groupBean.setAccId(groupBean.getAccId()));
+        }
+
     }
 
     @Override
@@ -93,6 +98,11 @@ public class GroupServiceImpl extends ServiceImpl<GroupDao, GroupBean> implement
             pageSize = "10";
         }
         Page<GroupBean> result = new Page<>(Long.valueOf(page), Long.valueOf(pageSize));
-        return result.setRecords(groupDao.queryGroupIdeaClickByUnitDay(result, groupBean.setAccId(String.valueOf(accountService.getCurrentAccount().getAccountId()))));
+
+        if(StringUtils.isEmpty(groupBean.getAccId())){
+            return result.setRecords(groupDao.queryGroupIdeaClickByUnitDay(result, groupBean.setAccId(String.valueOf(accountService.getCurrentAccount().getAccountId()))));
+        }else {
+            return result.setRecords(groupDao.queryGroupIdeaClickByUnitDay(result, groupBean.setAccId(groupBean.getAccId())));
+        }
     }
 }

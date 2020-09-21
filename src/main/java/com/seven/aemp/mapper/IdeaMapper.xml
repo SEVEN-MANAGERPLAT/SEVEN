@@ -29,6 +29,9 @@
             <if test="idea.egId != null and idea.egId != ''">
                 AND  I.EG_ID = #{idea.egId}
             </if>
+            <if test="idea.accId != null and idea.accId != ''">
+                AND  P.ACC_ID = #{idea.accId}
+            </if>
             <if test="idea.planId != null and idea.planId != ''">
                 AND I.PLAN_ID = #{idea.planId}
             </if>
@@ -72,6 +75,9 @@
         GROUP BY IC.IDEA_ID) SIC ON SIC.IDEA_ID=EI.IDEA_ID
         <where>
             EI.IDEA_ID IS NOT NULL
+            <if test="idea.accId != null and idea.accId != ''">
+                AND  P.ACC_ID = #{idea.accId}
+            </if>
             <if test="idea.ideaId != null and idea.ideaId != ''">
                 AND I.IDEA_ID  = #{idea.ideaId}
             </if>

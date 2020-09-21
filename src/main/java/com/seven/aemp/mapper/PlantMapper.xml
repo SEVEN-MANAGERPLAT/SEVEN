@@ -55,6 +55,9 @@
             GROUP BY PGIC.PLAN_ID)PIC ON PIC.PLAN_ID=P.PLAN_ID
         <where>
             P.PLAN_ID IS NOT NULL
+            <if test="plan.accId != null and plan.accId != ''">
+                AND  P.ACC_ID = #{plan.accId}
+            </if>
             <if test="plan.planId != null and plan.planId != ''">
                 AND P.PLAN_ID = #{plan.planId}
             </if>

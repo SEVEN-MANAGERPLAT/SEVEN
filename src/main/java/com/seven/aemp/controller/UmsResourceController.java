@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 
 
 /**
@@ -105,11 +106,11 @@ public class UmsResourceController {
 //        return CommonResult.success(CommonPage.restPage(resourceList));
 //    }
 //
-//    @ApiOperation("查询所有后台资源")
-//    @RequestMapping(value = "/listAll", method = RequestMethod.GET)
-//    @ResponseBody
-//    public CommonResult<List<UmsResource>> listAll() {
-//        List<UmsResource> resourceList = resourceService.listAll();
-//        return CommonResult.success(resourceList);
-//    }
+    @ApiOperation("查询所有后台资源")
+    @RequestMapping(value = "/listAll", method = RequestMethod.GET)
+    @ResponseBody
+    public JSONObject listAll() {
+        List<UmsResourceBean> resourceList = resourceService.listAll();
+        return CommonResultUtil.retSuccJSONObj(resourceList);
+    }
 }

@@ -50,7 +50,11 @@ public class IdeaServiceImpl extends ServiceImpl<IdeaDao, IdeaBean> implements I
 
     @Override
     public List<IdeaBean> queryIdea(IdeaBean ideaBean) throws Exception {
-        return ideaDao.queryIdea(ideaBean);
+        if(StringUtils.isEmpty(ideaBean.getAccId())){
+            return ideaDao.queryIdea(ideaBean.setAccId(String.valueOf(accountService.getCurrentAccount().getAccountId())));
+        }else {
+            return ideaDao.queryIdea(ideaBean);
+        }
     }
 
     @Override
@@ -62,7 +66,12 @@ public class IdeaServiceImpl extends ServiceImpl<IdeaDao, IdeaBean> implements I
             pageSize = "10";
         }
         Page<IdeaBean> result = new Page<>(Long.valueOf(page), Long.valueOf(pageSize));
-        return result.setRecords(ideaDao.queryIdea(result, ideaBean));
+
+        if(StringUtils.isEmpty(ideaBean.getAccId())){
+            return result.setRecords(ideaDao.queryIdea(result, ideaBean.setAccId(String.valueOf(accountService.getCurrentAccount().getAccountId()))));
+        }else {
+            return result.setRecords(ideaDao.queryIdea(result, ideaBean));
+        }
     }
 
     @Override
@@ -111,7 +120,12 @@ public class IdeaServiceImpl extends ServiceImpl<IdeaDao, IdeaBean> implements I
         if (ideaBeans.size() <= 0) throw new MessageException("创意不存在!");
 
         //修改账户余额
-        ideaDao.updateAccountBalance(new IdeaBean().setAccId(String.valueOf(accountService.getCurrentAccount().getAccountId())).setProdUrl(ideaBean.getProdUrl()));
+        if(StringUtils.isEmpty(ideaBean.getAccId())){
+            ideaDao.updateAccountBalance(new IdeaBean().setAccId(String.valueOf(accountService.getCurrentAccount().getAccountId())).setProdUrl(ideaBean.getProdUrl()));
+        }else {
+            ideaDao.updateAccountBalance(new IdeaBean().setAccId(ideaBean.getAccId()).setProdUrl(ideaBean.getProdUrl()));
+        }
+
 
         String newDate = TimeUtil.getDateYYYY_MM_DD(TimeUtil.getDBTime());
         ideaBean.setCreateDate(newDate);
@@ -139,7 +153,11 @@ public class IdeaServiceImpl extends ServiceImpl<IdeaDao, IdeaBean> implements I
             pageSize = "10";
         }
         Page<IdeaBean> result = new Page<>(Long.valueOf(page), Long.valueOf(pageSize));
-        return result.setRecords(ideaDao.queryIdeaClickByUnitDay(result, ideaBean.setAccId(String.valueOf(accountService.getCurrentAccount().getAccountId()))));
+        if(StringUtils.isEmpty(ideaBean.getAccId())){
+            return result.setRecords(ideaDao.queryIdeaClickByUnitDay(result, ideaBean.setAccId(String.valueOf(accountService.getCurrentAccount().getAccountId()))));
+        }else {
+            return result.setRecords(ideaDao.queryIdeaClickByUnitDay(result, ideaBean.setAccId(ideaBean.getAccId())));
+        }
     }
 
     @Override

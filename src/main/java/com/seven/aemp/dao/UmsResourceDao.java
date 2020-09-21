@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.seven.aemp.bean.AccountBean;
 import com.seven.aemp.bean.UmsResourceBean;
+import com.seven.aemp.model.UmsResourceExample;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -24,4 +25,6 @@ public interface UmsResourceDao extends BaseMapper<UmsResourceBean> {
     List<UmsResourceBean> queryUmsResource(Page<UmsResourceBean> result, @Param("resource") UmsResourceBean umsResourceBean);
 
     int updateResource(UmsResourceBean resourceBean);
+
+    List<UmsResourceBean> selectByExample(UmsResourceExample example);
 }

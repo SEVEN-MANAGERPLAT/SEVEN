@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.seven.aemp.bean.UmsMenuBean;
 import com.seven.aemp.bean.UmsResourceBean;
 import com.seven.aemp.bean.UmsRoleBean;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -75,11 +76,11 @@ public interface UmsRoleService extends IService<UmsRoleBean> {
      */
     List<UmsMenuBean> listMenu(Long roleId);
 
-//    /**
-//     * 获取角色相关资源
-//     */
-////    List<UmsResource> listResource(Long roleId);
-//
+    /**
+     * 获取角色相关资源
+     */
+    List<UmsResourceBean> listResource(Long roleId);
+
     /**
      * 给角色分配菜单
      */
@@ -91,4 +92,11 @@ public interface UmsRoleService extends IService<UmsRoleBean> {
      */
     @Transactional
     int allocResource(Long roleId, List<Long> resourceIds);
+
+
+    /**
+     * 查询角色列表
+     */
+    @Transactional
+    List<UmsRoleBean> getRoleList(@Param("adminId") Long adminId);
 }

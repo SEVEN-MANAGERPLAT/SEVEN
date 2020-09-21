@@ -22,12 +22,12 @@ public interface UmsAdminRoleRelationDao extends BaseMapper<UmsAdminRoleRelation
      * 批量插入用户角色关系
      */
     int insertList(@Param("list") List<UmsAdminRoleRelation> adminRoleRelationList);
-
-    /**
-     * 获取用于所有角色
-     */
+//
+//    /**
+//     * 获取用于所有角色
+//     */
 //    List<UmsRoleBean> getRoleList(@Param("adminId") Long adminId);
-
+//
 //    /**
 //     * 获取用户所有角色权限
 //     */

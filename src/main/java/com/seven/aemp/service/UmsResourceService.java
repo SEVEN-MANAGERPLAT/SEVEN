@@ -30,4 +30,7 @@ public interface UmsResourceService extends IService<UmsResourceBean> {
 
     //查询资源
     public Page<UmsResourceBean> umsResourceList(String page, String pageSize, UmsResourceBean umsResourceBean) throws Exception;
+
+
+    public List<UmsResourceBean> listAll();
 }

@@ -17,6 +17,7 @@ import com.seven.aemp.service.UmsRoleService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -93,6 +94,12 @@ public class UmsRoleServiceImpl extends ServiceImpl<UmsRoleDao, UmsRoleBean> imp
         return umsRoleDao.getMenuListByRoleId(roleId);
     }
 
+    @Override
+    public List<UmsResourceBean> listResource(Long roleId) {
+        return umsRoleDao.getResourceListByRoleId(roleId);
+    }
+
+    @Override
     public Page<UmsRoleBean> umsRoleList(String page, String pageSize, UmsRoleBean umsRoleBean) throws Exception {
         if (StringUtils.isBlank(page)) {
             page = "1";
@@ -137,4 +144,11 @@ public class UmsRoleServiceImpl extends ServiceImpl<UmsRoleDao, UmsRoleBean> imp
 //        adminCacheService.delResourceListByRole(roleId);
         return resourceIds.size();
     }
+
+    @Override
+    public List<UmsRoleBean> getRoleList(Long adminId) {
+        return umsRoleDao.getRoleList(adminId);
+    }
+
+
 }
